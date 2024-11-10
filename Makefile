@@ -1,9 +1,13 @@
 TARGET = raylib-test.elf
-SRCS=$(wildcard src/*.cpp src/*.h)
+SRCS=$(wildcard src/*.cpp src/Scene/*.cpp)
 OBJS = $(SRCS: .cpp=.o) romdisk.o
 KOS_ROMDISK_DIR = romdisk
 
-KOS_CPPFLAGS += -std=gnu++17
+PCH_SRC = pch.cpp
+PCH_HEADER = pch.h
+PCH_OUT = pch.gch
+
+KOS_CPPFLAGS += -std=gnu++17 
 
 all: rm-elf $(TARGET)
 
@@ -17,7 +21,7 @@ rm-elf:
 
 $(TARGET): $(OBJS)
 	kos-c++ -o $(TARGET) $(OBJS) -lkosutils -lraylib -lGL -lm -ltsunami -lparallax -lpng -ljpeg -lz -lkmg
- 	
+
 run: $(TARGET)
 	$(KOS_LOADER) $(TARGET)
 	

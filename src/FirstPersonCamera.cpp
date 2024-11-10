@@ -1,6 +1,6 @@
+#include "pch.h"
 #include "FirstPersonCamera.h"
 
-#include <dc/maple/controller.h>
 
 FirstPersonCamera::FirstPersonCamera()
 {
@@ -18,15 +18,10 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
         float movement = -GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
         float turn = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 
-        if(turn > 0.1f)
-        {
-            m_Rotation.x = turn * DEG2RAD * m_TurnSpeed * deltaTime;
-        }
-        if(movement > 0.1f)
-        {
-            m_Position.x += movement * m_MovementSpeed * deltaTime;
-        }
+        m_Position = Vector3{movement * m_MovementSpeed * deltaTime,0.f, 0.f };
+        m_Rotation = Vector3{turn * DEG2RAD * m_TurnSpeed * deltaTime, 0.f, 0.f};
+
+        UpdateCameraPro(&m_Camera, m_Position, m_Rotation, 0.f);
     }
     
-    UpdateCameraPro(&m_Camera, m_Position, m_Rotation, 0.f);
 }
