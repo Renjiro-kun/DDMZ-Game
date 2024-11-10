@@ -1,8 +1,14 @@
 #pragma once
 #include <map>
 #include <raylib/raylib.h>
-#include "Scene.h"
-#include "SceneMaze.h"
+
+class Scene;
+
+enum SceneId : int
+{
+    SCENE_MAIN_MENU = 0,
+    SCENE_MAZE = 1
+};
 
 class SceneManager
 {
@@ -23,6 +29,8 @@ public:
 
     void Draw();
 
+    void LoadScene(SceneId id);
+
 private:
     SceneManager() = default;
     ~SceneManager() = default;
@@ -31,5 +39,5 @@ private:
 
 private:
     Scene* m_ActiveScene;
-    std::map<int, Scene*> m_ScenesArray;
+    std::map<SceneId, Scene*> m_ScenesArray;
 };

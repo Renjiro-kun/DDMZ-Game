@@ -1,11 +1,14 @@
 #include "SceneManager.h"
+#include "SceneMaze.h"
+#include "SceneMainMenu.h"
 
 void SceneManager::Init()
 {
-    m_ScenesArray = std::map<int, Scene*>();
-    m_ScenesArray.emplace(std::pair<int, Scene*>(0, new SceneMaze()));
-    m_ActiveScene = m_ScenesArray.at(0);
-    m_ActiveScene->OnActivated();
+    m_ScenesArray = std::map<SceneId, Scene*>();
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SCENE_MAZE, new SceneMaze()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SCENE_MAIN_MENU, new SceneMainMenu()));
+    //m_ActiveScene = m_ScenesArray.at(SceneId::SCENE_MAZE);
+    //m_ActiveScene->OnActivated();
 }
 
 void SceneManager::Shutdown()
@@ -15,6 +18,16 @@ void SceneManager::Shutdown()
         delete it.second;
     }
     delete m_ActiveScene;
+}
+
+void SceneManager::LoadScene(SceneId id)
+{
+    if(m_ActiveScene != nullptr)
+    {
+        m_ActiveScene->OnDectivated();
+    }
+    m_ActiveScene = m_ScenesArray.at(id);
+    m_ActiveScene->OnActivated();
 }
 
 void SceneManager::Update()
