@@ -14,6 +14,16 @@
                 "text": "set architecture sh",
                 "description": "Set GDB Arch to SuperH",
                 "ignoreFailures" : false,
+            },
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "python import sys; sys.path.insert(0, '/opt/toolchains/dc/sh-elf/share/gcc-13.2.0/python');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
+                "ignoreFailures": false
+            },
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
             }],
             "miDebuggerServerAddress": ":9999",
             // path to lxdream-nitro

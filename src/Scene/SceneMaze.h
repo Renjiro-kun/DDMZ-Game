@@ -13,6 +13,8 @@ public:
     
     Camera& GetCamera() { return m_FpsCamera.GetCamera(); }
 private:
+    void CalculateLight();
+private:
     Texture2D m_CubicMap;
     Texture2D m_CubeAtlas;
     Model m_MazeModel;
