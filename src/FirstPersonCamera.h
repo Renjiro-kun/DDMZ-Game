@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib/raylib.h>
+#include <Sound/SfxManager.h>
 
 class FirstPersonCamera
 {
@@ -14,6 +15,7 @@ public:
     Vector3& GetCameraPosition() { return m_Position; }
     Vector3& GetCameraRotation() { return m_Rotation; }
 private:
+    SFXHandle m_BoomSFX;
     float m_MovementSpeed = 3.f;
     float m_TurnSpeed = 5000.f;
     Vector3 m_Position{0.f};

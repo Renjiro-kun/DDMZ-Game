@@ -1,9 +1,11 @@
 #include <kos.h>
 
 #include "pch.h"
-#include "FirstPersonCamera.h"
-#include "Scene/SceneManager.h"
+#include <FirstPersonCamera.h>
+#include <Scene/SceneManager.h>
 
+#include <Sound/BgmManager.h>
+#include <Sound/SfxManager.h>
 
 int main()
 {
@@ -12,6 +14,9 @@ int main()
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Test window");
     SetTargetFPS(TARGET_FPS);
+
+    BGMManager::GetInstance().Init();
+    SFXManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAIN_MENU);
@@ -30,6 +35,9 @@ int main()
 
         EndDrawing();
     }
+
+    SFXManager::GetInstance().Shutdown();
+    BGMManager::GetInstance().Shutdown();
 
     CloseWindow();
     return 0;

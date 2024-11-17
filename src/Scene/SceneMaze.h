@@ -1,6 +1,7 @@
 #pragma once
-#include "Scene.h"
-#include "../FirstPersonCamera.h"
+#include <Scene/Scene.h>
+#include <FirstPersonCamera.h>
+#include <Sound/BgmManager.h>
 
 class SceneMaze : public Scene
 {
@@ -15,6 +16,7 @@ public:
 private:
     void CalculateLight();
 private:
+    BGM_Handle m_BGM;
     Texture2D m_CubicMap;
     Texture2D m_CubeAtlas;
     Model m_MazeModel;

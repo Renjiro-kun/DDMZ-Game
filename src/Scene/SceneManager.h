@@ -7,7 +7,8 @@ class Scene;
 enum SceneId : int
 {
     SCENE_MAIN_MENU = 0,
-    SCENE_MAZE = 1
+    SCENE_MAZE = 1,
+    SCENE_BATTLE = 2
 };
 
 class SceneManager

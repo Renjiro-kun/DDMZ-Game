@@ -438,6 +438,17 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 		fCounter += 2;
 	}
 
+	// fCounter = 0;
+	// // Move colors data
+	// for (size_t i = 0; i < cCounter; i++)
+	// {
+	// 	outMesh.colors[fCounter] 	 = 255;
+	// 	outMesh.colors[fCounter + 1] = 255;
+	// 	outMesh.colors[fCounter + 2] = 255;
+	// 	outMesh.colors[fCounter + 3] = 255;
+	// 	fCounter += 4;
+	// }
+
 	RL_FREE(mapVerticies);
 	RL_FREE(mapNormals);
 	RL_FREE(mapTexcoord);
