@@ -11,6 +11,8 @@ public:
     void OnDraw2D();
     
     Camera& GetCamera() { return m_Camera; }
+
+    Color GetSceneBackgroundColor() { return BLACK; }
 private:
     Model m_Skybox;
     Camera m_Camera;

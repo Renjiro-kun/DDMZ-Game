@@ -42,6 +42,11 @@ void SceneManager::Draw3D()
     EndMode3D();
 }
 
+void SceneManager::ClearScreen()
+{
+    ClearBackground(m_ActiveScene->GetSceneBackgroundColor());
+}
+
 void SceneManager::Draw()
 {
     m_ActiveScene->OnDraw2D();

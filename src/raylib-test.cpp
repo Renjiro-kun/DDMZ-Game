@@ -26,7 +26,8 @@ int main()
         SceneManager::GetInstance().Update();
 
         BeginDrawing();
-            ClearBackground(RAYWHITE);
+            //ClearBackground(RAYWHITE);
+            SceneManager::GetInstance().ClearScreen();
             
             SceneManager::GetInstance().Draw3D();
             SceneManager::GetInstance().Draw();

@@ -32,6 +32,8 @@ public:
 
     void LoadScene(SceneId id);
 
+    void ClearScreen();
+
 private:
     SceneManager() = default;
     ~SceneManager() = default;

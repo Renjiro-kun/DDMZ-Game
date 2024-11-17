@@ -31,7 +31,7 @@ void SceneMainMenu::OnUpdate()
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
         {   
-            SceneManager::GetInstance().LoadScene(SCENE_MAZE);
+            SceneManager::GetInstance().LoadScene(SCENE_BATTLE);
         }
     }
 }

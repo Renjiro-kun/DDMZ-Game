@@ -10,4 +10,6 @@ public:
     virtual void OnDraw3D() = 0;
     virtual void OnDraw2D() = 0;
     virtual Camera& GetCamera() = 0;
+
+    virtual Color GetSceneBackgroundColor() { return RAYWHITE; }
 };
