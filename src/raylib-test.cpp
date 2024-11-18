@@ -7,6 +7,8 @@
 #include <Sound/BgmManager.h>
 #include <Sound/SfxManager.h>
 
+#include <PuruPuruManager.h>
+
 int main()
 {
     const int SCREEN_WIDTH = WIDTH;
@@ -17,6 +19,8 @@ int main()
 
     BGMManager::GetInstance().Init();
     SFXManager::GetInstance().Init();
+
+    PuruPuruManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAIN_MENU);
@@ -36,6 +40,7 @@ int main()
         EndDrawing();
     }
 
+    PuruPuruManager::GetInstance().Shutdown();
     SFXManager::GetInstance().Shutdown();
     BGMManager::GetInstance().Shutdown();
 
