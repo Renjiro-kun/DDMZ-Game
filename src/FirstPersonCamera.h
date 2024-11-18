@@ -12,13 +12,11 @@ public:
 
     void UpdateCamera(float deltaTime);
 
-    Vector3& GetCameraPosition() { return m_Position; }
-    Vector3& GetCameraRotation() { return m_Rotation; }
+    Vector3 GetPosition() const { return m_Camera.position; }
+    void SetPosition(Vector3 position) { m_Camera.position = position; }
 private:
     SFXHandle m_BoomSFX;
     float m_MovementSpeed = 3.f;
     float m_TurnSpeed = 5000.f;
-    Vector3 m_Position{0.f};
-    Vector3 m_Rotation{0.f};
     Camera m_Camera;
 };

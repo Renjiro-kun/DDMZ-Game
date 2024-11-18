@@ -25,9 +25,9 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
             SFXManager::GetInstance().Play(m_BoomSFX);
         }
 
-        m_Position = Vector3{movement * m_MovementSpeed * deltaTime,0.f, 0.f };
-        m_Rotation = Vector3{turn * DEG2RAD * m_TurnSpeed * deltaTime, 0.f, 0.f};
+        Vector3 desiredPosition = Vector3{movement * m_MovementSpeed * deltaTime, 0.f, 0.f };
+        Vector3 desiredRotation = Vector3{turn * DEG2RAD * m_TurnSpeed * deltaTime, 0.f, 0.f};
 
-        UpdateCameraPro(&m_Camera, m_Position, m_Rotation, 0.f);
+        UpdateCameraPro(&m_Camera, desiredPosition, desiredRotation, 0.f);
     }   
 }

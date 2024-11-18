@@ -457,8 +457,40 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 	UploadMesh(&outMesh, false);
 }
 
+void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& collisionMask)
+{
+	LayerInfo* layerInfo;
 
-void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze)
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (info.layers[i].name.compare("Walls") == 0)
+		{
+			layerInfo = &info.layers[i];
+		}
+	}
+
+	if(!layerInfo)
+	{
+		return;
+	}
+
+	collisionMask.clear();
+	collisionMask.reserve(layerInfo->dataSize);
+
+	const char wallID = 1;
+
+	for (size_t i = 0; i < layerInfo->dataSize; i++)
+	{
+		char pushValue = 0;
+		if(((char*)layerInfo->data)[i] == wallID)
+		{
+			pushValue = 1;
+		}	
+		collisionMask.push_back(pushValue);
+	}
+}
+
+void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, std::vector<char>& collisionMask)
 {
 	int size = 0;
 
@@ -470,6 +502,6 @@ void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze)
 	MazeGenerator::MazeInfo info;
 
 	ParseFile(file, info);
-
+	GenerateCollisionMask(info, collisionMask);
 	GenerateMesh(info, maze);
 }

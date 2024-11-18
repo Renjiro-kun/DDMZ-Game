@@ -7,7 +7,7 @@
 class MazeGenerator
 {
 public:
-	static void GenerateMazeMap(const std::string& name, Mesh& maze);
+	static void GenerateMazeMap(const std::string& name, Mesh& maze, std::vector<char>& collisionMask);
 private:
 	enum LayerType : char
 	{
@@ -32,6 +32,6 @@ private:
 	static void ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze);
 
 	static void GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh);
-
+	static void GenerateCollisionMask(MazeGenerator::MazeInfo& info, std::vector<char>& collisionMask);
 	static bool CheckLayerData(void* data, size_t idx, char value);
 };
