@@ -14,7 +14,7 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 	file.read(&mazeInfo.width, sizeof(char));
 	file.read(&mazeInfo.height, sizeof(char));
 	file.read(&layerCount, sizeof(char));
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < layerCount; i++)
 	{
 		LayerInfo& layer = mazeInfo.layers.emplace_back();
 		char length = 0;
@@ -22,11 +22,46 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 		char* name = new char[length];
 		file.read(name, sizeof(char) * length);
 		layer.name = name;
-		layer.dataSize = mazeInfo.width * mazeInfo.height;
-		layer.data = (void*)new char[layer.dataSize];
-		file.read((char*)layer.data, sizeof(char) * mazeInfo.width * mazeInfo.height);
+		file.read((char*)&layer.type, sizeof(char));
+		if(layer.type == LayerType::Tile)
+		{
+			layer.dataSize = mazeInfo.width * mazeInfo.height;
+			layer.data = (void*)new char[layer.dataSize];
+			ReadTileData((char*)layer.data, (size_t)mazeInfo.width * mazeInfo.height, file);
+		} 
+		else if (layer.type == LayerType::Object)
+		{
+			char count = 0;
+			file.read(&count, sizeof(char));
+			layer.objects.reserve(count);
+			for (size_t j = 0; j < count; j++)
+			{
+				ObjectInfo obj;
+				ReadObjectData(obj, file);
+				layer.objects.push_back(obj);
+			}
+		}
+		
 		delete[] name;
 	}
+	file.close();
+}
+
+void MazeGenerator::ReadTileData(char* dataLocation, size_t size, std::ifstream& stream)
+{
+	stream.read(dataLocation, sizeof(char) * size);
+}
+
+void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
+{
+	char length = 0;
+	stream.read(&length, sizeof(length));
+	stream.read(object.name, sizeof(char) * length);
+	int32_t tempInt = 0;
+	stream.read((char*)&tempInt, sizeof(int32_t));
+	object.x = tempInt;
+	stream.read((char*)&tempInt, sizeof(int32_t));
+	object.y = tempInt;
 }
 
 bool MazeGenerator::CheckLayerData(void* data, size_t idx, char value)

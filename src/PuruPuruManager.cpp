@@ -4,12 +4,6 @@
 
 maple_device_t* PuruPuruManager::m_PuruPuruDevice = nullptr;
 
-inline void word2hexbytes(uint32_t word, uint8_t *bytes) {
-  for (int i = 0; i < 8; i++) {
-    bytes[i] = (word >> (28 - (i * 4))) & 0xf;
-  }
-}
-
 void PuruPuruManager::Init()
 {
     if((m_PuruPuruDevice == NULL) || (maple_dev_valid(m_PuruPuruDevice->port, m_PuruPuruDevice->unit) == 0)) 
