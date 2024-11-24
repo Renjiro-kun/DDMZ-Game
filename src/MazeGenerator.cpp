@@ -525,7 +525,31 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 	}
 }
 
-void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, std::vector<char>& collisionMask)
+void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo)
+{
+	runtimeInfo.height = info.height;
+	runtimeInfo.width = info.width;
+
+	LayerInfo* objectLayer = nullptr;
+
+	for (auto layer : info.layers)
+	{
+		if(layer.type == LayerType::Object)
+		{
+			objectLayer = &layer;
+		}
+	}
+
+	if(!objectLayer)
+	{
+		return;
+	}
+	
+	runtimeInfo.spawnX = objectLayer->objects[0].x;
+	runtimeInfo.spawnY = objectLayer->objects[0].y;
+}
+
+void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, MazeRuntimeInfo& runtimeInfo)
 {
 	int size = 0;
 
@@ -537,6 +561,8 @@ void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, std::ve
 	MazeGenerator::MazeInfo info;
 
 	ParseFile(file, info);
-	GenerateCollisionMask(info, collisionMask);
+	GenerateCollisionMask(info, runtimeInfo.collisionMask);
+	FillRuntimeInfo(info, runtimeInfo);
+
 	GenerateMesh(info, maze);
 }

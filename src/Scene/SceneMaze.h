@@ -2,6 +2,8 @@
 #include <Scene/Scene.h>
 #include <FirstPersonCamera.h>
 #include <Sound/BgmManager.h>
+#include <MazeGenerator.h>
+
 #include <vector>
 
 class SceneMaze : public Scene
@@ -18,12 +20,10 @@ private:
     void CheckCollisions();
     void CalculateLight();
 private:
-    std::vector<char> m_CollisionMask;
+    MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;
-    Texture2D m_CubicMap;
     Texture2D m_CubeAtlas;
     Model m_MazeModel;
-    Color* m_MapPixels;
     Vector3 m_OldCamPosition;
     Vector3 m_MapPosition;
 

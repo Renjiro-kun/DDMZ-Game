@@ -4,10 +4,20 @@
 #include <vector>
 #include <fstream>
 
+struct MazeRuntimeInfo
+{
+	std::vector<char> collisionMask;
+	short width;
+	short height;
+
+	int32_t spawnX;
+	int32_t spawnY;
+};
+
 class MazeGenerator
 {
 public:
-	static void GenerateMazeMap(const std::string& name, Mesh& maze, std::vector<char>& collisionMask);
+	static void GenerateMazeMap(const std::string& name, Mesh& maze, MazeRuntimeInfo& info);
 private:
 	enum LayerType : char
 	{
@@ -47,5 +57,6 @@ private:
 
 	static void GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh);
 	static void GenerateCollisionMask(MazeGenerator::MazeInfo& info, std::vector<char>& collisionMask);
+	static void FillRuntimeInfo(MazeGenerator::MazeInfo& info, MazeRuntimeInfo& runtimeInfo);
 	static bool CheckLayerData(void* data, size_t idx, char value);
 };
