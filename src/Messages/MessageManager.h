@@ -15,7 +15,7 @@ public:
     void Update();
     void OnDraw2D();
 
-    void Request() { m_DialogRequested = true; }
+    void Request();
 
 private:
     MessageManager() = default;

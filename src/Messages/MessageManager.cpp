@@ -1,5 +1,6 @@
 #include <pch.h>
 #include <Messages/MessageManager.h>
+#include <Input/InputContextManager.h>
 
 void MessageManager::Init()
 {
@@ -32,13 +33,23 @@ void MessageManager::OnDraw2D()
     }
 }
 
+void MessageManager::Request()
+{
+    if(!m_DialogRequested)
+    {
+        m_DialogRequested = true;
+        InputContextManager::GetInstance().SetInputContext(InputContext::Message);
+    }
+}
+
 void MessageManager::Update()
 {
-    if(IsGamepadAvailable(0))
+    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Message)
     {
-        if(m_DialogRequested && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
+        if(m_DialogRequested && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
         {
             m_DialogRequested = false;
+            InputContextManager::GetInstance().SetInputContext(InputContext::Default);
         }
     }
 }

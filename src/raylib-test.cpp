@@ -7,6 +7,8 @@
 #include <Sound/BgmManager.h>
 #include <Sound/SfxManager.h>
 
+#include <Input/InputContextManager.h>
+
 #include <Messages/MessageManager.h>
 
 #include <PuruPuruManager.h>
@@ -23,6 +25,7 @@ int main()
     SFXManager::GetInstance().Init();
 
     PuruPuruManager::GetInstance().Init();
+    InputContextManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAIN_MENU);
@@ -45,6 +48,7 @@ int main()
         EndDrawing();
     }
 
+    InputContextManager::GetInstance().Shutdown();
     MessageManager::GetInstance().Shutdown();
     PuruPuruManager::GetInstance().Shutdown();
     SFXManager::GetInstance().Shutdown();

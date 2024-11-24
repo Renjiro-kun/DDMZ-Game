@@ -2,6 +2,7 @@
 #include "FirstPersonCamera.h"
 #include <PuruPuruManager.h>
 #include <Messages/MessageManager.h>
+#include <Input/InputContextManager.h>
 
 FirstPersonCamera::FirstPersonCamera()
 {
@@ -16,7 +17,7 @@ FirstPersonCamera::FirstPersonCamera()
 
 void FirstPersonCamera::UpdateCamera(float deltaTime)
 {
-    if(IsGamepadAvailable(0))
+    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
         float movement = -GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
         float turn = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
@@ -27,7 +28,7 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
             PuruPuruManager::GetInstance().Rumble(0x3339F010);
         }
 
-        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
         {
             MessageManager::GetInstance().Request();
         }
