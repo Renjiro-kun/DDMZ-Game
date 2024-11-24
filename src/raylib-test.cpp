@@ -7,6 +7,8 @@
 #include <Sound/BgmManager.h>
 #include <Sound/SfxManager.h>
 
+#include <Messages/MessageManager.h>
+
 #include <PuruPuruManager.h>
 
 int main()
@@ -24,22 +26,26 @@ int main()
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAIN_MENU);
+    MessageManager::GetInstance().Init();
 
     while (!WindowShouldClose())
     {
         SceneManager::GetInstance().Update();
+        MessageManager::GetInstance().Update();
 
         BeginDrawing();
             SceneManager::GetInstance().ClearScreen();
             
             SceneManager::GetInstance().Draw3D();
             SceneManager::GetInstance().Draw();
+            MessageManager::GetInstance().OnDraw2D();
                         
             DrawFPS(10, 10);
 
         EndDrawing();
     }
 
+    MessageManager::GetInstance().Shutdown();
     PuruPuruManager::GetInstance().Shutdown();
     SFXManager::GetInstance().Shutdown();
     BGMManager::GetInstance().Shutdown();

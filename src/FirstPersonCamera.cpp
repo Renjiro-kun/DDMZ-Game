@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FirstPersonCamera.h"
 #include <PuruPuruManager.h>
+#include <Messages/MessageManager.h>
 
 FirstPersonCamera::FirstPersonCamera()
 {
@@ -24,6 +25,11 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
         {
             SFXManager::GetInstance().Play(m_BoomSFX);
             PuruPuruManager::GetInstance().Rumble(0x3339F010);
+        }
+
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+        {
+            MessageManager::GetInstance().Request();
         }
 
         Vector3 desiredPosition = Vector3{movement * m_MovementSpeed * deltaTime, 0.f, 0.f };

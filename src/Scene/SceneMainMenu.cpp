@@ -17,7 +17,6 @@ void SceneMainMenu::OnActivated()
             m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat("/cd/titlescreen/ts%01i%01i.png", y+1, x+1));
         }
     }
-    
 }
 
 void SceneMainMenu::OnDectivated()
