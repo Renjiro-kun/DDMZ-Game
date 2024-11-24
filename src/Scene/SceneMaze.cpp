@@ -14,7 +14,7 @@ void SceneMaze::OnActivated()
 
     m_MapPosition = { 0.f, 0.0f, 0.0f };          // Set model position
 
-    m_BGM = BGMManager::GetInstance().LoadSound("/rd/bgm_field.adpcm");
+    m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
     BGMManager::GetInstance().Play(m_BGM);
 
     m_FpsCamera.SetPosition(Vector3{m_MapInfo.spawnX / 128.f, .4f, m_MapInfo.spawnY / 128.f});
