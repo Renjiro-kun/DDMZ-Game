@@ -19,6 +19,8 @@ public:
 private:
     void CheckCollisions();
     void CalculateLight();
+
+    void OnExitReached();
 private:
     MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;

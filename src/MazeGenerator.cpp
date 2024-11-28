@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <math.h>
 
 void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& mazeInfo)
 {
@@ -25,6 +26,7 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 		file.read((char*)&layer.type, sizeof(char));
 		if(layer.type == LayerType::Tile)
 		{
+			file.read((char*)&layer.tileType, sizeof(char));
 			layer.dataSize = mazeInfo.width * mazeInfo.height;
 			layer.data = (void*)new char[layer.dataSize];
 			ReadTileData((char*)layer.data, (size_t)mazeInfo.width * mazeInfo.height, file);
@@ -56,12 +58,16 @@ void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
 {
 	char length = 0;
 	stream.read(&length, sizeof(length));
-	stream.read(object.name, sizeof(char) * length);
+	char* tempName = new char[length];
+	stream.read(tempName, sizeof(char) * length);
+	object.name = tempName;
+	stream.read((char*)&object.type, sizeof(char));
 	int32_t tempInt = 0;
 	stream.read((char*)&tempInt, sizeof(int32_t));
 	object.x = tempInt;
 	stream.read((char*)&tempInt, sizeof(int32_t));
 	object.y = tempInt;
+	delete[] tempName;
 }
 
 bool MazeGenerator::CheckLayerData(void* data, size_t idx, char value)
@@ -112,9 +118,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 
 	LayerInfo* layerInfo;
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < info.layers.size(); i++)
 	{
-		if (info.layers[i].name.compare("Walls") == 0)
+		if (info.layers[i].tileType == TileLayerType::Wall)
 		{
 			layerInfo = &info.layers[i];
 		}
@@ -498,7 +504,7 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 
 	for (size_t i = 0; i < 3; i++)
 	{
-		if (info.layers[i].name.compare("Walls") == 0)
+		if (info.layers[i].tileType == TileLayerType::Wall)
 		{
 			layerInfo = &info.layers[i];
 		}
@@ -516,10 +522,10 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 
 	for (size_t i = 0; i < layerInfo->dataSize; i++)
 	{
-		char pushValue = 0;
+		char pushValue = static_cast<char>(CollisionType::None);
 		if(((char*)layerInfo->data)[i] == wallID)
 		{
-			pushValue = 1;
+			pushValue = static_cast<char>(CollisionType::Wall);
 		}	
 		collisionMask.push_back(pushValue);
 	}
@@ -545,8 +551,37 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		return;
 	}
 	
-	runtimeInfo.spawnX = objectLayer->objects[0].x;
-	runtimeInfo.spawnY = objectLayer->objects[0].y;
+	runtimeInfo.objects.reserve(objectLayer->objects.size());
+
+	for (auto& obj : objectLayer->objects)
+	{
+		RuntimeObjectInfo info;
+		info.position = Vector2{obj.x / 128.f, obj.y / 128.f};
+		info.type = obj.type;
+		runtimeInfo.objects.push_back(info);
+	}
+
+	GenerateCollisionMask(info, runtimeInfo.collisionMask);
+
+	Vector2 exitPosition{0};
+	for (auto& obj : runtimeInfo.objects)
+	{
+		if(obj.type == ObjectType::ExitNode)
+		{
+			exitPosition = Vector2{obj.position.x * 1.f, obj.position.y * 1.f};
+		}
+	}
+
+	int exitCellX = static_cast<int>(roundf(exitPosition.x)) - 1;
+	int exitCellY = static_cast<int>(roundf(exitPosition.y)) - 1;
+
+    if(exitCellX < 0) exitCellX = 0;
+    else if(exitCellX > runtimeInfo.width) exitCellX = runtimeInfo.width - 1;
+
+    if(exitCellY < 0) exitCellY = 0;
+    else if(exitCellY > runtimeInfo.height) exitCellY = runtimeInfo.height - 1;
+
+	runtimeInfo.collisionMask[exitCellY*runtimeInfo.width+exitCellX] = static_cast<char>(CollisionType::Exit);
 }
 
 void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, MazeRuntimeInfo& runtimeInfo)
@@ -561,7 +596,6 @@ void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, MazeRun
 	MazeGenerator::MazeInfo info;
 
 	ParseFile(file, info);
-	GenerateCollisionMask(info, runtimeInfo.collisionMask);
 	FillRuntimeInfo(info, runtimeInfo);
 
 	GenerateMesh(info, maze);

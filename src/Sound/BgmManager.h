@@ -2,6 +2,7 @@
 #include <string>
 
 typedef int BGM_Handle;
+const int INVALID_BGM_HANDLE = -1;
 
 class BGMManager
 {

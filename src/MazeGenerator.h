@@ -4,14 +4,39 @@
 #include <vector>
 #include <fstream>
 
+enum class ObjectType : char
+{
+	Invalid = 0,
+	PlayerStart = 1,
+	ExitNode = 2
+}; 
+
+struct RuntimeObjectInfo
+{
+	Vector2 position;
+	ObjectType type;
+};
+
+enum class CollisionType :  char
+{
+	None = 0,
+	Wall = 1,
+	Exit = 2
+};
+
 struct MazeRuntimeInfo
 {
 	std::vector<char> collisionMask;
 	short width;
 	short height;
+	std::vector<RuntimeObjectInfo> objects;
+};
 
-	int32_t spawnX;
-	int32_t spawnY;
+enum class TileLayerType : char
+{
+	Floor = 0,
+	Wall = 1,
+	Celling = 2
 };
 
 class MazeGenerator
@@ -28,15 +53,17 @@ private:
 
 	struct ObjectInfo
 	{
-		char* name;
+		std::string name;
 		int32_t x;
 		int32_t y;
+		ObjectType type;
 	};
 
 	struct LayerInfo
 	{
 		std::string name;
 		LayerType type;
+		TileLayerType tileType;
 		void* data;
 		size_t dataSize;
 		std::vector<ObjectInfo> objects;

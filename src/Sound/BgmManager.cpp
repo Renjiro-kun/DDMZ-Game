@@ -22,23 +22,32 @@ BGM_Handle BGMManager::LoadSound(const std::string& path)
 
 void BGMManager::Play(BGM_Handle bgm)
 {
-    // TODO: Add validations
-    wav_play(bgm);
+    if(bgm != INVALID_BGM_HANDLE)
+    {
+        wav_play(bgm);
+    }
 }
 
 void BGMManager::SetVolume(BGM_Handle bgm, int volume)
 {
-    // TODO: Add validations
-    wav_volume(bgm, volume);
+    if(bgm != INVALID_BGM_HANDLE)
+    {
+        wav_volume(bgm, volume);
+    }
 }
 
 void BGMManager::Stop(BGM_Handle bgm)
 {
-    // TODO: Add validations
-    wav_stop(bgm);
+    if(bgm != INVALID_BGM_HANDLE)
+    {
+        wav_stop(bgm);
+    }
 }
 
 void BGMManager::UnloadBGM(BGM_Handle bgm)
 {
-    wav_destroy(bgm);
+    if(bgm != INVALID_BGM_HANDLE)
+    {
+        wav_destroy(bgm);
+    }
 }
