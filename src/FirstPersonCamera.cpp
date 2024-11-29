@@ -30,7 +30,7 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
 
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
         {
-            MessageManager::GetInstance().Request();
+            MessageManager::GetInstance().Request(1);
         }
 
         Vector3 desiredPosition = Vector3{movement * m_MovementSpeed * deltaTime, 0.f, 0.f };

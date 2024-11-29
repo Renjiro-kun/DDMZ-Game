@@ -9,6 +9,13 @@ void MessageManager::Init()
     {
         m_DialogBoxTextures[i] = LoadTexture(TextFormat("/rd/dlgbox%0i.png", i+1));
     }
+
+    std::ifstream file("/rd/script.scr", std::ios::binary);
+	if (!file)
+	{
+		// error handling
+	}
+    ReadScriptIntoMemory(file);
 }
 
 void MessageManager::Shutdown()
@@ -21,6 +28,32 @@ void MessageManager::Shutdown()
     delete[] m_DialogBoxTextures;
 }
 
+void MessageManager::ReadScriptIntoMemory(std::ifstream& file)
+{
+    char header[4];
+    file.read(header, sizeof(char)*4);
+    char type;
+    file.read(&type, sizeof(char));
+    uint16_t size = 0;
+    file.read((char*)&size, sizeof(uint16_t));
+    m_LoadedMessage.reserve(size);
+    for (size_t i = 0; i < size; i++)
+    {
+        Message msg;
+        file.read((char*)&msg.ID, sizeof(short));
+        char msgType = 0;
+        file.read(&msgType, sizeof(char));
+        char lenght = 0;
+        file.read(&lenght, sizeof(char));
+        char* tempStr = new char[lenght];
+        file.read(tempStr, sizeof(char)*lenght);
+        msg.Message = tempStr;
+        m_LoadedMessage.push_back(msg);
+        delete[] tempStr;
+    }
+    
+}
+
 void MessageManager::OnDraw2D()
 {
     if(m_DialogRequested)
@@ -29,17 +62,31 @@ void MessageManager::OnDraw2D()
         {
             DrawTexture(m_DialogBoxTextures[i], i * 256, 256, WHITE);
         }
-        DrawText("Test message", 0, 256, 32, WHITE);
+        DrawText(m_RequestedString.c_str(), 0, 256, 32, WHITE);
     }
 }
 
-void MessageManager::Request()
+void MessageManager::Request(uint16_t messageID)
 {
     if(!m_DialogRequested)
     {
         m_DialogRequested = true;
+        SetRequestedMessage(messageID);
         InputContextManager::GetInstance().SetInputContext(InputContext::Message);
     }
+}
+
+void MessageManager::SetRequestedMessage(uint16_t messageID)
+{
+    for (size_t i = 0; i < m_LoadedMessage.size(); i++)
+    {
+        if(m_LoadedMessage[i].ID == messageID)
+        {
+            m_RequestedString = m_LoadedMessage[i].Message;
+            return;
+        }
+    }
+    m_RequestedString = TextFormat("Message %d not found", messageID);
 }
 
 void MessageManager::Update()
