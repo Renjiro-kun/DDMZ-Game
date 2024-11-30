@@ -9,6 +9,8 @@ void SceneMainMenu::OnActivated()
     m_Camera.fovy = 45.f;
     m_Camera.projection = CAMERA_PERSPECTIVE;
 
+    m_AdvFont = LoadFont("/rd/font_adv.png");
+
     m_AdvTextures = new Texture2D[widthCount * heightCount];
     for (size_t y = 0; y < heightCount; y++)
     {
@@ -42,7 +44,8 @@ void SceneMainMenu::OnDraw2D()
            DrawTexture(m_AdvTextures[y*widthCount+x], x * 256, y * 256, WHITE);
         }
     }
-    DrawText("PRESS START", 200, 50, 20, BLACK);
+    //DrawText("PRESS START", 200, 50, 20, BLACK);
+    DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, 50 }, 32, 1, BLACK);
 }
 
 void SceneMainMenu::OnUpdate()

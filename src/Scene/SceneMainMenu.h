@@ -14,6 +14,7 @@ public:
     Camera& GetCamera() override { return m_Camera; }
 
 private:
+    Font m_AdvFont;
     Texture2D* m_AdvTextures;
 
     const int8_t widthCount = 3;
