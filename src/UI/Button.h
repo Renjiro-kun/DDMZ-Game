@@ -5,7 +5,7 @@ class Button : public Widget
 {
 public:
     Button();
-    Button(Vector2 position);
+    Button(Vector2 position, void (*pressedCallback)() = nullptr, void(*focusedCallback)() = nullptr);
     ~Button();
 
     void OnDraw2D() override;
@@ -15,7 +15,12 @@ public:
     void SetPosition(Vector2 position) { m_Position = position; }
 
 private:
+    void InitData();
+
     void SetCurrentState(char state);
+private:
+    void (*onButtonPressedCallback)();
+    void (*onButtonFocusedCallback)();
 private:
     Texture2D m_ButtonTexture;
     Rectangle m_CurrentStateRect;

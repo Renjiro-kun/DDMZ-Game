@@ -1,3 +1,2 @@
-#include "../pch.h"
-#include "Scene.h"
-
+#include <pch.h>
+#include <Scene/Scene.h>

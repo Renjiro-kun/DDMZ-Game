@@ -4,11 +4,13 @@
 
 class Scene;
 
-enum SceneId : int
+enum class SceneId : int
 {
     SCENE_MAIN_MENU = 0,
     SCENE_MAZE = 1,
-    SCENE_BATTLE = 2
+    SCENE_BATTLE = 2,
+    SCENE_INTRO = 3,
+    SCENE_TITLE_SCREEN = 4
 };
 
 class SceneManager

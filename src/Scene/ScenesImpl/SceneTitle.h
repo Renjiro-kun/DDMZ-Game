@@ -4,7 +4,7 @@
 #include <vector>
 #include <UI/Canvas.h>
 
-class SceneMainMenu : public Scene
+class SceneTitle : public Scene
 {
 public:
     void OnActivated() override;
@@ -17,8 +17,6 @@ public:
 private:
     Font m_AdvFont;
     Texture2D* m_AdvTextures;
-
-    Canvas* m_MenuCanvas = nullptr;
 
     const int8_t widthCount = 3;
     const int8_t heightCount = 2;

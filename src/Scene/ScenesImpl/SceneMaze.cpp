@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <Scene/SceneMaze.h>
+#include <Scene/ScenesImpl/SceneMaze.h>
 #include <Scene/SceneManager.h>
 
 void SceneMaze::OnActivated()
@@ -95,7 +95,7 @@ void SceneMaze::OnDraw2D()
 
 void SceneMaze::OnExitReached()
 {
-    SceneManager::GetInstance().LoadScene(SCENE_MAIN_MENU);
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
 }
 
 void SceneMaze::CalculateLight()

@@ -1,14 +1,16 @@
 #include <Scene/SceneManager.h>
-#include <Scene/SceneMaze.h>
-#include <Scene/SceneMainMenu.h>
-#include <Scene/SceneBattle.h>
+#include <Scene/ScenesImpl/SceneMaze.h>
+#include <Scene/ScenesImpl/SceneMainMenu.h>
+#include <Scene/ScenesImpl/SceneBattle.h>
+#include <Scene/ScenesImpl/SceneTitle.h>
 
 void SceneManager::Init()
 {
     m_ScenesArray = std::map<SceneId, Scene*>();
-    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SCENE_MAZE, new SceneMaze()));
-    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SCENE_MAIN_MENU, new SceneMainMenu()));
-    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SCENE_BATTLE, new SceneBattle()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_MAZE, new SceneMaze()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_MAIN_MENU, new SceneMainMenu()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_BATTLE, new SceneBattle()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_TITLE_SCREEN, new SceneTitle()));
 }
 
 void SceneManager::Shutdown()

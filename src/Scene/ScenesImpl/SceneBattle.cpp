@@ -1,4 +1,4 @@
-#include <Scene/SceneBattle.h>
+#include <Scene/ScenesImpl/SceneBattle.h>
 
 void SceneBattle::OnActivated()
 {
