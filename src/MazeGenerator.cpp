@@ -536,29 +536,32 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.height = info.height;
 	runtimeInfo.width = info.width;
 
-	LayerInfo* objectLayer = nullptr;
+	short objectLayerIdx = -1;
 
-	for (auto layer : info.layers)
+	for (int i = 0; i < info.layers.size(); i++)
 	{
-		if(layer.type == LayerType::Object)
+		if(info.layers[i].type == LayerType::Object)
 		{
-			objectLayer = &layer;
+			objectLayerIdx = i;
 		}
 	}
 
-	if(!objectLayer)
+	if(objectLayerIdx < 0 || objectLayerIdx > info.layers.size() - 1)
 	{
 		return;
 	}
 	
-	runtimeInfo.objects.reserve(objectLayer->objects.size());
+	runtimeInfo.objects.reserve(info.layers[objectLayerIdx].objects.size());
 
-	for (auto& obj : objectLayer->objects)
+
+	for (size_t i = 0; i < info.layers[objectLayerIdx].objects.size(); i++)
 	{
-		RuntimeObjectInfo info;
-		info.position = Vector2{obj.x / 128.f, obj.y / 128.f};
-		info.type = obj.type;
-		runtimeInfo.objects.push_back(info);
+		RuntimeObjectInfo runtimeObj;
+		ObjectInfo& object = info.layers[objectLayerIdx].objects[i];
+
+		runtimeObj.position = Vector2{object.x / 128.f, object.y / 128.f};
+		runtimeObj.type = object.type;
+		runtimeInfo.objects.push_back(runtimeObj);
 	}
 
 	GenerateCollisionMask(info, runtimeInfo.collisionMask);

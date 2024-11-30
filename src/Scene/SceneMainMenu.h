@@ -2,6 +2,7 @@
 #include <Scene/Scene.h>
 #include <raylib/raylib.h>
 #include <vector>
+#include <UI/Canvas.h>
 
 class SceneMainMenu : public Scene
 {
@@ -16,6 +17,8 @@ public:
 private:
     Font m_AdvFont;
     Texture2D* m_AdvTextures;
+
+    Canvas* m_MenuCanvas = nullptr;
 
     const int8_t widthCount = 3;
     const int8_t heightCount = 2;
