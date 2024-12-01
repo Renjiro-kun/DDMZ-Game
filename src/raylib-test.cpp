@@ -28,7 +28,7 @@ int main()
     InputContextManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
-    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
     MessageManager::GetInstance().Init();
 
     while (!WindowShouldClose())
