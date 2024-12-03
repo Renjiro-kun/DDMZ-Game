@@ -7,11 +7,10 @@ void SceneMaze::OnActivated()
     m_FpsCamera = FirstPersonCamera();
 
     Mesh mesh {0};
-    MazeGenerator::GenerateMazeMap("/rd/testMap.ddmz", mesh, m_MapInfo);
+    MazeGenerator::GenerateMazeMap("/rd/bigTileTest.ddmz", mesh, m_MapInfo);
     m_MazeModel = LoadModelFromMesh(mesh);
 
-    m_CubeAtlas = LoadTexture("/rd/cubicmap_atlas.png");
-    m_MazeModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_CubeAtlas;
+    m_MazeModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_MapInfo.atlas;
 
     m_MapPosition = { 0.f, 0.0f, 0.0f };          // Set model position
 

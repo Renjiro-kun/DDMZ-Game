@@ -1,5 +1,7 @@
 #include "MazeGenerator.h"
 
+#include <PVRTextureLoader.h>
+
 #include <string.h>
 #include <vector>
 #include <string>
@@ -14,6 +16,39 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 	file.read(header, sizeof(char) * 4);
 	file.read(&mazeInfo.width, sizeof(char));
 	file.read(&mazeInfo.height, sizeof(char));
+	
+	char length;
+	file.read(&length, sizeof(char));
+	char* atlasName = new char[length];
+	file.read(atlasName, sizeof(char) * length);
+	mazeInfo.atlasName = atlasName;
+	delete[] atlasName;
+
+	file.read((char*)&mazeInfo.tileSize, sizeof(int));
+	file.read((char*)&mazeInfo.imageSize, sizeof(int));
+
+	int tilesCount;
+	file.read((char*)&tilesCount, sizeof(int));
+	mazeInfo.tiles.reserve(tilesCount);
+	for (size_t i = 0; i < tilesCount; i++)
+	{
+		TileInfo info;
+		file.read((char*)&info.id, sizeof(int));
+		// info.id = info.id+1;
+		int tempVal = 0;
+		file.read((char*)&tempVal, sizeof(int));
+		info.uvRect.x = (float)tempVal / mazeInfo.imageSize;
+		file.read((char*)&tempVal, sizeof(int));
+		info.uvRect.y = (float)tempVal / mazeInfo.imageSize;
+		file.read((char*)&tempVal, sizeof(int));
+		info.uvRect.width = (float)tempVal / mazeInfo.imageSize;
+		file.read((char*)&tempVal, sizeof(int));
+		info.uvRect.height = (float)tempVal / mazeInfo.imageSize;
+		mazeInfo.tiles.push_back(info);
+	}
+
+	mazeInfo.DefalutTileUVs = mazeInfo.tiles[0].uvRect;
+
 	file.read(&layerCount, sizeof(char));
 	for (size_t i = 0; i < layerCount; i++)
 	{
@@ -75,6 +110,83 @@ bool MazeGenerator::CheckLayerData(void* data, size_t idx, char value)
 	return ((char*)data)[idx] == value;
 }
 
+bool MazeGenerator::CellIsWall(void* data, size_t idx)
+{
+	return ((char*)data)[idx] > 0;
+}
+
+void MazeGenerator::SetTileUVs(RectangleF& uvRects, Vector2* texCoordsArray, int& texCounter, UVType type)
+{
+	if(type == UVType::BOTTOM)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x, uvRects.y };
+	}
+	else if(type == UVType::TOP)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+	}
+	else if(type == UVType::LEFT)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+	}
+	else if(type == UVType::RIGHT)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+	}
+	else if(type == UVType::FRONT)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+	}
+	else if(type == UVType::BACK)
+	{
+		texCoordsArray[texCounter]		= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 1]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 2]	= Vector2{ uvRects.x + uvRects.width, uvRects.y + uvRects.height };
+		texCoordsArray[texCounter + 3]	= Vector2{ uvRects.x + uvRects.width, uvRects.y };
+		texCoordsArray[texCounter + 4]	= Vector2{ uvRects.x, uvRects.y };
+		texCoordsArray[texCounter + 5]	= Vector2{ uvRects.x, uvRects.y + uvRects.height };
+	}
+	
+	texCounter += 6;
+}
+
+MazeGenerator::RectangleF& MazeGenerator::GetTileUV(MazeGenerator::MazeInfo& info, char id)
+{
+	for (size_t i = 0; i < info.tiles.size(); i++)
+	{
+		if(static_cast<int>(id) == info.tiles[i].id)
+		{
+			return info.tiles[i].uvRect;
+		}
+	}
+	return info.DefalutTileUVs;
+}
+
 void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 {
 	int maxTriangles = info.width * info.height * 12;
@@ -101,14 +213,6 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 	Vector3 n5 = { 0.f, 0.f, -1.f };
 	Vector3 n6 = { 0.f, 0.f, 1.f };
 
-	typedef struct RectangleF
-	{
-		float x;
-		float y;
-		float width;
-		float height;
-	} RectangleF;
-
 	RectangleF rightTexUV	= { 0.f, 0.f, 0.5f, 0.5f };
 	RectangleF leftTexUV	= { .5f, 0.f, 0.5f, 0.5f };
 	RectangleF frontTexUV	= { 0.f, 0.f, 0.5f, 0.5f };
@@ -116,13 +220,27 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 	RectangleF topTexUV		= { 0.f, 0.5f, 0.5f, 0.5f };
 	RectangleF bottomTexUV	= { 0.5f, 0.5f, 0.5f, 0.5f };
 
-	LayerInfo* layerInfo;
+	LayerInfo* WallLayer;
+	LayerInfo* cellingLayer;
+	LayerInfo* floorLayer;
 
 	for (size_t i = 0; i < info.layers.size(); i++)
 	{
+		if(info.layers[i].type == LayerType::Object)
+		{
+			continue;
+		}
 		if (info.layers[i].tileType == TileLayerType::Wall)
 		{
-			layerInfo = &info.layers[i];
+			WallLayer = &info.layers[i];
+		}
+		if(info.layers[i].tileType == TileLayerType::Floor)
+		{
+			floorLayer = &info.layers[i];
+		}
+		if(info.layers[i].tileType == TileLayerType::Celling)
+		{
+			cellingLayer = &info.layers[i];
 		}
 	}
 
@@ -143,7 +261,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 			Vector3 v7 = { w * (x - 0.5f), 0, h * (z + 0.5f) };
 			Vector3 v8 = { w * (x + 0.5f), 0, h * (z + 0.5f) };
 
-			if (CheckLayerData (layerInfo->data, z * info.width + x,wallID))
+			if(CellIsWall(WallLayer->data, z * info.width + x))
 			{
 				// Define triangles and checking collateral cubes
 				//----------------------------------------------
@@ -216,7 +334,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				cCounter += 6;
 
 				// Checking cube on the botton of current cube
-				if (((z < info.height - 1) && CheckLayerData(layerInfo->data, (z+1)*info.width+x, emptyID)) || (z == info.height - 1))
+				if (((z < info.height - 1) && !CellIsWall(WallLayer->data, (z+1)*info.width+x)) || (z == info.height - 1))
 				{
 					// Define front triangles (2 tris, 6 verts --> v2-v7-v3, v3-v7-v8)
 					// NOTE: Collateral occluded faces are not generated
@@ -236,13 +354,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n6;
 					nCounter += 6;
 
-					mapTexcoord[tcCounter]		= Vector2{ frontTexUV.x, frontTexUV.y };
-					mapTexcoord[tcCounter + 1]	= Vector2{ frontTexUV.x, frontTexUV.y + frontTexUV.height };
-					mapTexcoord[tcCounter + 2]	= Vector2{ frontTexUV.x + frontTexUV.width, frontTexUV.y };
-					mapTexcoord[tcCounter + 3]	= Vector2{ frontTexUV.x + frontTexUV.width, frontTexUV.y };
-					mapTexcoord[tcCounter + 4]	= Vector2{ frontTexUV.x, frontTexUV.y + frontTexUV.height };
-					mapTexcoord[tcCounter + 5]	= Vector2{ frontTexUV.x + frontTexUV.width, frontTexUV.y + frontTexUV.height };
-					tcCounter += 6;
+					char id = ((char*)WallLayer->data)[z * info.width + x];
+					RectangleF& uvRect = GetTileUV(info, id);
+					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::FRONT);
 
 					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
 					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
@@ -255,7 +369,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on top of the current cube
-				if (((z > 0) && CheckLayerData(layerInfo->data, (z-1) * info.width + x, emptyID)) || (z==0))
+				if (((z > 0) && !CellIsWall(WallLayer->data, (z-1) * info.width + x)) || (z==0))
 				{
 					// Define back triangles (2 tris, 6 verts --> v1-v5-v6, v1-v4-v5)
 					mapVerticies[vCounter]		= v1;
@@ -274,13 +388,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n5;
 					nCounter += 6;
 
-					mapTexcoord[tcCounter]		= Vector2{ backTexUV.x + backTexUV.width, backTexUV.y };
-					mapTexcoord[tcCounter + 1]	= Vector2{ backTexUV.x, backTexUV.y + backTexUV.height };
-					mapTexcoord[tcCounter + 2]	= Vector2{ backTexUV.x + backTexUV.width, backTexUV.y + backTexUV.height };
-					mapTexcoord[tcCounter + 3]	= Vector2{ backTexUV.x + backTexUV.width, backTexUV.y };
-					mapTexcoord[tcCounter + 4]	= Vector2{ backTexUV.x, backTexUV.y };
-					mapTexcoord[tcCounter + 5]	= Vector2{ backTexUV.x, backTexUV.y + backTexUV.height };
-					tcCounter += 6;
+					char id = ((char*)WallLayer->data)[z * info.width + x];
+					RectangleF& uvRect = GetTileUV(info, id);
+					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::BACK);
 
 					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
 					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
@@ -293,7 +403,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on right of the current cube
-				if (((x < info.width - 1) && CheckLayerData(layerInfo->data, z*info.width+(x+1), emptyID)) || (x == info.width - 1))
+				if (((x < info.width - 1) && !CellIsWall(WallLayer->data, z*info.width+(x+1))) || (x == info.width - 1))
 				{
 					// Define right triangles (2 tris, 6 verts --> v3-v8-v4, v4-v8-v5)
 					mapVerticies[vCounter]		= v3;
@@ -312,13 +422,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n1;
 					nCounter += 6;
 
-					mapTexcoord[tcCounter]		= Vector2{ rightTexUV.x, rightTexUV.y };
-					mapTexcoord[tcCounter + 1]	= Vector2{ rightTexUV.x, rightTexUV.y + rightTexUV.height };
-					mapTexcoord[tcCounter + 2]	= Vector2{ rightTexUV.x + rightTexUV.width, rightTexUV.y };
-					mapTexcoord[tcCounter + 3]	= Vector2{ rightTexUV.x + rightTexUV.width, rightTexUV.y };
-					mapTexcoord[tcCounter + 4]	= Vector2{ rightTexUV.x, rightTexUV.y + rightTexUV.height };
-					mapTexcoord[tcCounter + 5]	= Vector2{ rightTexUV.x + rightTexUV.width, rightTexUV.y + rightTexUV.height };
-					tcCounter += 6;
+					char id = ((char*)WallLayer->data)[z * info.width + x];
+					RectangleF& uvRect = GetTileUV(info, id);
+					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::RIGHT);
 
 					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
 					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
@@ -331,7 +437,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on the left of the current cube
-				if (((x > 0) && CheckLayerData(layerInfo->data, z * info.width + (x - 1), emptyID)) || (x == 0))
+				if (((x > 0) && !CellIsWall(WallLayer->data, z * info.width + (x - 1))) || (x == 0))
 				{
 					// Define left triangles (2 tris, 6 verts --> v1-v7-v2, v1-v6-v7)
 					mapVerticies[vCounter]		= v1;
@@ -350,13 +456,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5] = n2;
 					nCounter += 6;
 
-					mapTexcoord[tcCounter]		= Vector2{ leftTexUV.x, leftTexUV.y };
-					mapTexcoord[tcCounter + 1]	= Vector2{ leftTexUV.x + leftTexUV.width, leftTexUV.y + leftTexUV.height };
-					mapTexcoord[tcCounter + 2]	= Vector2{ leftTexUV.x + leftTexUV.width, leftTexUV.y };
-					mapTexcoord[tcCounter + 3]	= Vector2{ leftTexUV.x, leftTexUV.y };
-					mapTexcoord[tcCounter + 4]	= Vector2{ leftTexUV.x, leftTexUV.y + leftTexUV.height };
-					mapTexcoord[tcCounter + 5]	= Vector2{ leftTexUV.x + leftTexUV.width, leftTexUV.y + leftTexUV.height };
-					tcCounter += 6;
+					char id = ((char*)WallLayer->data)[z * info.width + x];
+					RectangleF& uvRect = GetTileUV(info, id);
+					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::LEFT);
 
 					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
 					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
@@ -368,75 +470,73 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					cCounter += 6;
 				}
 			}
-			else if (CheckLayerData(layerInfo->data, z * info.width + x, emptyID))
+			else if(!CellIsWall(WallLayer->data, z * info.width + x))
 			{
-				// Define top triangles (2 tris, 6 verts --> v1-v2-v3, v1-v3-v4)
-				mapVerticies[vCounter]		= v1;
-				mapVerticies[vCounter + 1]	= v3;
-				mapVerticies[vCounter + 2]	= v2;
-				mapVerticies[vCounter + 3]	= v1;
-				mapVerticies[vCounter + 4]	= v4;
-				mapVerticies[vCounter + 5]	= v3;
-				vCounter += 6;
+				if(CellIsWall(cellingLayer->data, z * info.width + x))
+				{
+					// Define top triangles (2 tris, 6 verts --> v1-v2-v3, v1-v3-v4)
+					mapVerticies[vCounter]		= v1;
+					mapVerticies[vCounter + 1]	= v3;
+					mapVerticies[vCounter + 2]	= v2;
+					mapVerticies[vCounter + 3]	= v1;
+					mapVerticies[vCounter + 4]	= v4;
+					mapVerticies[vCounter + 5]	= v3;
+					vCounter += 6;
 
-				mapNormals[nCounter]		= n4;
-				mapNormals[nCounter + 1]	= n4;
-				mapNormals[nCounter + 2]	= n4;
-				mapNormals[nCounter + 3]	= n4;
-				mapNormals[nCounter + 4]	= n4;
-				mapNormals[nCounter + 5]	= n4;
-				nCounter += 6;
+					mapNormals[nCounter]		= n4;
+					mapNormals[nCounter + 1]	= n4;
+					mapNormals[nCounter + 2]	= n4;
+					mapNormals[nCounter + 3]	= n4;
+					mapNormals[nCounter + 4]	= n4;
+					mapNormals[nCounter + 5]	= n4;
+					nCounter += 6;
 
-				mapTexcoord[tcCounter]		= Vector2{ topTexUV.x, topTexUV.y };
-				mapTexcoord[tcCounter + 1]	= Vector2{ topTexUV.x + topTexUV.width, topTexUV.y + topTexUV.height };
-				mapTexcoord[tcCounter + 2]	= Vector2{ topTexUV.x, topTexUV.y + topTexUV.height };
-				mapTexcoord[tcCounter + 3]	= Vector2{ topTexUV.x, topTexUV.y };
-				mapTexcoord[tcCounter + 4]	= Vector2{ topTexUV.x + topTexUV.width, topTexUV.y };
-				mapTexcoord[tcCounter + 5]	= Vector2{ topTexUV.x + topTexUV.width, topTexUV.y + topTexUV.height };
-				tcCounter += 6;
+					char id = ((char*)cellingLayer->data)[z * info.width + x];
+					RectangleF& topUVs = GetTileUV(info, id);
+					SetTileUVs(topUVs, mapTexcoord, tcCounter, UVType::TOP);
 
-				mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 2] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 3] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 4] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 5] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 2] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 3] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 4] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 5] = Vector4{ 255, 255, 255, 255 };
 
-				cCounter += 6;
+					cCounter += 6;
+				}
+				
+				if(CellIsWall(floorLayer->data, z * info.width + x))
+				{
+					// Define botton triangles (2 tris, 6 verts --> v6-v8-v7, v6-v5-v8)
+					mapVerticies[vCounter]		= v6;
+					mapVerticies[vCounter + 1]	= v7;
+					mapVerticies[vCounter + 2]	= v8;
+					mapVerticies[vCounter + 3]	= v6;
+					mapVerticies[vCounter + 4]	= v8;
+					mapVerticies[vCounter + 5]	= v5;
+					vCounter += 6;
 
-				// Define botton triangles (2 tris, 6 verts --> v6-v8-v7, v6-v5-v8)
-				mapVerticies[vCounter]		= v6;
-				mapVerticies[vCounter + 1]	= v7;
-				mapVerticies[vCounter + 2]	= v8;
-				mapVerticies[vCounter + 3]	= v6;
-				mapVerticies[vCounter + 4]	= v8;
-				mapVerticies[vCounter + 5]	= v5;
-				vCounter += 6;
+					mapNormals[nCounter]		= n3;
+					mapNormals[nCounter + 1]	= n3;
+					mapNormals[nCounter + 2]	= n3;
+					mapNormals[nCounter + 3]	= n3;
+					mapNormals[nCounter + 4]	= n3;
+					mapNormals[nCounter + 5]	= n3;
+					nCounter += 6;
 
-				mapNormals[nCounter]		= n3;
-				mapNormals[nCounter + 1]	= n3;
-				mapNormals[nCounter + 2]	= n3;
-				mapNormals[nCounter + 3]	= n3;
-				mapNormals[nCounter + 4]	= n3;
-				mapNormals[nCounter + 5]	= n3;
-				nCounter += 6;
+					char floorId = ((char*)floorLayer->data)[z * info.width + x];
+					RectangleF& bottomUVs = GetTileUV(info, floorId);
+					SetTileUVs(bottomUVs, mapTexcoord, tcCounter, UVType::BOTTOM);
 
-				mapTexcoord[tcCounter]		= Vector2{ bottomTexUV.x + bottomTexUV.width, bottomTexUV.y };
-				mapTexcoord[tcCounter + 1]	= Vector2{ bottomTexUV.x + bottomTexUV.width, bottomTexUV.y + bottomTexUV.height };
-				mapTexcoord[tcCounter + 2]	= Vector2{ bottomTexUV.x, bottomTexUV.y + bottomTexUV.height };
-				mapTexcoord[tcCounter + 3]	= Vector2{ bottomTexUV.x + bottomTexUV.width, bottomTexUV.y };
-				mapTexcoord[tcCounter + 4]	= Vector2{ bottomTexUV.x, bottomTexUV.y + bottomTexUV.height };
-				mapTexcoord[tcCounter + 5]	= Vector2{ bottomTexUV.x, bottomTexUV.y };
-				tcCounter += 6;
+					mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 2] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 3] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 4] = Vector4{ 255, 255, 255, 255 };
+					mapColors[cCounter + 5] = Vector4{ 255, 255, 255, 255 };
 
-				mapColors[cCounter]		= Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 1] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 2] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 3] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 4] = Vector4{ 255, 255, 255, 255 };
-				mapColors[cCounter + 5] = Vector4{ 255, 255, 255, 255 };
-
-				cCounter += 6;
+					cCounter += 6;
+				}
 			}
 		}
 	}
@@ -523,7 +623,7 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 	for (size_t i = 0; i < layerInfo->dataSize; i++)
 	{
 		char pushValue = static_cast<char>(CollisionType::None);
-		if(((char*)layerInfo->data)[i] == wallID)
+		if(CellIsWall(layerInfo->data, i))
 		{
 			pushValue = static_cast<char>(CollisionType::Wall);
 		}	
@@ -535,6 +635,8 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 {
 	runtimeInfo.height = info.height;
 	runtimeInfo.width = info.width;
+
+	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 1, 0); // LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()));
 
 	short objectLayerIdx = -1;
 
@@ -553,13 +655,12 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	
 	runtimeInfo.objects.reserve(info.layers[objectLayerIdx].objects.size());
 
-
 	for (size_t i = 0; i < info.layers[objectLayerIdx].objects.size(); i++)
 	{
 		RuntimeObjectInfo runtimeObj;
 		ObjectInfo& object = info.layers[objectLayerIdx].objects[i];
 
-		runtimeObj.position = Vector2{object.x / 128.f, object.y / 128.f};
+		runtimeObj.position = Vector2{(float)object.x / info.tileSize, (float)object.y / info.tileSize};
 		runtimeObj.type = object.type;
 		runtimeInfo.objects.push_back(runtimeObj);
 	}

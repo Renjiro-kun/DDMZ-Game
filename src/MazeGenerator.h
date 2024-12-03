@@ -29,6 +29,7 @@ struct MazeRuntimeInfo
 	std::vector<char> collisionMask;
 	short width;
 	short height;
+	Texture2D atlas;
 	std::vector<RuntimeObjectInfo> objects;
 };
 
@@ -51,12 +52,36 @@ private:
 		Object = 2
 	};
 
+	enum class UVType : char
+	{
+		LEFT, 
+		RIGHT,
+		BOTTOM, 
+		TOP,
+		FRONT,
+		BACK
+	};
+
+	struct RectangleF
+	{
+		float x;
+		float y;
+		float width;
+		float height;
+	};
+
 	struct ObjectInfo
 	{
 		std::string name;
 		int32_t x;
 		int32_t y;
 		ObjectType type;
+	};
+
+	struct TileInfo
+	{
+		int id;
+		RectangleF uvRect;
 	};
 
 	struct LayerInfo
@@ -73,6 +98,11 @@ private:
 	{
 		char width = 0;
 		char height = 0;
+		int tileSize;
+		int imageSize;
+		RectangleF DefalutTileUVs;
+		std::string atlasName;
+		std::vector<TileInfo> tiles;
 		std::vector<LayerInfo> layers;
 	};
 	
@@ -86,4 +116,7 @@ private:
 	static void GenerateCollisionMask(MazeGenerator::MazeInfo& info, std::vector<char>& collisionMask);
 	static void FillRuntimeInfo(MazeGenerator::MazeInfo& info, MazeRuntimeInfo& runtimeInfo);
 	static bool CheckLayerData(void* data, size_t idx, char value);
+	static bool CellIsWall(void* data, size_t idx);
+	static RectangleF& GetTileUV(MazeGenerator::MazeInfo& info, char id);
+	static void SetTileUVs(RectangleF& uvRects, Vector2* texCoordsArray, int& texCounter, UVType type);
 };
