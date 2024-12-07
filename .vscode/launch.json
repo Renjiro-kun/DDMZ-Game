@@ -29,7 +29,46 @@
             // path to lxdream-nitro
             "debugServerPath": "/opt/toolchains/dc/lxdream-nitro/builddir/lxdream-nitro",
             // lxdream-nitro flags
-            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -A null -e ${workspaceRoot}/raylib-test.elf -n ${workspaceRoot}/disc.cdi",
+            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -A null -u -e ${workspaceRoot}/raylib-test.elf -n ${workspaceRoot}/disc.cdi",
+            "filterStdout": true,
+            "filterStderr": true,
+            // run on connect
+            "stopAtConnect": false,
+            // stop at main
+            "stopAtEntry": true,
+            "externalConsole": false,
+            "avoidWindowsConsoleRedirection": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "launchCompleteCommand": "exec-run",
+            "serverStarted": "SH4 GDB server running on port",
+            "useExtendedRemote": true
+        },
+        {
+            "name": "flycast",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "Build",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceFolder}/raylib-test.elf",
+            "miDebuggerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gdb",
+            "setupCommands": [{
+                "text": "set architecture sh",
+                "description": "Set GDB Arch to SuperH",
+                "ignoreFailures" : false,
+            },
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "python import sys; sys.path.insert(0, '/opt/toolchains/dc/sh-elf/share/gcc-13.2.0/python');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
+                "ignoreFailures": false
+            },
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }],
+            "miDebuggerServerAddress": ":3263",
+            "debugServerPath": "/opt/toolchains/dc/flycast/build/flycast",
+            "debugServerArgs": "${workspaceRoot}/raylib-test.elf",
             "filterStdout": true,
             "filterStderr": true,
             // run on connect

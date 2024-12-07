@@ -2,12 +2,16 @@
 #include <Scene/ScenesImpl/SceneMaze.h>
 #include <Scene/SceneManager.h>
 
+#include <VMU/SaveManager.h>
+
 void SceneMaze::OnActivated()
 {
     m_FpsCamera = FirstPersonCamera();
 
     Mesh mesh {0};
-    MazeGenerator::GenerateMazeMap("/rd/bigTileTest.ddmz", mesh, m_MapInfo);
+    int16_t levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
+
+    MazeGenerator::GenerateMazeMap(m_LevelNames[levelIdx], mesh, m_MapInfo);
     m_MazeModel = LoadModelFromMesh(mesh);
 
     m_MazeModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_MapInfo.atlas;
@@ -94,6 +98,17 @@ void SceneMaze::OnDraw2D()
 
 void SceneMaze::OnExitReached()
 {
+    int16_t lvlIdx = SaveGameManager::GetInstance().GetCurrentLevel();
+    lvlIdx += 1;
+
+    if(lvlIdx > m_LevelNames.size() - 1)
+    {
+        lvlIdx = 0;
+    }
+
+    SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
+    SaveGameManager::GetInstance().SaveData();
+
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
 }
 

@@ -5,6 +5,7 @@
 #include <MazeGenerator.h>
 
 #include <vector>
+#include <array>
 
 class SceneMaze : public Scene
 {
@@ -22,6 +23,13 @@ private:
 
     void OnExitReached();
 private:
+
+    std::array<std::string, 2> m_LevelNames
+    {
+        "/rd/testMap.ddmz",
+        "/rd/bigTileTest.ddmz"
+    };
+
     MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;
     Texture2D m_CubeAtlas;

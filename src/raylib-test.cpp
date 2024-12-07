@@ -10,7 +10,7 @@
 #include <Input/InputContextManager.h>
 
 #include <Messages/MessageManager.h>
-
+#include <VMU/SaveManager.h>
 #include <PuruPuruManager.h>
 
 int main()
@@ -20,6 +20,10 @@ int main()
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Test window");
     SetTargetFPS(TARGET_FPS);
+    MessageManager::GetInstance().Init();
+    
+    SaveGameManager::GetInstance().Init();
+    SaveGameManager::GetInstance().LoadData();
 
     BGMManager::GetInstance().Init();
     SFXManager::GetInstance().Init();
@@ -29,7 +33,6 @@ int main()
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
-    MessageManager::GetInstance().Init();
 
     while (!WindowShouldClose())
     {
@@ -53,7 +56,7 @@ int main()
     PuruPuruManager::GetInstance().Shutdown();
     SFXManager::GetInstance().Shutdown();
     BGMManager::GetInstance().Shutdown();
-
+    SaveGameManager::GetInstance().Shutdown();
     CloseWindow();
     return 0;
 }
