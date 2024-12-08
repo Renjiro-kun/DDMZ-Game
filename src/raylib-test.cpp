@@ -20,16 +20,15 @@ int main()
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Test window");
     SetTargetFPS(TARGET_FPS);
+    InputContextManager::GetInstance().Init();
     MessageManager::GetInstance().Init();
     
     SaveGameManager::GetInstance().Init();
-    SaveGameManager::GetInstance().LoadData();
 
     BGMManager::GetInstance().Init();
     SFXManager::GetInstance().Init();
 
     PuruPuruManager::GetInstance().Init();
-    InputContextManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);

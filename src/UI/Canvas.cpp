@@ -1,5 +1,6 @@
 #include <UI/Canvas.h>
 #include <UI/Widget.cpp>
+#include <Input/InputContextManager.h>
 
 #include <raylib/raylib.h>
 
@@ -26,7 +27,7 @@ void Canvas::AddWidget(Widget* widget)
 void Canvas::OnUpdate()
 {
     m_LastFocusIdx = m_CurrentFocusIdx;
-    if(IsGamepadAvailable(0))
+    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
         {

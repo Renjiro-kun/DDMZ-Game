@@ -10,6 +10,19 @@ struct Message
     std::string Message;
 };
 
+enum class SystemMessageType : char
+{
+    Default = 0,
+    Blocking = 1,
+    Timed = 2,
+    Interactive = 3
+};
+
+enum class SystemMessageID : uint16_t
+{
+    SaveData = 0,
+    LoadData = 1
+};
 
 class MessageManager
 {
@@ -26,11 +39,11 @@ public:
     void Update();
     void OnDraw2D();
 
-    void Request(uint16_t messageID);
+    void RequestSystemMessage(SystemMessageID messageID, SystemMessageType type = SystemMessageType::Default, float time = 0.15f);
 
 private:
     void SetRequestedMessage(uint16 messageID);
-    void ReadScriptIntoMemory(std::ifstream& file);
+    void ReadScriptIntoMemory(std::ifstream& file, std::vector<Message>& sourceArray);
 private:
     MessageManager() = default;
     ~MessageManager() = default;
@@ -41,5 +54,5 @@ private:
     Texture2D* m_DialogBoxTextures;
     bool m_DialogRequested;
     std::string m_RequestedString;
-    std::vector<Message> m_LoadedMessage;
+    std::vector<Message> m_SystemMessages;
 };

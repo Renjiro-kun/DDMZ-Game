@@ -3,9 +3,10 @@
 
 #include <Scene/SceneManager.h>
 #include <Scene/ScenesImpl/SceneMainMenu.h>
+#include <Input/InputContextManager.h>
 
 #include <UI/Button.h>
-
+#include <VMU/SaveManager.h>
 
 void SceneTitle::OnActivated()
 {
@@ -24,6 +25,8 @@ void SceneTitle::OnActivated()
             m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat("/cd/titlescreen/ts%01i%01i.png", y+1, x+1));
         }
     }
+
+    SaveGameManager::GetInstance().LoadData();
 }
 
 void SceneTitle::OnDectivated()
@@ -50,12 +53,12 @@ void SceneTitle::OnDraw2D()
            DrawTexture(m_AdvTextures[y*widthCount+x], x * 256, y * 256, WHITE);
         }
     }
-    DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, 50 }, 32, 1, BLACK);
+    DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, 50 }, 32, 1, WHITE);
 }
 
 void SceneTitle::OnUpdate()
 {
-    if(IsGamepadAvailable(0))
+    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
         {   

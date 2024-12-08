@@ -1,5 +1,6 @@
 #include <pch.h>
 #include <VMU/SaveManager.h>
+#include <Messages/MessageManager.h>
 
 #include <kos.h>
 
@@ -43,6 +44,8 @@ void SaveGameManager::SaveData()
         return;
     }
 
+    MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveData, SystemMessageType::Timed, 2.f);
+
     fs_write(f, pkg_out, pkg_size);
     fs_close(f);
 }
@@ -66,6 +69,8 @@ void SaveGameManager::LoadData()
         // Add error message
         return;
     }
+    MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::LoadData, SystemMessageType::Timed, 2.f);
+
     pkg_data = (uint8_t*)malloc(pkg_size);
     fs_read(f, pkg_data, pkg_size);
     vmu_pkg_parse(pkg_data, &pkg);

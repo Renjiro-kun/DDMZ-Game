@@ -13,7 +13,7 @@ public:
     void OnDraw3D() override;
     void OnDraw2D() override;
     Camera& GetCamera() override { return m_Camera; }
-
+    Color GetSceneBackgroundColor() override { return BLACK; }
 private:
     Font m_AdvFont;
     Texture2D* m_AdvTextures;

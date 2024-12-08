@@ -10,12 +10,12 @@ void MessageManager::Init()
         m_DialogBoxTextures[i] = LoadTexture(TextFormat("/rd/dlgbox%0i.png", i+1));
     }
 
-    std::ifstream file("/rd/script.scr", std::ios::binary);
+    std::ifstream file("/rd/msg_system.scr", std::ios::binary);
 	if (!file)
 	{
 		// error handling
 	}
-    ReadScriptIntoMemory(file);
+    ReadScriptIntoMemory(file, m_SystemMessages);
 }
 
 void MessageManager::Shutdown()
@@ -28,7 +28,7 @@ void MessageManager::Shutdown()
     delete[] m_DialogBoxTextures;
 }
 
-void MessageManager::ReadScriptIntoMemory(std::ifstream& file)
+void MessageManager::ReadScriptIntoMemory(std::ifstream& file, std::vector<Message>& sourceRepository)
 {
     char header[4];
     file.read(header, sizeof(char)*4);
@@ -36,7 +36,7 @@ void MessageManager::ReadScriptIntoMemory(std::ifstream& file)
     file.read(&type, sizeof(char));
     uint16_t size = 0;
     file.read((char*)&size, sizeof(uint16_t));
-    m_LoadedMessage.reserve(size);
+    sourceRepository.reserve(size);
     for (size_t i = 0; i < size; i++)
     {
         Message msg;
@@ -48,10 +48,9 @@ void MessageManager::ReadScriptIntoMemory(std::ifstream& file)
         char* tempStr = new char[lenght];
         file.read(tempStr, sizeof(char)*lenght);
         msg.Message = tempStr;
-        m_LoadedMessage.push_back(msg);
+        sourceRepository.push_back(msg);
         delete[] tempStr;
-    }
-    
+    }   
 }
 
 void MessageManager::OnDraw2D()
@@ -66,23 +65,23 @@ void MessageManager::OnDraw2D()
     }
 }
 
-void MessageManager::Request(uint16_t messageID)
+void MessageManager::RequestSystemMessage(SystemMessageID messageID, SystemMessageType type, float time)
 {
     if(!m_DialogRequested)
     {
         m_DialogRequested = true;
-        SetRequestedMessage(messageID);
+        SetRequestedMessage(static_cast<uint16_t>(messageID));
         InputContextManager::GetInstance().SetInputContext(InputContext::Message);
     }
 }
 
 void MessageManager::SetRequestedMessage(uint16_t messageID)
 {
-    for (size_t i = 0; i < m_LoadedMessage.size(); i++)
+    for (size_t i = 0; i < m_SystemMessages.size(); i++)
     {
-        if(m_LoadedMessage[i].ID == messageID)
+        if(m_SystemMessages[i].ID == messageID)
         {
-            m_RequestedString = m_LoadedMessage[i].Message;
+            m_RequestedString = m_SystemMessages[i].Message;
             return;
         }
     }

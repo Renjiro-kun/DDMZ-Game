@@ -99,17 +99,19 @@ void SceneMaze::OnDraw2D()
 void SceneMaze::OnExitReached()
 {
     int16_t lvlIdx = SaveGameManager::GetInstance().GetCurrentLevel();
+    SceneId nextScene = SceneId::SCENE_MAZE;
     lvlIdx += 1;
 
     if(lvlIdx > m_LevelNames.size() - 1)
     {
         lvlIdx = 0;
+        nextScene = SceneId::SCENE_TITLE_SCREEN;
     }
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
     SaveGameManager::GetInstance().SaveData();
 
-    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
+    SceneManager::GetInstance().LoadScene(nextScene);
 }
 
 void SceneMaze::CalculateLight()
