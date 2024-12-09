@@ -128,7 +128,7 @@ void  SceneMaze::LoadObjects()
         if(m_MapInfo.objects[i].type == ObjectType::SavePoint)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.emplace_back(new SavePoint(Vector3{obj.position.x, 0.4f, obj.position.y}));
+            m_MapObjects.emplace_back(new SavePoint(Vector3{obj.position.x, 0.0f, obj.position.y}));
         }
     }
     

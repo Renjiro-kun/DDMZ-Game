@@ -13,6 +13,9 @@ public:
     void SetFocused(bool focused) override;
     void OnPressed() override;
 
+    void OnScaleUp() {}
+    void OnScaleDown() {}
+
     void SetPosition(Vector2 position) { m_Position = position; }
 
 private:

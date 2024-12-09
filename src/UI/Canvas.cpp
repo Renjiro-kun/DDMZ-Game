@@ -47,6 +47,14 @@ void Canvas::OnUpdate()
         {
             m_WidgetsContainer[m_CurrentFocusIdx]->OnPressed();
         }
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT))
+        {
+            m_WidgetsContainer[m_CurrentFocusIdx]->OnScaleDown();
+        }
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
+        {
+            m_WidgetsContainer[m_CurrentFocusIdx]->OnScaleUp();
+        }
     }
 }
 

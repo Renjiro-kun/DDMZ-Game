@@ -655,7 +655,7 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.height = info.height;
 	runtimeInfo.width = info.width;
 
-	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 1, 0); // LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()));
+	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 1, 0);
 
 	short objectLayerIdx = -1;
 
@@ -679,7 +679,11 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		RuntimeObjectInfo runtimeObj;
 		ObjectInfo& object = info.layers[objectLayerIdx].objects[i];
 
-		runtimeObj.position = Vector2{(float)object.x / info.tileSize, (float)object.y / info.tileSize};
+		// Hack for proper rounding object cell location
+		int x = roundf((float)object.x / info.tileSize);
+		int y = roundf((float)object.y / info.tileSize);
+
+		runtimeObj.position = Vector2{(float)x, (float)y};
 		runtimeObj.type = object.type;
 		runtimeInfo.objects.push_back(runtimeObj);
 	}

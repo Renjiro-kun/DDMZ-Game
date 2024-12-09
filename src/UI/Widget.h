@@ -8,4 +8,7 @@ public:
     virtual void SetFocused(bool focused) = 0;
     virtual void OnPressed() = 0;
     virtual void SetPosition(Vector2 position) = 0;
+
+    virtual void OnScaleUp() = 0;
+    virtual void OnScaleDown() = 0;
 };
