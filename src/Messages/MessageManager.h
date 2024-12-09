@@ -51,6 +51,7 @@ private:
     MessageManager& operator=(const MessageManager&) = delete;
 private:
     const int16_t DIALOGBOX_TILES = 3;
+    Font m_MsgFont;
     Texture2D* m_DialogBoxTextures;
     bool m_DialogRequested;
     std::string m_RequestedString;

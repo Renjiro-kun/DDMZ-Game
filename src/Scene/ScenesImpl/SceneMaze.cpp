@@ -1,6 +1,8 @@
 #include <pch.h>
 #include <Scene/ScenesImpl/SceneMaze.h>
 #include <Scene/SceneManager.h>
+#include <Gameplay/Objects/SavePoint.h>
+
 
 #include <VMU/SaveManager.h>
 
@@ -17,10 +19,11 @@ void SceneMaze::OnActivated()
     m_MazeModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_MapInfo.atlas;
 
     m_MapPosition = { 0.f, 0.0f, 0.0f };          // Set model position
+    LoadObjects();
 
     m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
     BGMManager::GetInstance().Play(m_BGM);
-
+    
     Vector2 spawnPosition {0.f, 0.f};
     for (auto& obj : m_MapInfo.objects)
     {
@@ -38,6 +41,14 @@ void SceneMaze::OnDectivated()
     BGMManager::GetInstance().Stop(m_BGM);
     BGMManager::GetInstance().UnloadBGM(m_BGM);
 
+    for (size_t i = 0; i < m_MapObjects.size(); i++)
+    {
+        delete m_MapObjects[i];
+    }
+    
+    m_MapObjects.clear();
+    m_MapInfo.objects.clear();
+    m_MapInfo.collisionMask.clear();
     UnloadTexture(m_CubeAtlas);
     UnloadModel(m_MazeModel);
 }
@@ -62,7 +73,8 @@ void SceneMaze::CheckCollisions()
     {
         for (size_t x = 0; x < m_MapInfo.width; x++)
         {
-            if(collisionMask[y*m_MapInfo.width+x] == static_cast<char>(CollisionType::Wall) &&
+            if((collisionMask[y*m_MapInfo.width+x] == static_cast<char>(CollisionType::Wall) ||
+                collisionMask[y*m_MapInfo.width+x] == static_cast<char>(CollisionType::Object)) &&
                 (CheckCollisionCircleRec(playerPos, playerRadius, 
                 Rectangle{m_MapPosition.x - 0.5f + x *1.f, m_MapPosition.z - 0.5f + y * 1.f, 1.f, 1.f})))
             {
@@ -77,18 +89,49 @@ void SceneMaze::CheckCollisions()
         }
     }
     
+    CanSave = false;
+    // TODO: Add better interaction check
+    if(collisionMask[playerCellY*m_MapInfo.width+playerCellX+1] == static_cast<char>(CollisionType::Object))
+    {
+        CanSave = true;
+    }
 }
 
 void SceneMaze::OnUpdate()
 {
     m_OldCamPosition = m_FpsCamera.GetPosition();
     m_FpsCamera.UpdateCamera(GetFrameTime());
+    if(IsGamepadAvailable(0))
+    {
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && CanSave)
+        {
+            SaveGameManager::GetInstance().SaveData();
+        }
+    }
     CheckCollisions();
 }
 
 void SceneMaze::OnDraw3D()
 {
     DrawModel(m_MazeModel, m_MapPosition, 1.f, WHITE);
+    for (size_t i = 0; i < m_MapObjects.size(); i++)
+    {
+        m_MapObjects[i]->OnDraw3D();
+    }
+    
+}
+
+void  SceneMaze::LoadObjects()
+{
+    for (size_t i = 0; i < m_MapInfo.objects.size(); i++)
+    {
+        if(m_MapInfo.objects[i].type == ObjectType::SavePoint)
+        {
+            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
+            m_MapObjects.emplace_back(new SavePoint(Vector3{obj.position.x, 0.4f, obj.position.y}));
+        }
+    }
+    
 }
 
 void SceneMaze::OnDraw2D()

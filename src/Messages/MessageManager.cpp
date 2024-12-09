@@ -9,7 +9,7 @@ void MessageManager::Init()
     {
         m_DialogBoxTextures[i] = LoadTexture(TextFormat("/rd/dlgbox%0i.png", i+1));
     }
-
+    m_MsgFont = LoadFont("/rd/font_ui.png");
     std::ifstream file("/rd/msg_system.scr", std::ios::binary);
 	if (!file)
 	{
@@ -59,9 +59,10 @@ void MessageManager::OnDraw2D()
     {
         for (size_t i = 0; i < DIALOGBOX_TILES; i++)
         {
-            DrawTexture(m_DialogBoxTextures[i], i * 256, 256, WHITE);
+            DrawTexture(m_DialogBoxTextures[i], i * 256, HEIGHT-256, WHITE);
         }
-        DrawText(m_RequestedString.c_str(), 0, 256, 32, WHITE);
+        //DrawText(m_RequestedString.c_str(), 0, 256, 32, BLACK);
+        DrawTextEx(m_MsgFont, m_RequestedString.c_str(), Vector2{31, HEIGHT-161}, 32, 1, BLACK);
     }
 }
 

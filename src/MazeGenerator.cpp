@@ -601,12 +601,17 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& collisionMask)
 {
 	LayerInfo* layerInfo;
+	LayerInfo* objectLayer;
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < info.layers.size(); i++)
 	{
 		if (info.layers[i].tileType == TileLayerType::Wall)
 		{
 			layerInfo = &info.layers[i];
+		}
+		if(info.layers[i].type == LayerType::Object)
+		{
+			objectLayer = &info.layers[i];
 		}
 	}
 
@@ -626,9 +631,23 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 		if(CellIsWall(layerInfo->data, i))
 		{
 			pushValue = static_cast<char>(CollisionType::Wall);
-		}	
+		}
 		collisionMask.push_back(pushValue);
 	}
+
+	for (size_t i = 0; i < objectLayer->objects.size(); i++)
+	{
+		ObjectInfo& objectInfo = objectLayer->objects[i];
+		if(objectInfo.type == ObjectType::SavePoint)
+		{
+			char pushValue = static_cast<char>(CollisionType::Object);
+			size_t x = objectInfo.x / info.tileSize;
+			size_t y = objectInfo.y / info.tileSize;
+			size_t objIdx = y*info.width+x;
+			collisionMask[objIdx] = pushValue;
+		}
+	}
+	
 }
 
 void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo)

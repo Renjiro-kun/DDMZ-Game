@@ -7,6 +7,8 @@
 #include <vector>
 #include <array>
 
+class SavePoint;
+
 class SceneMaze : public Scene
 {
 public:
@@ -18,6 +20,8 @@ public:
     
     Camera& GetCamera() { return m_FpsCamera.GetCamera(); }
 private:
+    void LoadObjects();
+
     void CheckCollisions();
     void CalculateLight();
 
@@ -29,6 +33,8 @@ private:
         "/rd/testMap.ddmz",
         "/rd/bigTileTest.ddmz"
     };
+    // TODO: Modify to interactable objects
+    std::vector<SavePoint*> m_MapObjects;
 
     MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;
@@ -38,4 +44,5 @@ private:
     Vector3 m_MapPosition;
 
     FirstPersonCamera m_FpsCamera;
+    bool CanSave = false;
 };

@@ -8,7 +8,8 @@ enum class ObjectType : char
 {
 	Invalid = 0,
 	PlayerStart = 1,
-	ExitNode = 2
+	ExitNode = 2,
+	SavePoint = 3
 }; 
 
 struct RuntimeObjectInfo
@@ -17,11 +18,12 @@ struct RuntimeObjectInfo
 	ObjectType type;
 };
 
-enum class CollisionType :  char
+enum class CollisionType :   char
 {
 	None = 0,
 	Wall = 1,
-	Exit = 2
+	Exit = 2,
+	Object = 3
 };
 
 struct MazeRuntimeInfo
