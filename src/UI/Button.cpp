@@ -1,22 +1,21 @@
 #include <UI/Button.h>
+#include <UI/UIRepository.h>
 
 Button::Button()
 {
-    m_ButtonTexture = LoadTexture("/rd/btn_test.png");
-
-    m_FrameHeight = (float)m_ButtonTexture.height / 3;
-    m_CurrentStateRect = { 0, 0, (float)m_ButtonTexture.width, m_FrameHeight };
-    m_CurrentState = 0;
+    InitData();
 }
 
 Button::~Button()
 {
-    UnloadTexture(m_ButtonTexture);
+    m_ButtonText.clear();
+    m_TextToRender.clear();
 }
 
-Button::Button(Vector2 position, void (*pressedCallback)(), void(*focusedCallback)())
+Button::Button(Vector2 position, const std::string& buttonText, void (*pressedCallback)(), void(*focusedCallback)())
 {
     m_Position = position;
+    m_ButtonText = buttonText;
     InitData();
     onButtonPressedCallback = pressedCallback;
     onButtonFocusedCallback = focusedCallback;
@@ -24,15 +23,13 @@ Button::Button(Vector2 position, void (*pressedCallback)(), void(*focusedCallbac
 
 void Button::InitData()
 {
-    m_ButtonTexture = LoadTexture("/rd/btn_test.png");
-    m_FrameHeight = (float)m_ButtonTexture.height / 3;
-    m_CurrentStateRect = { 0, 0, (float)m_ButtonTexture.width, m_FrameHeight };
     m_CurrentState = 0;
+    m_TextToRender = TextFormat(" %s ", m_ButtonText.c_str());
 }
 
 void Button::OnDraw2D()
 {
-    DrawTextureRec(m_ButtonTexture, m_CurrentStateRect, m_Position, WHITE);
+    DrawTextEx(UIRepository::GetInstance().GetButtonFont(), m_TextToRender.c_str(), m_Position, UIRepository::GetInstance().GetButtonFont().baseSize, 1, WHITE);
 }
 
 void Button::OnPressed()
@@ -47,6 +44,7 @@ void Button::OnPressed()
 void Button::SetFocused(bool focus)
 {
     focus ? SetCurrentState(1) : SetCurrentState(0);
+    focus ? m_TextToRender = TextFormat(">%s<", m_ButtonText.c_str()) : m_TextToRender = TextFormat(" %s ", m_ButtonText.c_str());
     if(onButtonFocusedCallback != nullptr)
     {
         onButtonFocusedCallback();
@@ -56,5 +54,4 @@ void Button::SetFocused(bool focus)
 void Button::SetCurrentState(char state)
 {
     m_CurrentState = state;
-    m_CurrentStateRect.y = m_FrameHeight * m_CurrentState;
 }

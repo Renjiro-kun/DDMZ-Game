@@ -1,11 +1,12 @@
 #pragma once
 #include <UI/Widget.h>
+#include <string>
 
 class Button : public Widget
 {
 public:
     Button();
-    Button(Vector2 position, void (*pressedCallback)() = nullptr, void(*focusedCallback)() = nullptr);
+    Button(Vector2 position, const std::string& buttonText, void (*pressedCallback)() = nullptr, void(*focusedCallback)() = nullptr);
     ~Button();
 
     void OnDraw2D() override;
@@ -22,9 +23,9 @@ private:
     void (*onButtonPressedCallback)();
     void (*onButtonFocusedCallback)();
 private:
-    Texture2D m_ButtonTexture;
-    Rectangle m_CurrentStateRect;
     Vector2 m_Position;
     char m_CurrentState;
-    float m_FrameHeight;
+
+    std::string m_ButtonText;
+    std::string m_TextToRender;
 };

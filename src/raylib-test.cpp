@@ -3,6 +3,7 @@
 #include "pch.h"
 #include <FirstPersonCamera.h>
 #include <Scene/SceneManager.h>
+#include <UI/UIRepository.h>
 
 #include <Sound/BgmManager.h>
 #include <Sound/SfxManager.h>
@@ -24,6 +25,7 @@ int main()
     MessageManager::GetInstance().Init();
     
     SaveGameManager::GetInstance().Init();
+    UIRepository::GetInstance().Init();
 
     BGMManager::GetInstance().Init();
     SFXManager::GetInstance().Init();
@@ -52,6 +54,7 @@ int main()
 
     InputContextManager::GetInstance().Shutdown();
     MessageManager::GetInstance().Shutdown();
+    UIRepository::GetInstance().Shutdown();
     PuruPuruManager::GetInstance().Shutdown();
     SFXManager::GetInstance().Shutdown();
     BGMManager::GetInstance().Shutdown();
