@@ -35,3 +35,6 @@
 # Build files
 *.img
 *.cdi
+
+!romdisk/*.obj
+!cd/*.obj

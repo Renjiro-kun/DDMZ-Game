@@ -72,6 +72,12 @@ Texture2D PVRTextureLoader::LoadTexture(const char* filename, unsigned char isMi
     glGenTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, texID);
 
+    if(glMipMap)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    }
+
     if(texFormat != GL_UNSIGNED_SHORT_5_6_5)
         glCompressedTexImage2DARB(GL_TEXTURE_2D,
                            0,
