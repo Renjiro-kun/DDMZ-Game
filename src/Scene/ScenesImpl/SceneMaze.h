@@ -8,6 +8,7 @@
 #include <array>
 
 class SavePoint;
+class Canvas;
 
 class SceneMaze : public Scene
 {
@@ -42,7 +43,9 @@ private:
     Model m_MazeModel;
     Vector3 m_OldCamPosition;
     Vector3 m_MapPosition;
+    Canvas* m_PauseMenuCanvas;
 
     FirstPersonCamera m_FpsCamera;
     bool CanSave = false;
+    bool m_IsPaused = false;
 };

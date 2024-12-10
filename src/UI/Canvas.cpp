@@ -1,17 +1,22 @@
 #include <UI/Canvas.h>
 #include <UI/Widget.cpp>
-#include <Input/InputContextManager.h>
 
 #include <raylib/raylib.h>
 
-Canvas::Canvas()
+Canvas::Canvas(InputContext context)
 {
     m_CurrentFocusIdx = 0;
-    m_LastFocusIdx = 0;
+    m_LastFocusIdx = -1;
+    m_CanvasContext = context;
 }
 
 Canvas::~Canvas()
 {
+    if(m_Active)
+    {
+        SetActive(false);
+    }
+    
     for (size_t i = 0; i < m_WidgetsContainer.size(); i++)
     {
         delete m_WidgetsContainer[i];
@@ -27,7 +32,9 @@ void Canvas::AddWidget(Widget* widget)
 void Canvas::OnUpdate()
 {
     m_LastFocusIdx = m_CurrentFocusIdx;
-    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
+    if( m_Active &&
+        IsGamepadAvailable(0) &&
+        InputContextManager::GetInstance().CurrentInputComtext() == m_CanvasContext )
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN))
         {
@@ -60,10 +67,18 @@ void Canvas::OnUpdate()
 
 void Canvas::OnDraw2D()
 {
-    for (size_t i = 0; i < m_WidgetsContainer.size(); i++)
+    if(m_Active)
     {
-        m_WidgetsContainer[i]->OnDraw2D();
-    }   
+        for (size_t i = 0; i < m_WidgetsContainer.size(); i++)
+        {
+            m_WidgetsContainer[i]->OnDraw2D();
+        }   
+    }
+}
+
+void Canvas::ManageInputContext()
+{
+    m_Active ? InputContextManager::GetInstance().SetInputContext(m_CanvasContext) : InputContextManager::GetInstance().RestoreContext();
 }
 
 void Canvas::UpdateFocusedStates()

@@ -3,8 +3,11 @@
 #include <Scene/SceneManager.h>
 #include <Gameplay/Objects/SavePoint.h>
 
-
+#include <UI/Canvas.h>
+#include <UI/Button.h>
 #include <VMU/SaveManager.h>
+
+void OnExitPressed();
 
 void SceneMaze::OnActivated()
 {
@@ -24,6 +27,9 @@ void SceneMaze::OnActivated()
     m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
     BGMManager::GetInstance().Play(m_BGM);
     
+    m_PauseMenuCanvas = new Canvas(InputContext::PauseMenu);
+    m_PauseMenuCanvas->AddWidget(new Button(Vector2{200, 200}, "EXIT", OnExitPressed));
+
     Vector2 spawnPosition {0.f, 0.f};
     for (auto& obj : m_MapInfo.objects)
     {
@@ -46,6 +52,8 @@ void SceneMaze::OnDectivated()
         delete m_MapObjects[i];
     }
     
+    delete m_PauseMenuCanvas;
+
     m_MapObjects.clear();
     m_MapInfo.objects.clear();
     m_MapInfo.collisionMask.clear();
@@ -107,7 +115,14 @@ void SceneMaze::OnUpdate()
         {
             SaveGameManager::GetInstance().SaveData();
         }
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
+        {
+            m_IsPaused = !m_IsPaused;
+            m_PauseMenuCanvas->SetActive(m_IsPaused);
+        }
     }
+
+    m_PauseMenuCanvas->OnUpdate();
     CheckCollisions();
 }
 
@@ -118,7 +133,6 @@ void SceneMaze::OnDraw3D()
     {
         m_MapObjects[i]->OnDraw3D();
     }
-    
 }
 
 void  SceneMaze::LoadObjects()
@@ -136,7 +150,7 @@ void  SceneMaze::LoadObjects()
 
 void SceneMaze::OnDraw2D()
 {
-
+    m_PauseMenuCanvas->OnDraw2D();
 }
 
 void SceneMaze::OnExitReached()
@@ -150,6 +164,8 @@ void SceneMaze::OnExitReached()
         lvlIdx = 0;
         nextScene = SceneId::SCENE_TITLE_SCREEN;
     }
+
+    m_PauseMenuCanvas->SetActive(false);
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
     SaveGameManager::GetInstance().SaveData();
@@ -167,4 +183,9 @@ void SceneMaze::CalculateLight()
         m_MazeModel.meshes[0].colors[i*4+2] = tint.b;
         m_MazeModel.meshes[0].colors[i*4+3] = tint.a;
     }
+}
+
+void OnExitPressed()
+{
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
 }

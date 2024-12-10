@@ -15,10 +15,11 @@ void SceneMainMenu::OnActivated()
     m_Camera.fovy = 45.f;
     m_Camera.projection = CAMERA_PERSPECTIVE;
 
-    m_MenuCanvas = new Canvas();
+    m_MenuCanvas = new Canvas(InputContext::Default);
+    m_MenuCanvas->SetActive(true);
     m_MenuCanvas->AddWidget(new Button(Vector2{200, 200}, "CONTINUE", OnContinuePressed));
     m_MenuCanvas->AddWidget(new Button(Vector2{200, 250}, "NEW GAME", OnNewGamePressed));
-    m_MenuCanvas->AddWidget(new Button(Vector2{200, 300}, "OPTIONS"));
+    m_MenuCanvas->AddWidget(new Button(Vector2{200, 300}, "OPTIONS", OnOptionsPressed));
 
     m_AdvTextures = new Texture2D[widthCount * heightCount];
     for (size_t y = 0; y < heightCount; y++)
@@ -36,7 +37,8 @@ void SceneMainMenu::OnDectivated()
     {
         UnloadTexture(m_AdvTextures[i]);
     }
-    //UnloadFont(m_AdvFont);
+
+    m_MenuCanvas->SetActive(false);
     delete[] m_AdvTextures;
     delete m_MenuCanvas;
 }
@@ -76,5 +78,5 @@ void OnNewGamePressed()
 
 void OnOptionsPressed()
 {
-
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_OPTIONS);
 }

@@ -3,6 +3,7 @@
 #include <Scene/ScenesImpl/SceneMainMenu.h>
 #include <Scene/ScenesImpl/SceneTitle.h>
 #include <Scene/ScenesImpl/SceneIntro.h>
+#include <Scene/ScenesImpl/SceneOptions.h>
 
 void SceneManager::Init()
 {
@@ -11,6 +12,7 @@ void SceneManager::Init()
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_MAIN_MENU, new SceneMainMenu()));
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_TITLE_SCREEN, new SceneTitle()));
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_INTRO, new SceneIntro()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_OPTIONS, new SceneOptions()));
 }
 
 void SceneManager::Shutdown()
