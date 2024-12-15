@@ -81,3 +81,17 @@ void SaveGameManager::LoadData()
 
     free(pkg_data);
 }
+
+void SaveGameManager::ResetOptions()
+{
+    m_CurrentSaveData.BGMVolume = 255;
+    m_CurrentSaveData.SFXVolume = 255;
+    m_CurrentSaveData.UseVibration = false;
+}
+
+void SaveGameManager::ResetSaveGame()
+{
+    m_CurrentSaveData.LevelIdx = 0;
+    m_CurrentSaveData.PositionX = 0;
+    m_CurrentSaveData.PositionY = 0;
+}

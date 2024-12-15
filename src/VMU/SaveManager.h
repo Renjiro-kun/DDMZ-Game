@@ -47,6 +47,14 @@ public:
     bool GetUseVibration() { return m_CurrentSaveData.UseVibration; }
     void SetUseVibration(bool value) { m_CurrentSaveData.UseVibration = value; }
 
+    void SetPlayerPositionX(int value) { m_CurrentSaveData.PositionX = value; }
+    void SetPlayerPositionY(int value) { m_CurrentSaveData.PositionY = value; }
+
+    int GetPlayerPositionX() { return m_CurrentSaveData.PositionX; }
+    int GetPlayerPositionY() { return m_CurrentSaveData.PositionY; }
+
+    void ResetSaveGame();
+    void ResetOptions();
 private:
     SaveGameManager() = default;
     ~SaveGameManager() = default;

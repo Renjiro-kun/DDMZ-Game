@@ -1,6 +1,7 @@
 #include <Defines.h>
 #include <Scene/SceneManager.h>
 #include <Scene/ScenesImpl/SceneMainMenu.h>
+#include <VMU/SaveManager.h>
 
 #include <UI/Button.h>
 
@@ -73,6 +74,7 @@ void OnContinuePressed()
 
 void OnNewGamePressed()
 {
+    SaveGameManager::GetInstance().ResetSaveGame();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAZE);
 }
 

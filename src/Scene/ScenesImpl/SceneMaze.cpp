@@ -30,14 +30,21 @@ void SceneMaze::OnActivated()
     
     m_PauseMenu = new PauseMenu();
 
-    Vector2 spawnPosition {0.f, 0.f};
-    for (auto& obj : m_MapInfo.objects)
+    int posX = SaveGameManager::GetInstance().GetPlayerPositionX();
+    int posY = SaveGameManager::GetInstance().GetPlayerPositionY();
+
+    Vector2 spawnPosition {posX, posY};
+    if(posX == 0 && posY == 0)
     {
-        if(obj.type == ObjectType::PlayerStart)
+        for (auto& obj : m_MapInfo.objects)
         {
-            spawnPosition = obj.position;
+            if(obj.type == ObjectType::PlayerStart)
+            {
+                spawnPosition = obj.position;
+            }
         }
     }
+    
     m_FpsCamera.OnActivate();
     m_FpsCamera.SetPosition(Vector3{spawnPosition.x, 0.4f, spawnPosition.y});
 }
@@ -198,8 +205,11 @@ void SceneMaze::OnExitReached()
     {
         lvlIdx = 0;
         nextScene = SceneId::SCENE_TITLE_SCREEN;
+        SaveGameManager::GetInstance().ResetSaveGame();
     }
-
+    
+    SaveGameManager::GetInstance().SetPlayerPositionX(0);
+    SaveGameManager::GetInstance().SetPlayerPositionY(0);
     m_PauseMenu->DisableCanvasHack();
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);

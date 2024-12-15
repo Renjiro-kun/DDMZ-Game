@@ -24,7 +24,8 @@ void SavePoint::Interact()
     if(m_Context)
     {
         SaveGameManager::GetInstance().SetCurrentLevel(m_Context->levelIdx);
-
+        SaveGameManager::GetInstance().SetPlayerPositionX(m_Context->playerPosX);
+        SaveGameManager::GetInstance().SetPlayerPositionY(m_Context->playerPosY);
         SaveGameManager::GetInstance().SaveData();
     }
 }
