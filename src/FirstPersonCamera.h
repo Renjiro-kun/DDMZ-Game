@@ -8,6 +8,9 @@ public:
     FirstPersonCamera();
     ~FirstPersonCamera() = default;
 
+    void OnActivate();
+    void OnDeactivate();
+
     Camera& GetCamera() { return m_Camera; }
 
     void UpdateCamera(float deltaTime);

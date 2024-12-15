@@ -5,3 +5,6 @@
 
 #include <cstdint>
 #include <cmath>
+
+#define CD_DIR "/cd/DDGM/"
+#define RD_DIR "/rd/"

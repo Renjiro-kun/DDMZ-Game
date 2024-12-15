@@ -13,7 +13,16 @@ FirstPersonCamera::FirstPersonCamera()
     m_Camera.fovy = 45.0f;
     m_Camera.projection = CAMERA_PERSPECTIVE;
 
+}
+
+void FirstPersonCamera::OnActivate()
+{
     m_BoomSFX = SFXManager::GetInstance().LoadSFX("/rd/sfx_boom.wav");
+}
+
+void FirstPersonCamera::OnDeactivate()
+{
+    SFXManager::GetInstance().Unload(m_BoomSFX);
 }
 
 void FirstPersonCamera::UpdateCamera(float deltaTime)
@@ -23,7 +32,7 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
         float movement = -GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
         float turn = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 
-        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
         {
             SFXManager::GetInstance().Play(m_BoomSFX);
             PuruPuruManager::GetInstance().Rumble(0x3339F010);

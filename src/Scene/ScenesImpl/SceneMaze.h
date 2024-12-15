@@ -4,11 +4,11 @@
 #include <Sound/BgmManager.h>
 #include <MazeGenerator.h>
 #include <UI/Menu/PauseMenu.h>
+#include <Gameplay/Objects/Interactable.h>
 
 #include <vector>
 #include <array>
 
-class SavePoint;
 class Canvas;
 
 class SceneMaze : public Scene
@@ -28,6 +28,8 @@ private:
     void CalculateLight();
 
     void OnExitReached();
+
+    void TriggerInteractable();
 private:
 
     std::array<std::string, 2> m_LevelNames
@@ -36,7 +38,7 @@ private:
         "/rd/bigTileTest.ddmz"
     };
     // TODO: Modify to interactable objects
-    std::vector<SavePoint*> m_MapObjects;
+    std::vector<Interactable*> m_MapObjects;
 
     MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;
@@ -45,7 +47,10 @@ private:
     Vector3 m_OldCamPosition;
     Vector3 m_MapPosition;
     PauseMenu* m_PauseMenu;
+    InteractableContext m_InteractionContext;
 
     FirstPersonCamera m_FpsCamera;
-    bool CanSave = false;
+    bool m_CanInteract = false;
+    int m_CurrentInteractableX = -1;
+    int m_CurrentInteractableY = -1;
 };

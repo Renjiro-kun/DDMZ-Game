@@ -49,7 +49,6 @@ int main()
 #ifdef DEBUG
             DrawFPS(10, 10);
 #endif
-
         EndDrawing();
     }
 

@@ -37,7 +37,7 @@ void SceneMaze::OnActivated()
             spawnPosition = obj.position;
         }
     }
-
+    m_FpsCamera.OnActivate();
     m_FpsCamera.SetPosition(Vector3{spawnPosition.x, 0.4f, spawnPosition.y});
 }
 
@@ -56,6 +56,7 @@ void SceneMaze::OnDectivated()
     m_MapObjects.clear();
     m_MapInfo.objects.clear();
     m_MapInfo.collisionMask.clear();
+    m_FpsCamera.OnDeactivate();
     UnloadTexture(m_CubeAtlas);
     UnloadModel(m_MazeModel);
 }
@@ -96,14 +97,19 @@ void SceneMaze::CheckCollisions()
         }
     }
     
-    CanSave = false;
-    // TODO: Add better interaction check
+    m_CanInteract = false;
+    m_CurrentInteractableX = -1;
+    m_CurrentInteractableY = -1;
+
+    // Check interactable objects
     Vector3 camForward = m_FpsCamera.GetForwardVector();
     int xOffset = (int)roundf(camForward.x);
     int yOfsset = (int)roundf(camForward.z);
     if(collisionMask[(playerCellY+yOfsset)*m_MapInfo.width+playerCellX+xOffset] == static_cast<char>(CollisionType::Object))
     {
-        CanSave = true;
+        m_CanInteract = true;
+        m_CurrentInteractableX = playerCellX + xOffset;
+        m_CurrentInteractableY = playerCellY + yOfsset;
     }
 }
 
@@ -113,13 +119,39 @@ void SceneMaze::OnUpdate()
     m_FpsCamera.UpdateCamera(GetFrameTime());
     if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
-        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && CanSave)
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && m_CanInteract)
         {
-            SaveGameManager::GetInstance().SaveData();
+            TriggerInteractable();
         }
     }
     m_PauseMenu->OnUpdate();
     CheckCollisions();
+}
+
+void SceneMaze::TriggerInteractable()
+{
+    Vector2 playerPos = { m_FpsCamera.GetPosition().x, m_FpsCamera.GetPosition().z };
+    int playerCellX = (int)(playerPos.x - m_MapPosition.x + 0.5f);
+    int playerCellY = (int)(playerPos.y - m_MapPosition.z + 0.5f);
+
+    int interactIdx = -1;
+    for (size_t i = 0; i < m_MapObjects.size(); i++)
+    {
+        if(m_MapObjects[i]->IsOnCell(m_CurrentInteractableX, m_CurrentInteractableY))
+        {
+            interactIdx = i;
+            break;
+        }
+    }
+
+    if(interactIdx > -1 && interactIdx < m_MapObjects.size())
+    {
+        m_InteractionContext.levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
+        m_InteractionContext.playerPosX = playerCellX;
+        m_InteractionContext.playerPosY = playerCellY;
+        m_MapObjects[interactIdx]->SetContext(m_InteractionContext);
+        m_MapObjects[interactIdx]->Interact();
+    }
 }
 
 void SceneMaze::OnDraw3D()

@@ -1,7 +1,8 @@
 #pragma once
 #include <raylib/raylib.h>
+#include <Gameplay/Objects/Interactable.h>
 
-class SavePoint
+class SavePoint : public Interactable
 {
 public:
     SavePoint(Vector3 position);

@@ -1,6 +1,7 @@
 #include <Defines.h>
 #include <Gameplay/Objects/SavePoint.h>
 #include <PVRTextureLoader.h>
+#include <VMU/SaveManager.h>
 
 SavePoint::SavePoint(Vector3 position)
 {
@@ -8,6 +9,9 @@ SavePoint::SavePoint(Vector3 position)
     m_SavePointTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
     m_SavePointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_SavePointTexture;
     m_Position = position;
+
+    m_CellX = (int)position.x;
+    m_CellY = (int)position.z;
 }
 
 void SavePoint::OnDraw3D()
@@ -17,7 +21,12 @@ void SavePoint::OnDraw3D()
 
 void SavePoint::Interact()
 {
-    
+    if(m_Context)
+    {
+        SaveGameManager::GetInstance().SetCurrentLevel(m_Context->levelIdx);
+
+        SaveGameManager::GetInstance().SaveData();
+    }
 }
 
 SavePoint::~SavePoint()
