@@ -3,6 +3,7 @@
 #include <FirstPersonCamera.h>
 #include <Sound/BgmManager.h>
 #include <MazeGenerator.h>
+#include <UI/Menu/PauseMenu.h>
 
 #include <vector>
 #include <array>
@@ -43,9 +44,8 @@ private:
     Model m_MazeModel;
     Vector3 m_OldCamPosition;
     Vector3 m_MapPosition;
-    Canvas* m_PauseMenuCanvas;
+    PauseMenu* m_PauseMenu;
 
     FirstPersonCamera m_FpsCamera;
     bool CanSave = false;
-    bool m_IsPaused = false;
 };

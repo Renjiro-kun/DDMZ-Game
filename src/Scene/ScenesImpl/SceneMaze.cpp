@@ -1,4 +1,4 @@
-#include <pch.h>
+#include <Defines.h>
 #include <Scene/ScenesImpl/SceneMaze.h>
 #include <Scene/SceneManager.h>
 #include <Gameplay/Objects/SavePoint.h>
@@ -27,8 +27,7 @@ void SceneMaze::OnActivated()
     m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
     BGMManager::GetInstance().Play(m_BGM);
     
-    m_PauseMenuCanvas = new Canvas(InputContext::PauseMenu);
-    m_PauseMenuCanvas->AddWidget(new Button(Vector2{200, 200}, "EXIT", OnExitPressed));
+    m_PauseMenu = new PauseMenu();
 
     Vector2 spawnPosition {0.f, 0.f};
     for (auto& obj : m_MapInfo.objects)
@@ -52,7 +51,7 @@ void SceneMaze::OnDectivated()
         delete m_MapObjects[i];
     }
     
-    delete m_PauseMenuCanvas;
+    delete m_PauseMenu;
 
     m_MapObjects.clear();
     m_MapInfo.objects.clear();
@@ -99,7 +98,10 @@ void SceneMaze::CheckCollisions()
     
     CanSave = false;
     // TODO: Add better interaction check
-    if(collisionMask[playerCellY*m_MapInfo.width+playerCellX+1] == static_cast<char>(CollisionType::Object))
+    Vector3 camForward = m_FpsCamera.GetForwardVector();
+    int xOffset = (int)roundf(camForward.x);
+    int yOfsset = (int)roundf(camForward.z);
+    if(collisionMask[(playerCellY+yOfsset)*m_MapInfo.width+playerCellX+xOffset] == static_cast<char>(CollisionType::Object))
     {
         CanSave = true;
     }
@@ -109,20 +111,14 @@ void SceneMaze::OnUpdate()
 {
     m_OldCamPosition = m_FpsCamera.GetPosition();
     m_FpsCamera.UpdateCamera(GetFrameTime());
-    if(IsGamepadAvailable(0))
+    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && CanSave)
         {
             SaveGameManager::GetInstance().SaveData();
         }
-        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
-        {
-            m_IsPaused = !m_IsPaused;
-            m_PauseMenuCanvas->SetActive(m_IsPaused);
-        }
     }
-
-    m_PauseMenuCanvas->OnUpdate();
+    m_PauseMenu->OnUpdate();
     CheckCollisions();
 }
 
@@ -150,7 +146,8 @@ void  SceneMaze::LoadObjects()
 
 void SceneMaze::OnDraw2D()
 {
-    m_PauseMenuCanvas->OnDraw2D();
+    m_PauseMenu->OnDraw2D();
+    m_FpsCamera.OnDraw2D();
 }
 
 void SceneMaze::OnExitReached()
@@ -165,7 +162,7 @@ void SceneMaze::OnExitReached()
         nextScene = SceneId::SCENE_TITLE_SCREEN;
     }
 
-    m_PauseMenuCanvas->SetActive(false);
+    m_PauseMenu->DisableCanvasHack();
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
     SaveGameManager::GetInstance().SaveData();
@@ -183,9 +180,4 @@ void SceneMaze::CalculateLight()
         m_MazeModel.meshes[0].colors[i*4+2] = tint.b;
         m_MazeModel.meshes[0].colors[i*4+3] = tint.a;
     }
-}
-
-void OnExitPressed()
-{
-    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
 }

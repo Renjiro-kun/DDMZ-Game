@@ -655,7 +655,7 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.height = info.height;
 	runtimeInfo.width = info.width;
 
-	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 1);
+	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 0);
 
 	short objectLayerIdx = -1;
 

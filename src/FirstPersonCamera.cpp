@@ -1,8 +1,9 @@
-#include "pch.h"
+#include <Defines.h>
 #include "FirstPersonCamera.h"
 #include <PuruPuruManager.h>
 #include <Messages/MessageManager.h>
 #include <Input/InputContextManager.h>
+#include <raylib/raymath.h>
 
 FirstPersonCamera::FirstPersonCamera()
 {
@@ -33,4 +34,31 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
 
         UpdateCameraPro(&m_Camera, desiredPosition, desiredRotation, 0.f);
     }   
+}
+
+Vector3 FirstPersonCamera::GetForwardVector()
+{
+    return Vector3Normalize(Vector3Subtract(m_Camera.target, m_Camera.position));
+}
+
+Vector3 FirstPersonCamera::GetUpVector()
+{
+    return Vector3Normalize(m_Camera.up);
+}
+
+Vector3 FirstPersonCamera::GetRightVector()
+{
+    Vector3 forward = GetForwardVector();
+    Vector3 up = GetUpVector();
+
+    return Vector3CrossProduct(forward, up);
+}
+
+
+void FirstPersonCamera::OnDraw2D()
+{
+#ifdef DEBUG
+    Vector3 forward = GetForwardVector();
+    DrawText(TextFormat("Cam forward X: %02.02f Y: %02.02f", forward.x, forward.z), 10, 25, 20, LIME);   
+#endif
 }

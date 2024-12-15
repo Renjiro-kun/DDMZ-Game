@@ -1,4 +1,4 @@
-#include <pch.h>
+#include <Defines.h>
 #include <Scene/SceneManager.h>
 #include <Scene/ScenesImpl/SceneMainMenu.h>
 

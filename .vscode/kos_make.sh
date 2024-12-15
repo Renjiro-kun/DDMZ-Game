@@ -3,6 +3,6 @@
 #set the KOS environtment variables
 source /opt/toolchains/dc/kos/environ.sh
 
-make
+make config=debug
 
 exit

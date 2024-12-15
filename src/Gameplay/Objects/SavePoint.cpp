@@ -1,11 +1,11 @@
-#include <pch.h>
+#include <Defines.h>
 #include <Gameplay/Objects/SavePoint.h>
 #include <PVRTextureLoader.h>
 
 SavePoint::SavePoint(Vector3 position)
 {
     m_SavePointModel = LoadModel("/rd/table.obj");
-    m_SavePointTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 1);
+    m_SavePointTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
     m_SavePointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_SavePointTexture;
     m_Position = position;
 }

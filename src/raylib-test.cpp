@@ -1,6 +1,6 @@
 #include <kos.h>
 
-#include "pch.h"
+#include <Defines.h>
 #include <FirstPersonCamera.h>
 #include <Scene/SceneManager.h>
 #include <UI/UIRepository.h>
@@ -46,8 +46,9 @@ int main()
             SceneManager::GetInstance().Draw3D();
             SceneManager::GetInstance().Draw();
             MessageManager::GetInstance().OnDraw2D();
-                        
+#ifdef DEBUG
             DrawFPS(10, 10);
+#endif
 
         EndDrawing();
     }

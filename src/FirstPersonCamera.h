@@ -14,6 +14,12 @@ public:
 
     Vector3 GetPosition() const { return m_Camera.position; }
     void SetPosition(Vector3 position) { m_Camera.position = position; }
+
+    void OnDraw2D();
+
+    Vector3 GetForwardVector();
+    Vector3 GetRightVector();
+    Vector3 GetUpVector();
 private:
     SFXHandle m_BoomSFX;
     float m_MovementSpeed = 3.f;
