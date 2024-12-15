@@ -9,13 +9,16 @@ enum class ObjectType : char
 	Invalid = 0,
 	PlayerStart = 1,
 	ExitNode = 2,
-	SavePoint = 3
+	SavePoint = 3,
+	ItemChest = 4
 }; 
 
 struct RuntimeObjectInfo
 {
 	Vector2 position;
 	ObjectType type;
+	char orientation;
+	char itemId;
 };
 
 enum class CollisionType :   char
@@ -78,6 +81,8 @@ private:
 		int32_t x;
 		int32_t y;
 		ObjectType type;
+		char orientation;
+		char itemId;
 	};
 
 	struct TileInfo
@@ -113,7 +118,7 @@ private:
 
 	static void ReadTileData(char* dataLocation, size_t size, std::ifstream& stream);
 	static void ReadObjectData(ObjectInfo& objectToRead, std::ifstream& stream);
-
+	static bool IsObject(ObjectType type);
 	static void GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh);
 	static void GenerateCollisionMask(MazeGenerator::MazeInfo& info, std::vector<char>& collisionMask);
 	static void FillRuntimeInfo(MazeGenerator::MazeInfo& info, MazeRuntimeInfo& runtimeInfo);

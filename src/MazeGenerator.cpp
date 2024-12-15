@@ -102,6 +102,8 @@ void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
 	object.x = tempInt;
 	stream.read((char*)&tempInt, sizeof(int32_t));
 	object.y = tempInt;
+	stream.read(&object.orientation, sizeof(char));
+	stream.read(&object.itemId, sizeof(char));
 	delete[] tempName;
 }
 
@@ -598,6 +600,11 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 	UploadMesh(&outMesh, false);
 }
 
+bool MazeGenerator::IsObject(ObjectType type)
+{
+	return type == ObjectType::SavePoint || type == ObjectType::ItemChest;
+}
+
 void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& collisionMask)
 {
 	LayerInfo* layerInfo;
@@ -638,7 +645,7 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 	for (size_t i = 0; i < objectLayer->objects.size(); i++)
 	{
 		ObjectInfo& objectInfo = objectLayer->objects[i];
-		if(objectInfo.type == ObjectType::SavePoint)
+		if(IsObject(objectInfo.type))
 		{
 			char pushValue = static_cast<char>(CollisionType::Object);
 			size_t x = objectInfo.x / info.tileSize;
@@ -685,6 +692,8 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 
 		runtimeObj.position = Vector2{(float)x, (float)y};
 		runtimeObj.type = object.type;
+		runtimeObj.itemId = object.itemId;
+		runtimeObj.orientation = object.orientation;
 		runtimeInfo.objects.push_back(runtimeObj);
 	}
 

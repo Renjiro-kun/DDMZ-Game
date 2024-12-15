@@ -2,6 +2,7 @@
 #include <Scene/ScenesImpl/SceneMaze.h>
 #include <Scene/SceneManager.h>
 #include <Gameplay/Objects/SavePoint.h>
+#include <Gameplay/Objects/ItemChest.h>
 
 #include <UI/Canvas.h>
 #include <UI/Button.h>
@@ -171,6 +172,11 @@ void  SceneMaze::LoadObjects()
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
             m_MapObjects.emplace_back(new SavePoint(Vector3{obj.position.x, 0.0f, obj.position.y}));
+        }
+        if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
+        {
+            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
+            m_MapObjects.emplace_back(new ItemChest(Vector3{obj.position.x, 0.0f, obj.position.y}));
         }
     }
     
