@@ -183,7 +183,7 @@ void  SceneMaze::LoadObjects()
         if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.emplace_back(new ItemChest(Vector3{obj.position.x, 0.0f, obj.position.y}));
+            m_MapObjects.emplace_back(new ItemChest(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
         }
     }
     

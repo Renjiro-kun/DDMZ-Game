@@ -1,5 +1,5 @@
 TARGET = raylib-test.elf
-SRCS=$(wildcard src/*.cpp src/VMU/*.cpp src/Gameplay/Objects/*.cpp src/Scene/*.cpp src/Scene/ScenesImpl/*.cpp inc/*.hpp src/Sound/*.cpp src/Messages/*.cpp src/Input/*.cpp src/UI/*.cpp src/UI/Menu/*.cpp)
+SRCS=$(wildcard src/*.cpp src/VMU/*.cpp src/Gameplay/Objects/*.cpp src/Gameplay/Inventory/*.cpp src/Scene/*.cpp src/Scene/ScenesImpl/*.cpp inc/*.hpp src/Sound/*.cpp src/Messages/*.cpp src/Input/*.cpp src/UI/*.cpp src/UI/Menu/*.cpp)
 INC=$(src/)
 OBJS = $(SRCS: .cpp=.o) romdisk.o
 KOS_ROMDISK_DIR = romdisk

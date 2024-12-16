@@ -14,6 +14,8 @@
 #include <VMU/SaveManager.h>
 #include <PuruPuruManager.h>
 
+#include <Gameplay/Inventory/InventoryManager.h>
+
 int main()
 {
     const int SCREEN_WIDTH = WIDTH;
@@ -34,6 +36,7 @@ int main()
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
+    InventoryManager::GetInstance().Init();
 
     while (!WindowShouldClose())
     {
@@ -52,6 +55,7 @@ int main()
         EndDrawing();
     }
 
+    InventoryManager::GetInstance().Shutdown();
     InputContextManager::GetInstance().Shutdown();
     MessageManager::GetInstance().Shutdown();
     UIRepository::GetInstance().Shutdown();

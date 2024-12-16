@@ -21,7 +21,8 @@ enum class SystemMessageType : char
 enum class SystemMessageID : uint16_t
 {
     SaveData = 0,
-    LoadData = 1
+    LoadData = 1,
+    FoundItem = 2
 };
 
 class MessageManager
