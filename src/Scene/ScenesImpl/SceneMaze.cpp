@@ -25,6 +25,8 @@ void SceneMaze::OnActivated()
     m_MapPosition = { 0.f, 0.0f, 0.0f };          // Set model position
     LoadObjects();
 
+    m_HUD.OnActivate();
+
     m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
     BGMManager::GetInstance().Play(m_BGM);
     
@@ -51,6 +53,7 @@ void SceneMaze::OnActivated()
 
 void SceneMaze::OnDectivated()
 {
+    m_HUD.OnDeactivate();
     BGMManager::GetInstance().Stop(m_BGM);
     BGMManager::GetInstance().UnloadBGM(m_BGM);
 
@@ -134,6 +137,7 @@ void SceneMaze::OnUpdate()
     }
     m_PauseMenu->OnUpdate();
     CheckCollisions();
+    m_HUD.SetInteractActive(m_CanInteract);
 }
 
 void SceneMaze::TriggerInteractable()
@@ -192,6 +196,7 @@ void  SceneMaze::LoadObjects()
 void SceneMaze::OnDraw2D()
 {
     m_PauseMenu->OnDraw2D();
+    m_HUD.OnDraw2D();
     m_FpsCamera.OnDraw2D();
 }
 

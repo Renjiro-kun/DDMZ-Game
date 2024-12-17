@@ -5,6 +5,7 @@
 #include <MazeGenerator.h>
 #include <UI/Menu/PauseMenu.h>
 #include <Gameplay/Objects/Interactable.h>
+#include <UI/HUD/MazeHUD.h>
 
 #include <vector>
 #include <array>
@@ -48,6 +49,8 @@ private:
     Vector3 m_MapPosition;
     PauseMenu* m_PauseMenu;
     InteractableContext m_InteractionContext;
+
+    MazeHUD m_HUD;
 
     FirstPersonCamera m_FpsCamera;
     bool m_CanInteract = false;
