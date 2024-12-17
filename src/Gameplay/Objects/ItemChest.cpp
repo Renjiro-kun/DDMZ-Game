@@ -26,7 +26,8 @@ void ItemChest::Interact()
     if(m_ItemId > 0)
     {
         InventoryManager::GetInstance().AddItem(m_ItemId);
-        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem);
+        InventoryItem& item = InventoryManager::GetInstance().GetItemInfo(m_ItemId);
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem, SystemMessageType::Default, 0.f, item.name.c_str());
     }
 }
 

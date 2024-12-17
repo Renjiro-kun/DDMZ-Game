@@ -1,6 +1,5 @@
 #include <Defines.h>
 #include <Messages/MessageManager.h>
-#include <Input/InputContextManager.h>
 
 void MessageManager::Init()
 {
@@ -66,28 +65,17 @@ void MessageManager::OnDraw2D()
     }
 }
 
-void MessageManager::RequestSystemMessage(SystemMessageID messageID, SystemMessageType type, float time)
-{
-    if(!m_DialogRequested)
-    {
-        m_DialogRequested = true;
-        SetRequestedMessage(static_cast<uint16_t>(messageID));
-        InputContextManager::GetInstance().SetInputContext(InputContext::Message);
-    }
-}
+// template<typename... Args>
+// void MessageManager::RequestSystemMessage(SystemMessageID messageID, SystemMessageType type, float time, Args... args)
+// {
+    
+// }
 
-void MessageManager::SetRequestedMessage(uint16_t messageID)
-{
-    for (size_t i = 0; i < m_SystemMessages.size(); i++)
-    {
-        if(m_SystemMessages[i].ID == messageID)
-        {
-            m_RequestedString = m_SystemMessages[i].Message;
-            return;
-        }
-    }
-    m_RequestedString = TextFormat("Message %d not found", messageID);
-}
+// template<typename... Args>
+// void MessageManager::SetRequestedMessage(uint16_t messageID, Args... args)
+// {
+    
+// }
 
 void MessageManager::Update()
 {

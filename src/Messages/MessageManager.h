@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <Input/InputContextManager.h>
 
 struct Message
 {
@@ -39,11 +40,32 @@ public:
 
     void Update();
     void OnDraw2D();
-
-    void RequestSystemMessage(SystemMessageID messageID, SystemMessageType type = SystemMessageType::Default, float time = 0.15f);
+    template<typename... Args>
+    void RequestSystemMessage(SystemMessageID messageID, SystemMessageType type = SystemMessageType::Default, float time = 0.15f, Args... args)
+    {
+        if(!m_DialogRequested)
+        {
+            m_DialogRequested = true;
+            SetRequestedMessage(static_cast<uint16_t>(messageID), args...);
+            InputContextManager::GetInstance().SetInputContext(InputContext::Message);
+        }
+    }
 
 private:
-    void SetRequestedMessage(uint16 messageID);
+    template<typename... Args>
+    void SetRequestedMessage(uint16 messageID, Args... args)
+    {
+        for (size_t i = 0; i < m_SystemMessages.size(); i++)
+        {
+            if(m_SystemMessages[i].ID == messageID)
+            {
+                m_RequestedString = TextFormat(m_SystemMessages[i].Message.c_str(), args...);
+                return;
+            }
+        }
+        m_RequestedString = TextFormat("Message %d not found", messageID);
+    }
+
     void ReadScriptIntoMemory(std::ifstream& file, std::vector<Message>& sourceArray);
 private:
     MessageManager() = default;
