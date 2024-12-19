@@ -1,4 +1,6 @@
 #pragma once
+#include <Gameplay/Inventory/InventoryManager.h>
+#include <vector>
 
 class Canvas;
 
@@ -13,8 +15,10 @@ public:
     void OnUpdate();
 
     void DisableCanvasHack();
-
 private:
+    void LoadInventoryItems();
+private:
+    std::vector<InventoryItem*> m_InventoryItems;
     Canvas* m_Canvas;
     bool m_IsActive = false;
 };
