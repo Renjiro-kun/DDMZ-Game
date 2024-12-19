@@ -23,7 +23,12 @@ enum class SystemMessageID : uint16_t
 {
     SaveData = 0,
     LoadData = 1,
-    FoundItem = 2
+    FoundItem = 2,
+    SaveFailed = 3,
+    LoadFailed = 4,
+    ResponseYes = 5,
+    ResponseNo = 6,
+    EmptyChest = 7
 };
 
 class MessageManager

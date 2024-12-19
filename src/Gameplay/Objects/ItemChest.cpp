@@ -14,6 +14,8 @@ ItemChest::ItemChest(Vector3 position, size_t itemId)
 
     m_CellX = (int)position.x;
     m_CellY = (int)position.z;
+
+    m_IsOpened = false;
 }
 
 void ItemChest::OnDraw3D()
@@ -23,11 +25,16 @@ void ItemChest::OnDraw3D()
 
 void ItemChest::Interact()
 {
-    if(m_ItemId > 0)
+    if(m_ItemId > 0 && !m_IsOpened)
     {
         InventoryManager::GetInstance().AddItem(m_ItemId);
         InventoryItem& item = InventoryManager::GetInstance().GetItemInfo(m_ItemId);
         MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem, SystemMessageType::Default, 0.f, item.name.c_str());
+        m_IsOpened = true;
+    }
+    else
+    {
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::EmptyChest);
     }
 }
 
