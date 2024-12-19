@@ -67,7 +67,6 @@ Vector3 FirstPersonCamera::GetRightVector()
 void FirstPersonCamera::OnDraw2D()
 {
 #ifdef DEBUG
-    Vector3 forward = GetForwardVector();
-    DrawText(TextFormat("Cam forward X: %02.02f Y: %02.02f", forward.x, forward.z), 10, 25, 20, LIME);   
+    DrawText(TextFormat("SFX Id %i", m_BoomSFX), 10, 25, 20, LIME);   
 #endif
 }

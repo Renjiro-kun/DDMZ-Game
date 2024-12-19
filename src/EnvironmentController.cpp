@@ -1,0 +1,50 @@
+#include <Defines.h>
+#include <EnvironmentController.h>
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glkos.h>
+
+void EnvironmentController::OnActivate()
+{
+    
+    GLfloat fogColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f }; /* Fog Color */
+
+    glFogi(GL_FOG_MODE, GL_EXP2);               /* Fog Mode */
+    glFogfv(GL_FOG_COLOR, fogColor);            /* Set Fog Color */
+    glFogf(GL_FOG_DENSITY, 0.35f);              /* How Dense The Fog is */
+    glHint(GL_FOG_HINT, GL_DONT_CARE);          /* Fog Hint Value */
+    glFogf(GL_FOG_START, 0.0f);                 /* Fog Start Depth */
+    glFogf(GL_FOG_END, 5.0f);                   /* Fog End Depth */
+}
+
+void EnvironmentController::OnDeactivate()
+{
+
+}
+
+void EnvironmentController::SetFogColor(Color clr)
+{
+    GLfloat finalClr[4] = {clr.r, clr.g, clr.b, clr.a};
+    glFogfv(GL_FOG_COLOR, finalClr);
+}
+
+void EnvironmentController::SetLightColor(Color clr)
+{
+    GLfloat finalClr[4] = {clr.r, clr.g, clr.b, clr.a};
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, finalClr);
+}
+
+void EnvironmentController::Enable()
+{
+    glEnable(GL_FOG);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+}
+
+void EnvironmentController::Disable()
+{
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHT0);
+    glDisable(GL_LIGHTING);
+}

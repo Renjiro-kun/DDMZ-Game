@@ -6,6 +6,7 @@
 #include <UI/Menu/PauseMenu.h>
 #include <Gameplay/Objects/Interactable.h>
 #include <UI/HUD/MazeHUD.h>
+#include <EnvironmentController.h>
 
 #include <vector>
 #include <array>
@@ -26,7 +27,6 @@ private:
     void LoadObjects();
 
     void CheckCollisions();
-    void CalculateLight();
 
     void OnExitReached();
 
@@ -49,6 +49,7 @@ private:
     Vector3 m_MapPosition;
     PauseMenu* m_PauseMenu;
     InteractableContext m_InteractionContext;
+    EnvironmentController m_EnvironmentController;
 
     MazeHUD m_HUD;
 

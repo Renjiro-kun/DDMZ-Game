@@ -128,8 +128,8 @@ GLuint PVRTextureLoader::GetTextureFormat(unsigned char* hdr)
     GLuint color = (GLuint)hdr[PVR_HDR_SIZE - 8];
     GLuint format = (GLuint)hdr[PVR_HDR_SIZE - 7];
 
-    GLboolean twiddled = format == 0x01;
-    GLboolean compressed = (format == 0x10 || format == 0x03);
+    GLboolean twiddled = (format == 0x01 || format == 0x02 || format == 0x12);
+    GLboolean compressed = (format == 0x10 || format == 0x03 || format == 0x04 || format == 0x11);
 
     if(compressed) {
         if(twiddled) {

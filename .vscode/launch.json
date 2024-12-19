@@ -29,7 +29,7 @@
             // path to lxdream-nitro
             "debugServerPath": "/opt/toolchains/dc/lxdream-nitro/builddir/lxdream-nitro",
             // lxdream-nitro flags
-            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -A null -u -e ${workspaceRoot}/raylib-test.elf -n ${workspaceRoot}/disc.cdi",
+            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -u -e ${workspaceRoot}/raylib-test.elf -n ${workspaceRoot}/disc.cdi",
             "filterStdout": true,
             "filterStderr": true,
             // run on connect

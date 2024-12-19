@@ -12,8 +12,6 @@ void OnExitPressed();
 
 void SceneMaze::OnActivated()
 {
-    m_FpsCamera = FirstPersonCamera();
-
     Mesh mesh {0};
     int16_t levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
 
@@ -49,11 +47,14 @@ void SceneMaze::OnActivated()
     
     m_FpsCamera.OnActivate();
     m_FpsCamera.SetPosition(Vector3{spawnPosition.x, 0.4f, spawnPosition.y});
+    m_EnvironmentController.OnActivate();
+    m_EnvironmentController.SetLightColor(GREEN);
 }
 
 void SceneMaze::OnDectivated()
 {
     m_HUD.OnDeactivate();
+    m_EnvironmentController.OnDeactivate();
     BGMManager::GetInstance().Stop(m_BGM);
     BGMManager::GetInstance().UnloadBGM(m_BGM);
 
@@ -168,11 +169,13 @@ void SceneMaze::TriggerInteractable()
 
 void SceneMaze::OnDraw3D()
 {
+    m_EnvironmentController.Enable();
     DrawModel(m_MazeModel, m_MapPosition, 1.f, WHITE);
     for (size_t i = 0; i < m_MapObjects.size(); i++)
     {
         m_MapObjects[i]->OnDraw3D();
     }
+    m_EnvironmentController.Disable();
 }
 
 void  SceneMaze::LoadObjects()
@@ -221,16 +224,4 @@ void SceneMaze::OnExitReached()
     SaveGameManager::GetInstance().SaveData();
 
     SceneManager::GetInstance().LoadScene(nextScene);
-}
-
-void SceneMaze::CalculateLight()
-{
-    Color tint = MAGENTA;
-    for (unsigned int i = 0; i < m_MazeModel.meshes[0].vertexCount; i++)
-    {
-        m_MazeModel.meshes[0].colors[i*4] = tint.r;
-        m_MazeModel.meshes[0].colors[i*4+1] = tint.g;
-        m_MazeModel.meshes[0].colors[i*4+2] = tint.b;
-        m_MazeModel.meshes[0].colors[i*4+3] = tint.a;
-    }
 }
