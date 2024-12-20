@@ -605,7 +605,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 
 bool MazeGenerator::IsObject(ObjectType type)
 {
-	return type == ObjectType::SavePoint || type == ObjectType::ItemChest;
+	return type == ObjectType::SavePoint || type == ObjectType::ItemChest || type == ObjectType::Door;
 }
 
 void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& collisionMask)
@@ -709,9 +709,6 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		runtimeObj.orientation = object.orientation;
 		runtimeInfo.objects.push_back(runtimeObj);
 	}
-
-	
-	
 
 	GenerateCollisionMask(info, runtimeInfo.collisionMask);
 

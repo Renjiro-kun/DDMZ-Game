@@ -4,13 +4,14 @@
 #include <vector>
 #include <fstream>
 
-enum class ObjectType : char
+enum class ObjectType : unsigned char
 {
 	Invalid = 0,
 	PlayerStart = 1,
 	ExitNode = 2,
 	SavePoint = 3,
-	ItemChest = 4
+	ItemChest = 4,
+	Door = 5
 }; 
 
 struct RuntimeObjectInfo
@@ -21,7 +22,7 @@ struct RuntimeObjectInfo
 	char itemId;
 };
 
-enum class CollisionType :   char
+enum class CollisionType : unsigned char
 {
 	None = 0,
 	Wall = 1,

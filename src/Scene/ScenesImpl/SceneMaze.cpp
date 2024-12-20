@@ -3,9 +3,9 @@
 #include <Scene/SceneManager.h>
 #include <Gameplay/Objects/SavePoint.h>
 #include <Gameplay/Objects/ItemChest.h>
+#include <Gameplay/Objects/Door.h>
+#include <Input/InputContextManager.h>
 
-#include <UI/Canvas.h>
-#include <UI/Button.h>
 #include <VMU/SaveManager.h>
 
 void OnExitPressed();
@@ -193,8 +193,12 @@ void  SceneMaze::LoadObjects()
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
             m_MapObjects.emplace_back(new ItemChest(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
         }
+        if(m_MapInfo.objects[i].type == ObjectType::Door)
+        {
+            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
+            m_MapObjects.emplace_back(new Door(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, m_MapInfo.width, &m_MapInfo.collisionMask));
+        }
     }
-    
 }
 
 void SceneMaze::OnDraw2D()
