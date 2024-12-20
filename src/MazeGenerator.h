@@ -32,10 +32,12 @@ enum class CollisionType :   char
 struct MazeRuntimeInfo
 {
 	std::vector<char> collisionMask;
-	short width;
-	short height;
+	int width;
+	int height;
 	Texture2D atlas;
 	std::vector<RuntimeObjectInfo> objects;
+	float FogColor[4];
+	float LightColor[4];
 };
 
 enum class TileLayerType : char
@@ -103,10 +105,12 @@ private:
 
 	struct MazeInfo
 	{
-		char width = 0;
-		char height = 0;
+		int width = 0;
+		int height = 0;
 		int tileSize;
 		int imageSize;
+		uint8_t FogColor[4];
+		uint8_t LightColor[4];
 		RectangleF DefalutTileUVs;
 		std::string atlasName;
 		std::vector<TileInfo> tiles;

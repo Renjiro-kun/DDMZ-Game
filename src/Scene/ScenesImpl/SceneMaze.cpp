@@ -48,7 +48,8 @@ void SceneMaze::OnActivated()
     m_FpsCamera.OnActivate();
     m_FpsCamera.SetPosition(Vector3{spawnPosition.x, 0.4f, spawnPosition.y});
     m_EnvironmentController.OnActivate();
-    m_EnvironmentController.SetLightColor(GREEN);
+    m_EnvironmentController.SetLightColor(m_MapInfo.LightColor);
+    m_EnvironmentController.SetFogColor(m_MapInfo.FogColor);
 }
 
 void SceneMaze::OnDectivated()

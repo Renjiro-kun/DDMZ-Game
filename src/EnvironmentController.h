@@ -1,5 +1,4 @@
 #pragma once
-#include <raylib/raylib.h>
 
 class EnvironmentController
 {
@@ -10,6 +9,6 @@ public:
     void Enable();
     void Disable();
 
-    void SetFogColor(Color clr);
-    void SetLightColor(Color clr);
+    void SetFogColor(float* clr);
+    void SetLightColor(float* clr);
 };

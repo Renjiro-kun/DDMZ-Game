@@ -23,16 +23,14 @@ void EnvironmentController::OnDeactivate()
 
 }
 
-void EnvironmentController::SetFogColor(Color clr)
+void EnvironmentController::SetFogColor(float* clr)
 {
-    GLfloat finalClr[4] = {clr.r, clr.g, clr.b, clr.a};
-    glFogfv(GL_FOG_COLOR, finalClr);
+    glFogfv(GL_FOG_COLOR, clr);
 }
 
-void EnvironmentController::SetLightColor(Color clr)
+void EnvironmentController::SetLightColor(float* clr)
 {
-    GLfloat finalClr[4] = {clr.r, clr.g, clr.b, clr.a};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, finalClr);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, clr);
 }
 
 void EnvironmentController::Enable()

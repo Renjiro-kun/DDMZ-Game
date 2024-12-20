@@ -14,8 +14,11 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 
 	char header[4];
 	file.read(header, sizeof(char) * 4);
-	file.read(&mazeInfo.width, sizeof(char));
-	file.read(&mazeInfo.height, sizeof(char));
+	file.read((char*)&mazeInfo.width, sizeof(int));
+	file.read((char*)&mazeInfo.height, sizeof(int));
+	
+	file.read((char*)mazeInfo.FogColor, sizeof(uint8_t)*4);
+	file.read((char*)mazeInfo.LightColor, sizeof(uint8_t)*4);
 	
 	char length;
 	file.read(&length, sizeof(char));
@@ -664,6 +667,16 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 
 	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 0);
 
+	for (size_t i = 0; i < 4; i++)
+	{
+		runtimeInfo.FogColor[i] = ((float)info.FogColor[i] / 255);
+	}
+
+	for (size_t i = 0; i < 4; i++)
+	{
+		runtimeInfo.LightColor[i] = ((float)info.LightColor[i] / 255);
+	}
+
 	short objectLayerIdx = -1;
 
 	for (int i = 0; i < info.layers.size(); i++)
@@ -696,6 +709,9 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		runtimeObj.orientation = object.orientation;
 		runtimeInfo.objects.push_back(runtimeObj);
 	}
+
+	
+	
 
 	GenerateCollisionMask(info, runtimeInfo.collisionMask);
 
