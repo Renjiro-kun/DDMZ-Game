@@ -17,12 +17,12 @@ FirstPersonCamera::FirstPersonCamera()
 
 void FirstPersonCamera::OnActivate()
 {
-    m_BoomSFX = SFXManager::GetInstance().LoadSFX("/rd/sfx_boom.wav");
+    m_StepSFX = SFXManager::GetInstance().LoadSFX("/rd/sfx_step.wav");
 }
 
 void FirstPersonCamera::OnDeactivate()
 {
-    SFXManager::GetInstance().Unload(m_BoomSFX);
+    SFXManager::GetInstance().Unload(m_StepSFX);
 }
 
 void FirstPersonCamera::UpdateCamera(float deltaTime)
@@ -32,14 +32,18 @@ void FirstPersonCamera::UpdateCamera(float deltaTime)
         float movement = -GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
         float turn = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
 
-        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
-        {
-            SFXManager::GetInstance().Play(m_BoomSFX);
-            PuruPuruManager::GetInstance().Rumble(0x3339F010);
-        }
-
         Vector3 desiredPosition = Vector3{movement * m_MovementSpeed * deltaTime, 0.f, 0.f };
         Vector3 desiredRotation = Vector3{turn * DEG2RAD * m_TurnSpeed * deltaTime, 0.f, 0.f};
+
+        if(abs(movement) > 0.1f)
+        {
+            m_StepTimer += deltaTime;
+            if(m_StepTimer > STEP_TIMING)
+            {
+                SFXManager::GetInstance().Play(m_StepSFX);
+                m_StepTimer = 0;
+            }
+        }
 
         UpdateCameraPro(&m_Camera, desiredPosition, desiredRotation, 0.f);
     }   
@@ -67,6 +71,6 @@ Vector3 FirstPersonCamera::GetRightVector()
 void FirstPersonCamera::OnDraw2D()
 {
 #ifdef DEBUG
-    DrawText(TextFormat("SFX Id %i", m_BoomSFX), 10, 25, 20, LIME);   
+    DrawText(TextFormat("SFX Id %i", m_StepSFX), 10, 25, 20, LIME);   
 #endif
 }

@@ -24,8 +24,11 @@ public:
     Vector3 GetRightVector();
     Vector3 GetUpVector();
 private:
-    SFXHandle m_BoomSFX;
+    const float STEP_TIMING = 0.3f;
+    SFXHandle m_StepSFX;
     float m_MovementSpeed = 3.f;
     float m_TurnSpeed = 5000.f;
     Camera m_Camera;
+
+    float m_StepTimer = 0.f;
 };
