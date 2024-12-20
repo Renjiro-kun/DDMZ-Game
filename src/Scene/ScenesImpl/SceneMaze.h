@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <array>
+#include <memory>
 
 class Canvas;
 
@@ -33,13 +34,13 @@ private:
     void TriggerInteractable();
 private:
 
-    std::array<std::string, 2> m_LevelNames
+    const std::array<std::string, 2> m_LevelNames
     {
         "/rd/testMap.ddmz",
         "/rd/bigTileTest.ddmz"
     };
     // TODO: Modify to interactable objects
-    std::vector<Interactable*> m_MapObjects;
+    std::vector<std::unique_ptr<Interactable>> m_MapObjects;
 
     MazeRuntimeInfo m_MapInfo;
     BGM_Handle m_BGM;

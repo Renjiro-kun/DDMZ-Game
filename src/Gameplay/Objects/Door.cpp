@@ -22,6 +22,11 @@ Door::Door(Vector3 position, size_t itemId, int mapHeight, std::vector<char>* co
 
 Door::~Door()
 {
+    Unload();
+}
+
+void Door::Unload()
+{
     UnloadTexture(m_DoorTexture);
     UnloadModel(m_DoorModel);
 }

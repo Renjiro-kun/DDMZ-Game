@@ -38,8 +38,13 @@ void ItemChest::Interact()
     }
 }
 
-ItemChest::~ItemChest()
+void ItemChest::Unload()
 {
     UnloadTexture(m_ChestTexture);
     UnloadModel(m_ChestModel);
+}
+
+ItemChest::~ItemChest()
+{
+    Unload();
 }

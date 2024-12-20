@@ -13,12 +13,14 @@ public:
     virtual void Interact() = 0;
     virtual void OnDraw3D() = 0;
 
+    virtual void Unload() = 0;
+
     bool IsOnCell(int x, int y)
     {
         return m_CellX == x && m_CellY == y;
     }
 
-    void SetContext(InteractableContext& ctx) { m_Context = &ctx; }
+    void SetContext(InteractableContext* ctx) { m_Context = ctx; }
 
 protected:
     InteractableContext* m_Context;

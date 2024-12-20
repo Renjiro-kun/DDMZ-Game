@@ -12,6 +12,8 @@ public:
 
     void OnDraw3D();
 
+    void Unload() override;
+
 private:
     Model m_SavePointModel;
     Texture2D m_SavePointTexture;

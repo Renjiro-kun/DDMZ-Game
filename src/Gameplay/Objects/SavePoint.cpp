@@ -30,8 +30,13 @@ void SavePoint::Interact()
     }
 }
 
-SavePoint::~SavePoint()
+void SavePoint::Unload()
 {
     UnloadTexture(m_SavePointTexture);
     UnloadModel(m_SavePointModel);
+}
+
+SavePoint::~SavePoint()
+{
+    Unload();
 }

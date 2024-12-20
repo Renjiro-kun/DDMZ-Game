@@ -61,7 +61,7 @@ void SceneMaze::OnDectivated()
 
     for (size_t i = 0; i < m_MapObjects.size(); i++)
     {
-        delete m_MapObjects[i];
+        m_MapObjects[i]->Unload();
     }
     
     delete m_PauseMenu;
@@ -163,7 +163,7 @@ void SceneMaze::TriggerInteractable()
         m_InteractionContext.levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
         m_InteractionContext.playerPosX = playerCellX;
         m_InteractionContext.playerPosY = playerCellY;
-        m_MapObjects[interactIdx]->SetContext(m_InteractionContext);
+        m_MapObjects[interactIdx]->SetContext(&m_InteractionContext);
         m_MapObjects[interactIdx]->Interact();
     }
 }
@@ -186,17 +186,17 @@ void  SceneMaze::LoadObjects()
         if(m_MapInfo.objects[i].type == ObjectType::SavePoint)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.emplace_back(new SavePoint(Vector3{obj.position.x, 0.0f, obj.position.y}));
+            m_MapObjects.push_back(std::make_unique<SavePoint>(Vector3{obj.position.x, 0.0f, obj.position.y}));
         }
         if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.emplace_back(new ItemChest(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
+            m_MapObjects.push_back(std::make_unique<ItemChest>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
         }
         if(m_MapInfo.objects[i].type == ObjectType::Door)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.emplace_back(new Door(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, m_MapInfo.width, &m_MapInfo.collisionMask));
+            m_MapObjects.push_back(std::make_unique<Door>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, m_MapInfo.width, &m_MapInfo.collisionMask));
         }
     }
 }
@@ -220,7 +220,7 @@ void SceneMaze::OnExitReached()
         nextScene = SceneId::SCENE_TITLE_SCREEN;
         SaveGameManager::GetInstance().ResetSaveGame();
     }
-    
+
     SaveGameManager::GetInstance().SetPlayerPositionX(0);
     SaveGameManager::GetInstance().SetPlayerPositionY(0);
     m_PauseMenu->DisableCanvasHack();

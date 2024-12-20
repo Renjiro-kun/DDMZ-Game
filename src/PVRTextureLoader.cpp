@@ -67,6 +67,7 @@ Texture2D PVRTextureLoader::LoadTexture(const char* filename, unsigned char isMi
         TEX0 = (uint16_t*)malloc(texSize);
 
     fread(TEX0, 1, texSize, tex); /* Read in the PVR texture data */
+    fclose(tex);
 
     /* Generate and bind a texture as normal for Open GL */
     glGenTextures(1, &texID);

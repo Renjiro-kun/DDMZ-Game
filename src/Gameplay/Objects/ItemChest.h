@@ -11,6 +11,8 @@ public:
 public:
     void Interact() override;
     void OnDraw3D() override;
+    
+    void Unload() override;
 
 private:
     Model m_ChestModel;
