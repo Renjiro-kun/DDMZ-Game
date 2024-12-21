@@ -3,7 +3,7 @@
 #include <PVRTextureLoader.h>
 #include <Gameplay/Inventory/InventoryManager.h>
 
-Door::Door(Vector3 position, size_t itemId, int mapHeight, std::vector<char>* collisionMask)
+Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
     m_DoorModel = LoadModel("/rd/doorTemp.obj");
     m_DoorTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
@@ -15,6 +15,7 @@ Door::Door(Vector3 position, size_t itemId, int mapHeight, std::vector<char>* co
     m_CellY = (int)position.z;
 
     m_IsOpened = false;
+    m_Rotation = rotation;
 
     m_CollisionMaskRef = collisionMask;
     m_MapHeight = mapHeight;
@@ -33,7 +34,7 @@ void Door::Unload()
 
 void Door::OnDraw3D()
 {
-    DrawModel(m_DoorModel, m_Position, 1.f, WHITE);
+    DrawModelEx(m_DoorModel, m_Position, Vector3{0,1,0}, m_Rotation, Vector3{1,1,1}, WHITE);
 }
 
 void Door::Interact()
@@ -45,6 +46,7 @@ void Door::Interact()
         {
             m_CollisionMaskRef->at(m_CellY * m_MapHeight + m_CellX) = 0;
             InventoryManager::GetInstance().UseItem(m_RequiredItemId);
+            m_Position.y = 0.87f;
             m_IsOpened = true;
         }
     }

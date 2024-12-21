@@ -196,7 +196,7 @@ void  SceneMaze::LoadObjects()
         if(m_MapInfo.objects[i].type == ObjectType::Door)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.push_back(std::make_unique<Door>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, m_MapInfo.width, &m_MapInfo.collisionMask));
+            m_MapObjects.push_back(std::make_unique<Door>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, obj.orientation, m_MapInfo.width, &m_MapInfo.collisionMask));
         }
     }
 }

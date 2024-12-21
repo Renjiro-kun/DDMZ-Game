@@ -6,7 +6,7 @@
 class Door : public Interactable
 {
 public:
-    Door(Vector3 position, size_t itemId, int mapHeight, std::vector<char>* collisionMask);
+    Door(Vector3 position, size_t itemId, float rotation, int mapWidth, std::vector<char>* collisionMask);
     ~Door();
 
 public:
@@ -22,6 +22,7 @@ private:
     size_t m_RequiredItemId;
     std::vector<char>* m_CollisionMaskRef;
     int m_MapHeight;
+    float m_Rotation;
 
     bool m_IsOpened;
 };
