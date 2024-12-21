@@ -2,10 +2,11 @@
 #include <Gameplay/Objects/Door.h>
 #include <PVRTextureLoader.h>
 #include <Gameplay/Inventory/InventoryManager.h>
+#include <Messages/MessageManager.h>
 
 Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
-    m_DoorModel = LoadModel("/rd/doorTemp.obj");
+    m_DoorModel = LoadModel("/rd/Door.obj");
     m_DoorTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
     m_DoorModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_DoorTexture;
     m_Position = position;
@@ -42,12 +43,20 @@ void Door::Interact()
     if(!m_IsOpened)
     {
         bool itemCheck = InventoryManager::GetInstance().HasItem(m_RequiredItemId);
-        if(m_CollisionMaskRef && itemCheck)
+        if(m_CollisionMaskRef)
         {
-            m_CollisionMaskRef->at(m_CellY * m_MapHeight + m_CellX) = 0;
-            InventoryManager::GetInstance().UseItem(m_RequiredItemId);
-            m_Position.y = 0.87f;
-            m_IsOpened = true;
+            if(itemCheck)
+            {
+                m_CollisionMaskRef->at(m_CellY * m_MapHeight + m_CellX) = 0;
+                InventoryManager::GetInstance().UseItem(m_RequiredItemId);
+                m_Position.y = 0.87f;
+                m_IsOpened = true;
+            }
+            else
+            {
+                InventoryItem& item = InventoryManager::GetInstance().GetItemInfo(m_RequiredItemId);
+                MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::ItemRequired, SystemMessageType::Default, 0.f, item.name.c_str());
+            }
         }
     }
 }

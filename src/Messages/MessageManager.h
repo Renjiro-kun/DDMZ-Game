@@ -28,7 +28,8 @@ enum class SystemMessageID : uint16_t
     LoadFailed = 4,
     ResponseYes = 5,
     ResponseNo = 6,
-    EmptyChest = 7
+    EmptyChest = 7,
+    ItemRequired = 8
 };
 
 class MessageManager
