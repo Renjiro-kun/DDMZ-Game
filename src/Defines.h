@@ -8,3 +8,4 @@
 
 #define CD_DIR "/cd/DDGM/"
 #define RD_DIR "/rd/"
+#define DC_SH4

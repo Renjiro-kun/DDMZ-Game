@@ -15,6 +15,7 @@
 #include <PuruPuruManager.h>
 
 #include <Gameplay/Inventory/InventoryManager.h>
+#include <VMU/vmu_profiler.h>
 
 int main()
 {
@@ -37,6 +38,7 @@ int main()
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
     InventoryManager::GetInstance().Init();
+    VmuProfiler prof;
 
     while (!WindowShouldClose())
     {
@@ -51,6 +53,7 @@ int main()
             MessageManager::GetInstance().OnDraw2D();
 #ifdef DEBUG
             DrawFPS(10, 10);
+            prof.setVertexCount(0);
 #endif
         EndDrawing();
     }
