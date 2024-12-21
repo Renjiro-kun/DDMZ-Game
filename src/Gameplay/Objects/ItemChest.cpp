@@ -6,7 +6,7 @@
 
 ItemChest::ItemChest(Vector3 position, size_t itemId)
 {
-    m_ChestModel = LoadModel("/rd/cube.obj");
+    m_ChestModel = LoadModel("/rd/ItemChest.obj");
     m_ChestTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
     m_ChestModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_ChestTexture;
     m_Position = position;
