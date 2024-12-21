@@ -5,7 +5,7 @@
 class SavePoint : public Interactable
 {
 public:
-    SavePoint(Vector3 position);
+    SavePoint(Vector3 position, float rotation);
     ~SavePoint();
 public:
     void Interact();
@@ -19,4 +19,5 @@ private:
     Texture2D m_SavePointTexture;
 
     Vector3 m_Position;
+    float m_Rotation;
 };

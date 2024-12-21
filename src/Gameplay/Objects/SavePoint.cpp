@@ -3,20 +3,21 @@
 #include <PVRTextureLoader.h>
 #include <VMU/SaveManager.h>
 
-SavePoint::SavePoint(Vector3 position)
+SavePoint::SavePoint(Vector3 position, float rotation)
 {
-    m_SavePointModel = LoadModel("/rd/table.obj");
+    m_SavePointModel = LoadModel("/rd/SavePoint.obj");
     m_SavePointTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
     m_SavePointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_SavePointTexture;
     m_Position = position;
 
     m_CellX = (int)position.x;
     m_CellY = (int)position.z;
+    m_Rotation = rotation;
 }
 
 void SavePoint::OnDraw3D()
 {
-    DrawModel(m_SavePointModel, m_Position, 1.f, WHITE);
+    DrawModelEx(m_SavePointModel, m_Position, Vector3{0,1,0}, m_Rotation, Vector3{1,1,1}, WHITE);
 }
 
 void SavePoint::Interact()

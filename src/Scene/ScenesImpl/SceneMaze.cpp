@@ -186,7 +186,7 @@ void  SceneMaze::LoadObjects()
         if(m_MapInfo.objects[i].type == ObjectType::SavePoint)
         {
             RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.push_back(std::make_unique<SavePoint>(Vector3{obj.position.x, 0.0f, obj.position.y}));
+            m_MapObjects.push_back(std::make_unique<SavePoint>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.orientation));
         }
         if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
         {
