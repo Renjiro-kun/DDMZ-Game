@@ -1,10 +1,18 @@
 #include <Defines.h>
 #include <Scene/ScenesImpl/SceneOptions.h>
 #include <Scene/SceneManager.h>
+#include <VMU/SaveManager.h>
+
+#include <PuruPuruManager.h>
 
 #include <UI/Button.h>
+#include <UI/Toggle.h>
 
 void OnBackPressed();
+void OnVibrationPressed(Toggle* sender);
+void OnVibrationFocussed(Toggle* sender);
+bool GetVibrationValue();
+void SetVibrationValue(bool value);
 
 void SceneOptions::OnActivated()
 {
@@ -16,7 +24,7 @@ void SceneOptions::OnActivated()
     m_MenuCanvas = new Canvas(InputContext::Default);
     m_MenuCanvas->SetActive(true);
     m_MenuCanvas->AddWidget(new Button(Vector2{200, 200}, "VOLUME "));
-    m_MenuCanvas->AddWidget(new Button(Vector2{200, 250}, "VIBRATION "));
+    m_MenuCanvas->AddWidget(new Toggle(Vector2{200, 250}, "VIBRATION ", OnVibrationPressed, OnVibrationFocussed, SetVibrationValue, GetVibrationValue));
     m_MenuCanvas->AddWidget(new Button(Vector2{200, 300}, "BACK", OnBackPressed));
 
     m_BackTexture = new Texture2D[widthCount * heightCount];
@@ -67,4 +75,24 @@ void OnBackPressed()
 {
     // TODO: Add save
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_MAIN_MENU);
+}
+
+void OnVibrationPressed(Toggle* sender)
+{
+    SaveGameManager::GetInstance().SetUseVibration(PuruPuruManager::GetInstance().GetEnable());
+}
+
+void OnVibrationFocussed(Toggle* sender)
+{
+
+}
+
+bool GetVibrationValue()
+{
+    return PuruPuruManager::GetInstance().GetEnable();   
+}
+
+void SetVibrationValue(bool value)
+{
+    PuruPuruManager::GetInstance().SetEnable(value);
 }

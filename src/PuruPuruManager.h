@@ -16,6 +16,8 @@ public:
     void Shutdown();
 
     void Rumble(uint32_t effect);
+    void SetEnable(bool value);
+    bool GetEnable() { return m_IsEnabled; }
 
 private:
     PuruPuruManager() = default;
@@ -23,5 +25,6 @@ private:
     PuruPuruManager(const PuruPuruManager&) = delete;
     PuruPuruManager& operator=(const PuruPuruManager&) = delete;
 private:
+    bool m_IsEnabled = false;
     static maple_device_t* m_PuruPuruDevice;
 };
