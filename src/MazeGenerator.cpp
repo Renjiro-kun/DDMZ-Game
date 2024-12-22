@@ -667,6 +667,11 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 
 	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(GET_ASSET_FROM_RD(info.atlasName.c_str()), 0, 0); //PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 0);
 
+	runtimeInfo.BackColor.r = info.FogColor[0];
+	runtimeInfo.BackColor.g = info.FogColor[1];
+	runtimeInfo.BackColor.b = info.FogColor[2];
+	runtimeInfo.BackColor.a = 255;
+
 	for (size_t i = 0; i < 4; i++)
 	{
 		runtimeInfo.FogColor[i] = ((float)info.FogColor[i] / 255);

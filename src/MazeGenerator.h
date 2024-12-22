@@ -37,6 +37,7 @@ struct MazeRuntimeInfo
 	int height;
 	Texture2D atlas;
 	std::vector<RuntimeObjectInfo> objects;
+	Color BackColor;
 	float FogColor[4];
 	float LightColor[4];
 };

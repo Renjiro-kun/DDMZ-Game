@@ -23,6 +23,8 @@ public:
     void OnDraw3D();
     void OnDraw2D();
     
+    Color GetSceneBackgroundColor() { return m_MazeColor; }
+
     Camera& GetCamera() { return m_FpsCamera.GetCamera(); }
 private:
     void LoadObjects();
@@ -33,7 +35,6 @@ private:
 
     void TriggerInteractable();
 private:
-
     const std::array<std::string, 2> m_LevelNames
     {
         "/rd/testMap.ddmz",
@@ -53,6 +54,7 @@ private:
     EnvironmentController m_EnvironmentController;
 
     MazeHUD m_HUD;
+    Color m_MazeColor = RAYWHITE;
 
     FirstPersonCamera m_FpsCamera;
     bool m_CanInteract = false;
