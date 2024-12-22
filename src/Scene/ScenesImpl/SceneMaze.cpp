@@ -4,6 +4,7 @@
 #include <Gameplay/Objects/SavePoint.h>
 #include <Gameplay/Objects/ItemChest.h>
 #include <Gameplay/Objects/Door.h>
+#include <Gameplay/Objects/ObjectRepository.h>
 #include <Input/InputContextManager.h>
 
 #include <VMU/SaveManager.h>
@@ -25,7 +26,7 @@ void SceneMaze::OnActivated()
 
     m_HUD.OnActivate();
 
-    m_BGM = BGMManager::GetInstance().LoadSound("/cd/music/bgm_field.adpcm");
+    m_BGM = BGMManager::GetInstance().LoadSound(GET_ASSET_FROM_CD("music/bgm_field.adpcm"));
     BGMManager::GetInstance().Play(m_BGM);
     
     m_PauseMenu = new PauseMenu();
@@ -47,6 +48,7 @@ void SceneMaze::OnActivated()
     
     m_FpsCamera.OnActivate();
     m_FpsCamera.SetPosition(Vector3{spawnPosition.x, 0.4f, spawnPosition.y});
+    ObjectRepository::GetInstance().OnActivate();
     m_EnvironmentController.OnActivate();
     m_EnvironmentController.SetLightColor(m_MapInfo.LightColor);
     m_EnvironmentController.SetFogColor(m_MapInfo.FogColor);
@@ -56,6 +58,7 @@ void SceneMaze::OnDectivated()
 {
     m_HUD.OnDeactivate();
     m_EnvironmentController.OnDeactivate();
+    ObjectRepository::GetInstance().OnDeactivate();
     BGMManager::GetInstance().Stop(m_BGM);
     BGMManager::GetInstance().UnloadBGM(m_BGM);
 

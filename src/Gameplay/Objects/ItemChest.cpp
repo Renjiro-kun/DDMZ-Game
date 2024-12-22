@@ -1,14 +1,12 @@
 #include <Defines.h>
 #include <Gameplay/Objects/ItemChest.h>
+#include <Gameplay/Objects/ObjectRepository.h>
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Messages/MessageManager.h>
-#include <PVRTextureLoader.h>
 
 ItemChest::ItemChest(Vector3 position, size_t itemId)
 {
-    m_ChestModel = LoadModel("/rd/ItemChest.obj");
-    m_ChestTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
-    m_ChestModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_ChestTexture;
+    m_ChestModel = &ObjectRepository::GetInstance().GetChestModel();
     m_Position = position;
     m_ItemId = itemId;
 
@@ -20,7 +18,10 @@ ItemChest::ItemChest(Vector3 position, size_t itemId)
 
 void ItemChest::OnDraw3D()
 {
-    DrawModel(m_ChestModel, m_Position, 1.f, WHITE);
+    if(m_ChestModel)
+    {
+        DrawModel(*m_ChestModel, m_Position, 1.f, WHITE);
+    }
 }
 
 void ItemChest::Interact()
@@ -40,8 +41,7 @@ void ItemChest::Interact()
 
 void ItemChest::Unload()
 {
-    UnloadTexture(m_ChestTexture);
-    UnloadModel(m_ChestModel);
+    
 }
 
 ItemChest::~ItemChest()

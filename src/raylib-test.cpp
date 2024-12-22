@@ -15,6 +15,7 @@
 #include <PuruPuruManager.h>
 
 #include <Gameplay/Inventory/InventoryManager.h>
+#include <Gameplay/Objects/ObjectRepository.h>
 #include <VMU/vmu_profiler.h>
 
 int main()
@@ -37,6 +38,7 @@ int main()
 
     SceneManager::GetInstance().Init();
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
+    ObjectRepository::GetInstance().Init();
     InventoryManager::GetInstance().Init();
     VmuProfiler prof;
 
@@ -59,6 +61,7 @@ int main()
     }
 
     InventoryManager::GetInstance().Shutdown();
+    ObjectRepository::GetInstance().Shutdown();
     InputContextManager::GetInstance().Shutdown();
     MessageManager::GetInstance().Shutdown();
     UIRepository::GetInstance().Shutdown();

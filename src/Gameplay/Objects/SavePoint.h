@@ -15,8 +15,7 @@ public:
     void Unload() override;
 
 private:
-    Model m_SavePointModel;
-    Texture2D m_SavePointTexture;
+    Model* m_SavePointModel;
 
     Vector3 m_Position;
     float m_Rotation;

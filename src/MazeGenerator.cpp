@@ -1,5 +1,5 @@
-#include "MazeGenerator.h"
-
+#include <MazeGenerator.h>
+#include <Defines.h>
 #include <PVRTextureLoader.h>
 
 #include <string.h>
@@ -665,7 +665,7 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.height = info.height;
 	runtimeInfo.width = info.width;
 
-	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 0);
+	runtimeInfo.atlas = PVRTextureLoader::LoadTexture(GET_ASSET_FROM_RD(info.atlasName.c_str()), 0, 0); //PVRTextureLoader::LoadTexture(TextFormat("/rd/%s", info.atlasName.c_str()), 0, 0);
 
 	for (size_t i = 0; i < 4; i++)
 	{

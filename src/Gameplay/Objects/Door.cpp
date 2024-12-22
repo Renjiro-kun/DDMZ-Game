@@ -1,14 +1,12 @@
 #include <Defines.h>
 #include <Gameplay/Objects/Door.h>
-#include <PVRTextureLoader.h>
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Messages/MessageManager.h>
+#include <Gameplay/Objects/ObjectRepository.h>
 
 Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
-    m_DoorModel = LoadModel("/rd/Door.obj");
-    m_DoorTexture = PVRTextureLoader::LoadTexture("/rd/wood.pvr", 0, 0);
-    m_DoorModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_DoorTexture;
+    m_DoorModel = &ObjectRepository::GetInstance().GetDoorModel();
     m_Position = position;
     m_RequiredItemId = itemId;
 
@@ -29,13 +27,15 @@ Door::~Door()
 
 void Door::Unload()
 {
-    UnloadTexture(m_DoorTexture);
-    UnloadModel(m_DoorModel);
+    
 }
 
 void Door::OnDraw3D()
 {
-    DrawModelEx(m_DoorModel, m_Position, Vector3{0,1,0}, m_Rotation, Vector3{1,1,1}, WHITE);
+    if(m_DoorModel)
+    {
+        DrawModelEx(*m_DoorModel, m_Position, Vector3{0,1,0}, m_Rotation, Vector3{1,1,1}, WHITE);
+    }
 }
 
 void Door::Interact()

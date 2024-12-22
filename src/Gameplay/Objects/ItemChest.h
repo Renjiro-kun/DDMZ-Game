@@ -15,8 +15,7 @@ public:
     void Unload() override;
 
 private:
-    Model m_ChestModel;
-    Texture2D m_ChestTexture;
+    Model* m_ChestModel;
     Vector3 m_Position;
     size_t m_ItemId;
 

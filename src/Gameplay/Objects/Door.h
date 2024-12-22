@@ -16,8 +16,7 @@ public:
     void Unload() override;
 
 private:
-    Model m_DoorModel;
-    Texture2D m_DoorTexture;
+    Model* m_DoorModel = nullptr;
     Vector3 m_Position;
     size_t m_RequiredItemId;
     std::vector<char>* m_CollisionMaskRef;

@@ -15,14 +15,14 @@ void SceneTitle::OnActivated()
     m_Camera.fovy = 45.f;
     m_Camera.projection = CAMERA_PERSPECTIVE;
 
-    m_AdvFont = LoadFont("/rd/font_adv.png");
+    m_AdvFont = LoadFont(GET_ASSET_FROM_RD("font_adv.png"));
 
     m_AdvTextures = new Texture2D[widthCount * heightCount];
     for (size_t y = 0; y < heightCount; y++)
     {
         for (size_t x = 0; x < widthCount; x++)
         {
-            m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat("/cd/titlescreen/ts%01i%01i.png", y+1, x+1));
+            m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/ts%01i%01i.png"), y+1, x+1));
         }
     }
 
