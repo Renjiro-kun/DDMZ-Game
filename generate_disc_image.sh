@@ -6,4 +6,4 @@ workspaceDir="/home/vesel49k/Documents/Dreamcast-projects/raylib-test/dreamdisc2
 files=""
 directories="-d $workspaceDir/cd/"
 
-mkdcdisc  -N -e $workspaceDir/raylib-test.elf $files $directories -o $workspaceDir/disc.cdi -n "DreamDisc Game"
+mkdcdisc  -N -e $workspaceDir/game-main.elf $files $directories -o $workspaceDir/disc.cdi -n "DreamDisc Game"

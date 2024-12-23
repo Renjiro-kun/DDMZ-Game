@@ -7,8 +7,7 @@
             "request": "launch",
             "preLaunchTask": "Build",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceFolder}/raylib-test.elf",
-            //"program": "${workspaceFolder}/2ndmix.elf",
+            "program": "${workspaceFolder}/game-main.elf",
             "miDebuggerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gdb",
             "setupCommands": [{
                 "text": "set architecture sh",
@@ -29,7 +28,7 @@
             // path to lxdream-nitro
             "debugServerPath": "/opt/toolchains/dc/lxdream-nitro/builddir/lxdream-nitro",
             // lxdream-nitro flags
-            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -u -e ${workspaceRoot}/raylib-test.elf -n ${workspaceRoot}/disc.cdi",
+            "debugServerArgs": "--log=DEBUG --gdb-sh4=9999 -u -e ${workspaceRoot}/game-main.elf -n ${workspaceRoot}/disc.cdi",
             "filterStdout": true,
             "filterStderr": true,
             // run on connect
@@ -49,7 +48,7 @@
             "request": "launch",
             "preLaunchTask": "Build",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceFolder}/raylib-test.elf",
+            "program": "${workspaceFolder}/game-main.elf",
             "miDebuggerPath": "/opt/toolchains/dc/sh-elf/bin/sh-elf-gdb",
             "setupCommands": [{
                 "text": "set architecture sh",
@@ -68,7 +67,7 @@
             }],
             "miDebuggerServerAddress": ":3263",
             "debugServerPath": "/opt/toolchains/dc/flycast/build/flycast",
-            "debugServerArgs": "${workspaceRoot}/raylib-test.elf",
+            "debugServerArgs": "${workspaceRoot}/game-main.elf",
             "filterStdout": true,
             "filterStderr": true,
             // run on connect

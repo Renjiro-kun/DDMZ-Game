@@ -40,8 +40,9 @@ int main()
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
     ObjectRepository::GetInstance().Init();
     InventoryManager::GetInstance().Init();
+#if DEBUG
     VmuProfiler prof;
-
+#endif
     while (!WindowShouldClose())
     {
         SceneManager::GetInstance().Update();
