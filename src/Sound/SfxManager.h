@@ -20,9 +20,14 @@ public:
     void Play(SFXHandle sfx);
 
     void Unload(SFXHandle sfx);
+
+    int GetCurrentVolume();
+    void SetCurrentVolume(int volume);
 private:
     SFXManager() = default;
     ~SFXManager() = default;
     SFXManager(const SFXManager&) = delete;
     SFXManager& operator=(const SFXManager&) = delete;
+private:
+    int m_CurrentVolume{255};
 };

@@ -25,6 +25,7 @@ void BGMManager::Play(BGM_Handle bgm)
     if(bgm != INVALID_BGM_HANDLE)
     {
         wav_play(bgm);
+        wav_volume(bgm, m_CurrentVolume);
     }
 }
 
@@ -50,4 +51,14 @@ void BGMManager::UnloadBGM(BGM_Handle bgm)
     {
         wav_destroy(bgm);
     }
+}
+
+int BGMManager::GetVolume()
+{
+    return (m_CurrentVolume / 255) * 100;
+}
+
+void BGMManager::SetVolume(int volume)
+{
+    m_CurrentVolume = ((float)volume / 100) * 255;
 }

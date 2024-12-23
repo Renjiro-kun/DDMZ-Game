@@ -56,7 +56,7 @@ void Toggle::OnPressed()
 void Toggle::SetFocused(bool focus)
 {
     focus ? SetCurrentState(1) : SetCurrentState(0);
-    std::string baseText = TextFormat(" %s: %s", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
+    std::string baseText = TextFormat("%s: %s", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
     focus ? m_TextToRender = TextFormat(">%s<", baseText.c_str()) : m_TextToRender = TextFormat(" %s ", baseText.c_str());
     if(onToggleFocusedCallback != nullptr)
     {

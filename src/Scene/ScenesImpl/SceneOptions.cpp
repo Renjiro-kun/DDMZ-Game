@@ -4,15 +4,24 @@
 #include <VMU/SaveManager.h>
 
 #include <PuruPuruManager.h>
+#include <Sound/SfxManager.h>
+#include <Sound/BgmManager.h>
 
 #include <UI/Button.h>
 #include <UI/Toggle.h>
+#include <UI/Slider.h>
 
 void OnBackPressed();
 void OnVibrationPressed(Toggle* sender);
 void OnVibrationFocussed(Toggle* sender);
 bool GetVibrationValue();
 void SetVibrationValue(bool value);
+
+void SetSFXVolume(int value);
+int GetSFXVolume();
+
+void SetBGMVolume(int value);
+int GetBGMVolume();
 
 void SceneOptions::OnActivated()
 {
@@ -23,7 +32,8 @@ void SceneOptions::OnActivated()
 
     m_MenuCanvas = new Canvas(InputContext::Default);
     m_MenuCanvas->SetActive(true);
-    m_MenuCanvas->AddWidget(new Button(Vector2{200, 200}, "VOLUME "));
+    m_MenuCanvas->AddWidget(new Slider(Vector2{200, 150}, "BGM VOLUME ", 5, 0, 100, SetBGMVolume, GetBGMVolume));
+    m_MenuCanvas->AddWidget(new Slider(Vector2{200, 200}, "SFX VOLUME ", 5, 0, 100, SetSFXVolume, GetSFXVolume));
     m_MenuCanvas->AddWidget(new Toggle(Vector2{200, 250}, "VIBRATION ", OnVibrationPressed, OnVibrationFocussed, SetVibrationValue, GetVibrationValue));
     m_MenuCanvas->AddWidget(new Button(Vector2{200, 300}, "BACK", OnBackPressed));
 
@@ -95,4 +105,24 @@ bool GetVibrationValue()
 void SetVibrationValue(bool value)
 {
     PuruPuruManager::GetInstance().SetEnable(value);
+}
+
+void SetSFXVolume(int value)
+{
+    SFXManager::GetInstance().SetCurrentVolume(value);
+}
+
+int GetSFXVolume()
+{
+    return SFXManager::GetInstance().GetCurrentVolume();
+}
+
+void SetBGMVolume(int value)
+{
+    BGMManager::GetInstance().SetVolume(value);
+}
+
+int GetBGMVolume()
+{
+    return BGMManager::GetInstance().GetVolume();
 }

@@ -17,7 +17,7 @@ void SFXManager::Play(SFXHandle sfx)
     // TODO: Add pan and volume config
     if(sfx != SFXHND_INVALID)
     {
-        snd_sfx_play(sfx, 255, 128);
+        snd_sfx_play(sfx, m_CurrentVolume, 128);
     }
 }
 
@@ -33,4 +33,14 @@ void SFXManager::Unload(SFXHandle sfx)
     {
         snd_sfx_unload(sfx);
     }
+}
+
+int SFXManager::GetCurrentVolume()
+{
+    return (m_CurrentVolume / 255) * 100;
+}
+
+void SFXManager::SetCurrentVolume(int volume)
+{
+    m_CurrentVolume = ((float)volume / 100) * 255;
 }

@@ -21,9 +21,14 @@ public:
     void SetVolume(BGM_Handle bgm, int volume);
     void Play(BGM_Handle bgm);
     void Stop(BGM_Handle bgm);
+
+    void SetVolume(int volume);
+    int GetVolume();
 private:
     BGMManager() = default;
     ~BGMManager() = default;
     BGMManager(const BGMManager&) = delete;
     BGMManager& operator=(const BGMManager&) = delete;
+private:
+    int m_CurrentVolume;
 };
