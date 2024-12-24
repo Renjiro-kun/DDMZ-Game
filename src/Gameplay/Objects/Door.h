@@ -17,7 +17,6 @@ public:
 
 private:
     Model* m_DoorModel = nullptr;
-    Vector3 m_Position;
     size_t m_RequiredItemId;
     std::vector<char>* m_CollisionMaskRef;
     int m_MapHeight;

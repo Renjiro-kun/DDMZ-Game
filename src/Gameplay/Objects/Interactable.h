@@ -1,4 +1,5 @@
 #pragma once
+#include <raylib/raylib.h>
 
 struct InteractableContext
 {
@@ -22,7 +23,10 @@ public:
 
     void SetContext(InteractableContext* ctx) { m_Context = ctx; }
 
+    const Vector3& GetPosition() { return m_Position; }
+
 protected:
+    Vector3 m_Position;
     InteractableContext* m_Context;
 
     int m_CellX = 0;

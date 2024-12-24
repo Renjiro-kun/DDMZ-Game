@@ -16,7 +16,6 @@ public:
 
 private:
     Model* m_ChestModel;
-    Vector3 m_Position;
     size_t m_ItemId;
 
     bool m_IsOpened;

@@ -17,6 +17,5 @@ public:
 private:
     Model* m_SavePointModel;
 
-    Vector3 m_Position;
     float m_Rotation;
 };

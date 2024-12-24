@@ -23,6 +23,8 @@ public:
     Vector3 GetForwardVector();
     Vector3 GetRightVector();
     Vector3 GetUpVector();
+
+    bool IsInDrawingRange(const Vector3& position);
 private:
     const float STEP_TIMING = 0.3f;
     SFXHandle m_StepSFX;

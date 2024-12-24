@@ -38,7 +38,7 @@ private:
     const std::array<std::string, 2> m_LevelNames
     {
         "/rd/testMap.ddmz",
-        "/rd/bigTileTest.ddmz"
+        "/rd/map01.ddmz"
     };
     // TODO: Modify to interactable objects
     std::vector<std::unique_ptr<Interactable>> m_MapObjects;

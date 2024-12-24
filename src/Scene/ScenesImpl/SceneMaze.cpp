@@ -178,7 +178,10 @@ void SceneMaze::OnDraw3D()
     DrawModel(m_MazeModel, m_MapPosition, 1.f, WHITE);
     for (size_t i = 0; i < m_MapObjects.size(); i++)
     {
-        m_MapObjects[i]->OnDraw3D();
+        if(m_FpsCamera.IsInDrawingRange(m_MapObjects[i]->GetPosition()))
+        {
+            m_MapObjects[i]->OnDraw3D();
+        }
     }
     m_EnvironmentController.Disable();
 }
