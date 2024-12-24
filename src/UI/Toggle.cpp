@@ -46,7 +46,7 @@ void Toggle::OnPressed()
     m_Value = !m_Value;
     setToggleValue(m_Value);
     m_Value = getToggleValue();
-    m_TextToRender = TextFormat(" %s: %s", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
+    m_TextToRender = TextFormat(">%s: %s<", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
     if(onTogglePressedCallback != nullptr)
     {
         onTogglePressedCallback(this);

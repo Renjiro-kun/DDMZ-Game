@@ -69,7 +69,8 @@ void Slider::OnScaleDown()
         m_Value = m_MinValue;
     }
     setSliderValue(m_Value);
-    m_TextToRender = TextFormat(" %s: %d ", m_ButtonText.c_str(), m_Value);
+    
+    m_TextToRender = TextFormat(">%s: %d<", m_ButtonText.c_str(), m_Value);
 
     
     if(onSliderDownCallback)
@@ -86,7 +87,7 @@ void Slider::OnScaleUp()
         m_Value = m_MaxValue;
     }
     setSliderValue(m_Value);
-    m_TextToRender = TextFormat(" %s: %d ", m_ButtonText.c_str(), m_Value);
+    m_TextToRender = TextFormat(">%s: %d<", m_ButtonText.c_str(), m_Value);
 
     if(onSliderUpCallback)
     {
