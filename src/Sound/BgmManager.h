@@ -30,5 +30,5 @@ private:
     BGMManager(const BGMManager&) = delete;
     BGMManager& operator=(const BGMManager&) = delete;
 private:
-    int m_CurrentVolume;
+    int m_CurrentVolume{255};
 };

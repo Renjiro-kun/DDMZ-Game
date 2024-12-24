@@ -33,6 +33,7 @@ Slider::Slider(Vector2 position, const std::string& buttonText, int step, int mi
 void Slider::InitData()
 {
     m_CurrentState = 0;
+    m_Value = getSliderValue();
     m_TextToRender = TextFormat(" %s: %d ", m_ButtonText.c_str(), m_Value);
 }
 
