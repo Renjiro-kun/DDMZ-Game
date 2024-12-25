@@ -1,5 +1,6 @@
 #include <UI/Toggle.h>
 #include <UI/UIRepository.h>
+#include <Sound/SfxManager.h>
 
 Toggle::Toggle()
 {
@@ -47,6 +48,7 @@ void Toggle::OnPressed()
     setToggleValue(m_Value);
     m_Value = getToggleValue();
     m_TextToRender = TextFormat(">%s: %s<", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
+    SFXManager::GetInstance().Play(UIRepository::GetInstance().GetClickSFX());
     if(onTogglePressedCallback != nullptr)
     {
         onTogglePressedCallback(this);
@@ -58,6 +60,10 @@ void Toggle::SetFocused(bool focus)
     focus ? SetCurrentState(1) : SetCurrentState(0);
     std::string baseText = TextFormat("%s: %s", m_ButtonText.c_str(), GetValueText(getToggleValue()).c_str());
     focus ? m_TextToRender = TextFormat(">%s<", baseText.c_str()) : m_TextToRender = TextFormat(" %s ", baseText.c_str());
+    if(focus)
+    {
+        SFXManager::GetInstance().Play(UIRepository::GetInstance().GetFocusSFX());
+    }
     if(onToggleFocusedCallback != nullptr)
     {
         onToggleFocusedCallback(this);

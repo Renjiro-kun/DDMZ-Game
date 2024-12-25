@@ -17,7 +17,7 @@ FirstPersonCamera::FirstPersonCamera()
 
 void FirstPersonCamera::OnActivate()
 {
-    m_StepSFX = SFXManager::GetInstance().LoadSFX("/rd/sfx_step.wav");
+    m_StepSFX = SFXManager::GetInstance().LoadSFX(GET_ASSET_FROM_RD("sfx_footstep01.wav"));
 }
 
 void FirstPersonCamera::OnDeactivate()

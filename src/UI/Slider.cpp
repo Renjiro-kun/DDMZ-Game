@@ -1,5 +1,6 @@
 #include <UI/Slider.h>
 #include <UI/UIRepository.h>
+#include <Sound/SfxManager.h>
 
 Slider::Slider()
 {
@@ -56,6 +57,10 @@ void Slider::SetFocused(bool focus)
     focus ? SetCurrentState(1) : SetCurrentState(0);
     std::string baseText = TextFormat("%s: %d", m_ButtonText.c_str(), m_Value);
     focus ? m_TextToRender = TextFormat(">%s<", baseText.c_str()) : m_TextToRender = TextFormat(" %s ", baseText.c_str());
+    if(focus)
+    {
+        SFXManager::GetInstance().Play(UIRepository::GetInstance().GetFocusSFX());
+    }
     if(onSliderFocusedCallback != nullptr)
     {
         onSliderFocusedCallback();
@@ -72,7 +77,7 @@ void Slider::OnScaleDown()
     setSliderValue(m_Value);
     
     m_TextToRender = TextFormat(">%s: %d<", m_ButtonText.c_str(), m_Value);
-
+    SFXManager::GetInstance().Play(UIRepository::GetInstance().GetScaleSFX());
     
     if(onSliderDownCallback)
     {
@@ -89,6 +94,7 @@ void Slider::OnScaleUp()
     }
     setSliderValue(m_Value);
     m_TextToRender = TextFormat(">%s: %d<", m_ButtonText.c_str(), m_Value);
+    SFXManager::GetInstance().Play(UIRepository::GetInstance().GetScaleSFX());
 
     if(onSliderUpCallback)
     {

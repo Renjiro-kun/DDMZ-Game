@@ -32,6 +32,7 @@ void ItemChest::Interact()
         InventoryItem& item = InventoryManager::GetInstance().GetItemInfo(m_ItemId);
         MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem, SystemMessageType::Default, 0.f, item.name.c_str());
         m_IsOpened = true;
+        SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetItemPickupSFX());
     }
     else
     {

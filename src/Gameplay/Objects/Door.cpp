@@ -51,6 +51,7 @@ void Door::Interact()
                 InventoryManager::GetInstance().UseItem(m_RequiredItemId);
                 m_Position.y = 0.87f;
                 m_IsOpened = true;
+                SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetDoorOpenSFX());
             }
             else
             {

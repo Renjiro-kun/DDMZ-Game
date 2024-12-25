@@ -27,12 +27,12 @@ int main()
     SetTargetFPS(TARGET_FPS);
     InputContextManager::GetInstance().Init();
     MessageManager::GetInstance().Init();
-    
     SaveGameManager::GetInstance().Init();
-    UIRepository::GetInstance().Init();
 
     BGMManager::GetInstance().Init();
     SFXManager::GetInstance().Init();
+    UIRepository::GetInstance().Init();
+
 
     PuruPuruManager::GetInstance().Init();
 

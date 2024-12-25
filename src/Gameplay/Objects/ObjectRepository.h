@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib/raylib.h>
+#include <Sound/SfxManager.h>
 
 class ObjectRepository
 {
@@ -20,6 +21,10 @@ public:
     Model& GetDoorModel() { return m_DoorModel; }
     Model& GetSavePointModel() { return m_SavePointModel; }
 
+    SFXHandle GetDoorOpenSFX() { return m_DoorOpenSFX; }
+    SFXHandle GetItemPickupSFX() { return m_ItemPickupSFX; }
+    SFXHandle GetSavePointSFX() { return m_SavePointSFX; }
+
 private:
     ObjectRepository() = default;
     ~ObjectRepository() = default;
@@ -31,4 +36,8 @@ private:
     Model m_SavePointModel;
 
     Texture m_WoodTexture;
+
+    SFXHandle m_DoorOpenSFX;
+    SFXHandle m_ItemPickupSFX;
+    SFXHandle m_SavePointSFX;
 };

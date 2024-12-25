@@ -1,5 +1,6 @@
 #include <UI/Button.h>
 #include <UI/UIRepository.h>
+#include <Sound/SfxManager.h>
 
 Button::Button()
 {
@@ -35,6 +36,7 @@ void Button::OnDraw2D()
 void Button::OnPressed()
 {
     SetCurrentState(2);
+    SFXManager::GetInstance().Play(UIRepository::GetInstance().GetClickSFX());
     if(onButtonPressedCallback != nullptr)
     {
         onButtonPressedCallback();
@@ -45,6 +47,10 @@ void Button::SetFocused(bool focus)
 {
     focus ? SetCurrentState(1) : SetCurrentState(0);
     focus ? m_TextToRender = TextFormat(">%s<", m_ButtonText.c_str()) : m_TextToRender = TextFormat(" %s ", m_ButtonText.c_str());
+    if(focus)
+    {
+        SFXManager::GetInstance().Play(UIRepository::GetInstance().GetFocusSFX());
+    }
     if(onButtonFocusedCallback != nullptr)
     {
         onButtonFocusedCallback();
