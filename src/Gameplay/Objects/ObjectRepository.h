@@ -35,7 +35,9 @@ private:
     Model m_DoorModel;
     Model m_SavePointModel;
 
-    Texture m_WoodTexture;
+    Texture m_DoorTexture;
+    Texture m_SavePointTexture;
+    Texture m_ItemChestTexture;
 
     SFXHandle m_DoorOpenSFX;
     SFXHandle m_ItemPickupSFX;
