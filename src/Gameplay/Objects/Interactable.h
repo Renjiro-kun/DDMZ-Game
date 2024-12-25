@@ -1,11 +1,14 @@
 #pragma once
 #include <raylib/raylib.h>
 
+struct InteractableInfo;
+
 struct InteractableContext
 {
     int playerPosX;
     int playerPosY;
     int levelIdx;
+    InteractableInfo* currentInteractableState;
 };
 
 class Interactable
@@ -15,6 +18,7 @@ public:
     virtual void OnDraw3D() = 0;
 
     virtual void Unload() = 0;
+    virtual void SetState(bool state) {}
 
     bool IsOnCell(int x, int y)
     {

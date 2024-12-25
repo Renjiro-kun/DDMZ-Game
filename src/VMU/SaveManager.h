@@ -5,6 +5,25 @@
 #define LONG_DESC "DreamDisc 24 Game"
 #define SHORT_DESC "DDGAME"
 
+const size_t INTERACTABLE_STATES_SIZE = 100;
+
+struct InteractableInfo
+{
+    int CellX = -1;
+    int CellY = -1;
+    bool State = false;
+
+    bool IsValidObject()
+    {
+        return CellX > -1 && CellY > -1;
+    }
+
+    bool CheckObject(int cellX, int cellY)
+    {
+        return cellX == CellX && cellY == CellY;
+    }
+};
+
 struct SaveDataPkg
 {
     SaveDataPkg()
@@ -17,6 +36,7 @@ struct SaveDataPkg
         UseVibration = false;
     }
 
+    InteractableInfo InteractableStates[INTERACTABLE_STATES_SIZE];
     uint16_t LevelIdx = 0;
     int32_t PositionX = 0;
     int32_t PositionY = 0;
@@ -53,8 +73,13 @@ public:
     int GetPlayerPositionX() { return m_CurrentSaveData.PositionX; }
     int GetPlayerPositionY() { return m_CurrentSaveData.PositionY; }
 
+    InteractableInfo* GetInteractableStates() { return m_CurrentSaveData.InteractableStates; }
+
     void ResetSaveGame();
     void ResetOptions();
+    void ResetInteractableStates();
+
+    
 private:
     SaveGameManager() = default;
     ~SaveGameManager() = default;

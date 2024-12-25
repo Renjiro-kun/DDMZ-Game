@@ -15,6 +15,11 @@ public:
 
     void Unload() override;
 
+    void SetState(bool state) override { m_IsOpened = state; OpenDoor(); }
+
+private:
+    void OpenDoor();
+
 private:
     Model* m_DoorModel = nullptr;
     size_t m_RequiredItemId;

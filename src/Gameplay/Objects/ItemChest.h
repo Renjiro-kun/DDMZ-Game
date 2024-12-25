@@ -14,6 +14,8 @@ public:
     
     void Unload() override;
 
+    void SetState(bool state) { m_IsOpened = state; }
+
 private:
     Model* m_ChestModel;
     size_t m_ItemId;

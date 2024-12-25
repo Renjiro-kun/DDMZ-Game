@@ -3,6 +3,7 @@
 #include <Gameplay/Objects/ObjectRepository.h>
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Messages/MessageManager.h>
+#include <VMU/SaveManager.h>
 
 ItemChest::ItemChest(Vector3 position, size_t itemId)
 {
@@ -33,6 +34,7 @@ void ItemChest::Interact()
         MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem, SystemMessageType::Default, 0.f, item.name.c_str());
         m_IsOpened = true;
         SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetItemPickupSFX());
+        m_Context->currentInteractableState->State = true;
     }
     else
     {

@@ -13,6 +13,7 @@
 #include <memory>
 
 class Canvas;
+class InteractableInfo;
 
 class SceneMaze : public Scene
 {
@@ -50,6 +51,7 @@ private:
     Vector3 m_OldCamPosition;
     Vector3 m_MapPosition;
     PauseMenu* m_PauseMenu;
+    InteractableInfo* m_InteractableStates;
     InteractableContext m_InteractionContext;
     EnvironmentController m_EnvironmentController;
 

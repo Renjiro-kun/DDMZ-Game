@@ -40,7 +40,7 @@ void SaveGameManager::SaveData()
 
     if(!f)
     {
-        // show error message
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveFailed, SystemMessageType::Timed, 2.f);
         return;
     }
 
@@ -60,13 +60,13 @@ void SaveGameManager::LoadData()
     f = fs_open(TextFormat("/vmu/a1/%s", SAVE_NAME), O_RDONLY);
     if(!f)
     {
-        // Add error message
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::LoadFailed, SystemMessageType::Timed, 2.f);
         return;
     }
     pkg_size = fs_total(f);
     if(pkg_size <= 0)
     {
-        // Add error message
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::LoadFailed, SystemMessageType::Timed, 2.f);
         return;
     }
     MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::LoadData, SystemMessageType::Timed, 2.f);
@@ -94,4 +94,15 @@ void SaveGameManager::ResetSaveGame()
     m_CurrentSaveData.LevelIdx = 0;
     m_CurrentSaveData.PositionX = 0;
     m_CurrentSaveData.PositionY = 0;
+}
+
+void SaveGameManager::ResetInteractableStates()
+{
+    for (size_t i = 0; i < INTERACTABLE_STATES_SIZE; i++)
+    {
+        m_CurrentSaveData.InteractableStates[i].CellX = -1;
+        m_CurrentSaveData.InteractableStates[i].CellY = -1;
+        m_CurrentSaveData.InteractableStates[i].State = false;
+    }
+    
 }

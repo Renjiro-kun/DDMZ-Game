@@ -22,6 +22,7 @@ void SceneMaze::OnActivated()
     m_MazeModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = m_MapInfo.atlas;
 
     m_MapPosition = { 0.f, 0.0f, 0.0f };          // Set model position
+    m_InteractableStates = SaveGameManager::GetInstance().GetInteractableStates();
     LoadObjects();
 
     m_HUD.OnActivate();
@@ -167,6 +168,17 @@ void SceneMaze::TriggerInteractable()
         m_InteractionContext.levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
         m_InteractionContext.playerPosX = playerCellX;
         m_InteractionContext.playerPosY = playerCellY;
+        InteractableInfo* currentInteractableState = nullptr;
+        for (size_t i = 0; i < INTERACTABLE_STATES_SIZE; i++)
+        {
+            Vector3 pos = m_MapObjects[interactIdx]->GetPosition();
+            if(m_InteractableStates[i].CheckObject(pos.x, pos.z))
+            {
+                currentInteractableState = &m_InteractableStates[i];
+                break;
+            }
+        }
+        m_InteractionContext.currentInteractableState = currentInteractableState;
         m_MapObjects[interactIdx]->SetContext(&m_InteractionContext);
         m_MapObjects[interactIdx]->Interact();
     }
@@ -188,22 +200,48 @@ void SceneMaze::OnDraw3D()
 
 void  SceneMaze::LoadObjects()
 {
+    bool saveAvailable = m_InteractableStates[0].IsValidObject();
+    size_t currentStateIdx = 0;
     for (size_t i = 0; i < m_MapInfo.objects.size(); i++)
     {
+        bool state = false;
+        RuntimeObjectInfo& obj = m_MapInfo.objects[i];
         if(m_MapInfo.objects[i].type == ObjectType::SavePoint)
         {
-            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
             m_MapObjects.push_back(std::make_unique<SavePoint>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.orientation));
         }
-        if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
+        else if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
         {
-            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
             m_MapObjects.push_back(std::make_unique<ItemChest>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
         }
-        if(m_MapInfo.objects[i].type == ObjectType::Door)
+        else if(m_MapInfo.objects[i].type == ObjectType::Door)
         {
-            RuntimeObjectInfo& obj = m_MapInfo.objects[i];
-            m_MapObjects.push_back(std::make_unique<Door>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId, obj.orientation, m_MapInfo.width, &m_MapInfo.collisionMask));
+            m_MapObjects.push_back(std::make_unique<Door>(Vector3{obj.position.x, 0.0f, obj.position.y}, 
+                                                            obj.itemId, obj.orientation, m_MapInfo.width, &m_MapInfo.collisionMask));
+        }
+        else
+        {
+            continue;
+        }
+        if(saveAvailable)
+        {
+            for (size_t i = 0; i < INTERACTABLE_STATES_SIZE; i++)
+            {
+                if(m_InteractableStates[i].CheckObject(obj.position.x, obj.position.y))
+                {
+                    state = m_InteractableStates[i].State;
+                    break;
+                }
+            }
+
+            auto& mapObject = m_MapObjects.at(m_MapObjects.size() - 1);
+            mapObject->SetState(state);
+        }
+        else
+        {
+            m_InteractableStates[currentStateIdx].CellX = obj.position.x;
+            m_InteractableStates[currentStateIdx].CellY = obj.position.y;
+            currentStateIdx++;
         }
     }
 }
@@ -233,6 +271,7 @@ void SceneMaze::OnExitReached()
     m_PauseMenu->DisableCanvasHack();
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
+    SaveGameManager::GetInstance().ResetInteractableStates();
     SaveGameManager::GetInstance().SaveData();
 
     SceneManager::GetInstance().LoadScene(nextScene);

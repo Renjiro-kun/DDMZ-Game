@@ -3,6 +3,7 @@
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Messages/MessageManager.h>
 #include <Gameplay/Objects/ObjectRepository.h>
+#include <VMU/SaveManager.h>
 
 Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
@@ -38,6 +39,12 @@ void Door::OnDraw3D()
     }
 }
 
+void Door::OpenDoor()
+{
+    m_Position.y = 0.87f;
+    m_CollisionMaskRef->at(m_CellY * m_MapHeight + m_CellX) = 0;
+}
+
 void Door::Interact()
 {
     if(!m_IsOpened)
@@ -47,11 +54,11 @@ void Door::Interact()
         {
             if(itemCheck)
             {
-                m_CollisionMaskRef->at(m_CellY * m_MapHeight + m_CellX) = 0;
                 InventoryManager::GetInstance().UseItem(m_RequiredItemId);
-                m_Position.y = 0.87f;
                 m_IsOpened = true;
+                OpenDoor();
                 SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetDoorOpenSFX());
+                m_Context->currentInteractableState->State = true;
             }
             else
             {
