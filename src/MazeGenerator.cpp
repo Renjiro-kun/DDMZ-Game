@@ -723,6 +723,7 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		if(obj.type == ObjectType::ExitNode)
 		{
 			exitPosition = Vector2{obj.position.x * 1.f, obj.position.y * 1.f};
+			break;
 		}
 	}
 

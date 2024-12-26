@@ -36,10 +36,12 @@ private:
 
     void TriggerInteractable();
 private:
-    const std::array<std::string, 2> m_LevelNames
+    const std::array<std::string, 4> m_LevelNames
     {
         "/rd/testMap.ddmz",
-        "/rd/map01.ddmz"
+        "/rd/map01.ddmz",
+        "/rd/map02.ddmz",
+        "/rd/map03.ddmz"
     };
     // TODO: Modify to interactable objects
     std::vector<std::unique_ptr<Interactable>> m_MapObjects;
