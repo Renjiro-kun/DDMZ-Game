@@ -16,13 +16,14 @@ void SceneTitle::OnActivated()
     m_Camera.projection = CAMERA_PERSPECTIVE;
 
     m_AdvFont = LoadFont(GET_ASSET_FROM_RD("font_adv.png"));
+    m_EarthTexture = LoadTexture(GET_ASSET_FROM_CD("titlescreen/BG_Earth.png"));
 
     m_AdvTextures = new Texture2D[widthCount * heightCount];
     for (size_t y = 0; y < heightCount; y++)
     {
         for (size_t x = 0; x < widthCount; x++)
         {
-            m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/ts%01i%01i.png"), y+1, x+1));
+            m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/BG_TS_%01i%01i.png"), y+1, x+1));
         }
     }
 
@@ -36,6 +37,7 @@ void SceneTitle::OnDectivated()
         UnloadTexture(m_AdvTextures[i]);
     }
     UnloadFont(m_AdvFont);
+    UnloadTexture(m_EarthTexture);
     delete[] m_AdvTextures;
 }
 
@@ -53,6 +55,7 @@ void SceneTitle::OnDraw2D()
            DrawTexture(m_AdvTextures[y*widthCount+x], x * 256, y * 256, WHITE);
         }
     }
+    DrawTextureEx(m_EarthTexture, Vector2{128, HEIGHT-128}, sin(GetFrameTime()), 2.f, WHITE);;
     DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, 50 }, 32, 1, WHITE);
 }
 

@@ -42,7 +42,7 @@ void SceneOptions::OnActivated()
     {
         for (size_t x = 0; x < widthCount; x++)
         {
-            m_BackTexture[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/ts%01i%01i.png"), y+1, x+1));
+            m_BackTexture[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/BG_TS_%01i%01i.png"), y+1, x+1));
         }
     }
 }

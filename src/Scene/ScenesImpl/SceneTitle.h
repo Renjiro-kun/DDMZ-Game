@@ -17,6 +17,7 @@ public:
 private:
     Font m_AdvFont;
     Texture2D* m_AdvTextures;
+    Texture2D m_EarthTexture;
 
     const int8_t widthCount = 3;
     const int8_t heightCount = 2;
