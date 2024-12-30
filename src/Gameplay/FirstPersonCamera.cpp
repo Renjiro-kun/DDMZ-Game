@@ -1,6 +1,6 @@
 #include <Defines.h>
-#include "FirstPersonCamera.h"
-#include <PuruPuruManager.h>
+#include <Gameplay/FirstPersonCamera.h>
+#include <VMU/PuruPuruManager.h>
 #include <Messages/MessageManager.h>
 #include <Input/InputContextManager.h>
 #include <raylib/raymath.h>

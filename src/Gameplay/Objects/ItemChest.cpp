@@ -5,7 +5,7 @@
 #include <Messages/MessageManager.h>
 #include <VMU/SaveManager.h>
 
-ItemChest::ItemChest(Vector3 position, size_t itemId)
+ItemChest::ItemChest(Vector3 position, float rotation, size_t itemId)
 {
     m_ChestModel = &ObjectRepository::GetInstance().GetChestModel();
     m_Position = position;
@@ -15,13 +15,14 @@ ItemChest::ItemChest(Vector3 position, size_t itemId)
     m_CellY = (int)position.z;
 
     m_IsOpened = false;
+    m_Rotation = rotation;
 }
 
 void ItemChest::OnDraw3D()
 {
     if(m_ChestModel)
     {
-        DrawModel(*m_ChestModel, m_Position, 1.f, WHITE);
+        DrawModelEx(*m_ChestModel, m_Position, Vector3{0,1,0}, m_Rotation, Vector3{1,1,1}, WHITE);
     }
 }
 

@@ -1,5 +1,5 @@
 #include <Defines.h>
-#include <EnvironmentController.h>
+#include <Helpers/EnvironmentController.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>

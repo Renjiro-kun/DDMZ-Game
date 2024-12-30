@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib/raylib.h>
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -17,9 +18,9 @@ enum class ObjectType : unsigned char
 struct RuntimeObjectInfo
 {
 	Vector2 position;
-	ObjectType type;
-	char orientation;
+	int32_t orientation;
 	char itemId;
+	ObjectType type;
 };
 
 enum class CollisionType : unsigned char
@@ -84,15 +85,15 @@ private:
 		std::string name;
 		int32_t x;
 		int32_t y;
+		int32_t orientation;
 		ObjectType type;
-		char orientation;
 		char itemId;
 	};
 
 	struct TileInfo
 	{
-		int id;
 		RectangleF uvRect;
+		int id;
 	};
 
 	struct LayerInfo

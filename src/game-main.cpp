@@ -1,22 +1,19 @@
 #include <kos.h>
 
 #include <Defines.h>
-#include <FirstPersonCamera.h>
-#include <Scene/SceneManager.h>
-#include <UI/UIRepository.h>
-
-#include <Sound/BgmManager.h>
-#include <Sound/SfxManager.h>
-
-#include <Input/InputContextManager.h>
-
-#include <Messages/MessageManager.h>
-#include <VMU/SaveManager.h>
-#include <PuruPuruManager.h>
 
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Gameplay/Objects/ObjectRepository.h>
+#include <Input/InputContextManager.h>
+#include <Messages/MessageManager.h>
+#include <Scene/SceneManager.h>
+#include <Sound/BgmManager.h>
+#include <Sound/SfxManager.h>
+#include <VMU/SaveManager.h>
+#include <VMU/PuruPuruManager.h>
 #include <VMU/vmu_profiler.h>
+#include <UI/UIRepository.h>
+
 
 int main()
 {

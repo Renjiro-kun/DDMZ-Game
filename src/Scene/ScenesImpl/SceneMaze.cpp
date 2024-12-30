@@ -212,7 +212,7 @@ void  SceneMaze::LoadObjects()
         }
         else if(m_MapInfo.objects[i].type == ObjectType::ItemChest)
         {
-            m_MapObjects.push_back(std::make_unique<ItemChest>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.itemId));
+            m_MapObjects.push_back(std::make_unique<ItemChest>(Vector3{obj.position.x, 0.0f, obj.position.y}, obj.orientation, obj.itemId));
         }
         else if(m_MapInfo.objects[i].type == ObjectType::Door)
         {

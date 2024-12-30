@@ -1,12 +1,13 @@
 #pragma once
 #include <Scene/Scene.h>
-#include <FirstPersonCamera.h>
-#include <Sound/BgmManager.h>
-#include <MazeGenerator.h>
-#include <UI/Menu/PauseMenu.h>
+
+#include <Gameplay/FirstPersonCamera.h>
 #include <Gameplay/Objects/Interactable.h>
+#include <Helpers/EnvironmentController.h>
+#include <Helpers/MazeGenerator.h>
+#include <Sound/BgmManager.h>
 #include <UI/HUD/MazeHUD.h>
-#include <EnvironmentController.h>
+#include <UI/Menu/PauseMenu.h>
 
 #include <vector>
 #include <array>
@@ -36,9 +37,8 @@ private:
 
     void TriggerInteractable();
 private:
-    const std::array<std::string, 4> m_LevelNames
+    const std::array<std::string, 3> m_LevelNames
     {
-        "/rd/testMap.ddmz",
         "/rd/map01.ddmz",
         "/rd/map02.ddmz",
         "/rd/map03.ddmz"

@@ -13,6 +13,7 @@ public:
 
 private:
     Camera m_Camera;
+    Texture m_KOSLogo;
     int m_FramesCounter;
     int m_LogoPositionX;
     int m_LogoPositionY;

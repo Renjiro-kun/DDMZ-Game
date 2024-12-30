@@ -1,12 +1,11 @@
 #include <Defines.h>
+
 #include <Scene/ScenesImpl/SceneOptions.h>
 #include <Scene/SceneManager.h>
-#include <VMU/SaveManager.h>
-
-#include <PuruPuruManager.h>
 #include <Sound/SfxManager.h>
 #include <Sound/BgmManager.h>
-
+#include <VMU/PuruPuruManager.h>
+#include <VMU/SaveManager.h>
 #include <UI/Button.h>
 #include <UI/Toggle.h>
 #include <UI/Slider.h>

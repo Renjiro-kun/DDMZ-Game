@@ -55,8 +55,8 @@ void SceneTitle::OnDraw2D()
            DrawTexture(m_AdvTextures[y*widthCount+x], x * 256, y * 256, WHITE);
         }
     }
-    DrawTextureEx(m_EarthTexture, Vector2{128, HEIGHT-128}, sin(GetFrameTime()), 2.f, WHITE);;
-    DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, 50 }, 32, 1, WHITE);
+    DrawTextureEx(m_EarthTexture, Vector2{128, HEIGHT-128}, 0, 2.f, WHITE);
+    DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, HEIGHT-150 }, 32, 1, Fade(WHITE, fabs(sin(GetTime()*1.5f))));
 }
 
 void SceneTitle::OnUpdate()

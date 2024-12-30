@@ -2,6 +2,7 @@
 #include <UI/Menu/PauseMenu.h>
 
 #include <Scene/SceneManager.h>
+#include <UI/UIRepository.h>
 #include <UI/Canvas.h>
 #include <UI/Button.h>
 
@@ -44,9 +45,10 @@ void PauseMenu::OnDraw2D()
 {
     if(m_IsActive)
     {   
+        DrawTextEx(UIRepository::GetInstance().GetButtonFont(), "ITEMS: ", Vector2{150, 50}, 28, 1, WHITE);
         for (size_t i = 0; i < m_InventoryItems.size(); i++)
         {
-            DrawText(m_InventoryItems[i]->name.c_str(), 250, 250+(i*25), 20, GREEN);
+            DrawTextEx(UIRepository::GetInstance().GetButtonFont(), m_InventoryItems[i]->name.c_str(), Vector2{200, (float)100+(i*25)}, 20, 1, WHITE);
         }
     }
     

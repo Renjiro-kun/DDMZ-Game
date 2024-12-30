@@ -15,6 +15,7 @@ void SceneIntro::OnActivated()
     m_FramesCounter = 0;
     m_LettersCount = 0;
     m_Alpha = 1.f;
+    m_KOSLogo = LoadTexture(GET_ASSET_FROM_RD("KOS_Logo.png"));
 
     m_TopSideRecWidth = 16;
     m_LeftSideRecHeight = 16;
@@ -24,7 +25,7 @@ void SceneIntro::OnActivated()
 
 void SceneIntro::OnDectivated()
 {
-    
+    UnloadTexture(m_KOSLogo);   
 }
 
 void SceneIntro::OnDraw3D()
@@ -62,6 +63,10 @@ void SceneIntro::OnDraw2D()
         DrawRectangle(WIDTH/2-112, HEIGHT/2-112, 224, 224, Fade(RAYWHITE, m_Alpha));
 
         DrawText(TextSubtext("raylib", 0, m_LettersCount), WIDTH/2-44, HEIGHT/2+48, 50, Fade(BLACK, m_Alpha));
+    }
+    else if (m_State == 4 || m_State == 5)
+    {
+        DrawTexture(m_KOSLogo, 50, 0, Fade(WHITE, m_Alpha));
     }
 }
 
@@ -111,6 +116,26 @@ void SceneIntro::OnUpdate()
         }
     }
     else if (m_State == 4)
+    {
+        m_Alpha += 0.009f;
+
+        if(m_Alpha >= 1.f)
+        {
+            m_Alpha = 1.f;
+            m_State = 5;
+        }
+    }
+    else if(m_State == 5)
+    {
+        m_Alpha -= 0.009f;
+
+        if(m_Alpha <= 0.f)
+        {
+            m_Alpha = 0.f;
+            m_State = 6;
+        }
+    }
+    else if(m_State == 6)
     {
         SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
     }

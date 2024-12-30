@@ -5,7 +5,7 @@
 class ItemChest : public Interactable
 {
 public:
-    ItemChest(Vector3 position, size_t itemId);
+    ItemChest(Vector3 position, float rotation, size_t itemId);
     ~ItemChest();
 
 public:
@@ -19,6 +19,7 @@ public:
 private:
     Model* m_ChestModel;
     size_t m_ItemId;
+    float m_Rotation;
 
     bool m_IsOpened;
 };

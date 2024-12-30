@@ -1,4 +1,4 @@
-#include <PVRTextureLoader.h>
+#include <Helpers/PVRTextureLoader.h>
 #include <kos.h>
 #include <GL/glu.h>
 #include <GL/glext.h>

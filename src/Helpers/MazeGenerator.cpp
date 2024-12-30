@@ -1,6 +1,6 @@
-#include <MazeGenerator.h>
 #include <Defines.h>
-#include <PVRTextureLoader.h>
+#include <Helpers/MazeGenerator.h>
+#include <Helpers/PVRTextureLoader.h>
 
 #include <string.h>
 #include <vector>
@@ -105,7 +105,8 @@ void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
 	object.x = tempInt;
 	stream.read((char*)&tempInt, sizeof(int32_t));
 	object.y = tempInt;
-	stream.read(&object.orientation, sizeof(char));
+	stream.read((char*)&tempInt, sizeof(int32_t));
+	object.orientation = tempInt;
 	stream.read(&object.itemId, sizeof(char));
 	delete[] tempName;
 }

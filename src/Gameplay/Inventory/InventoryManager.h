@@ -37,10 +37,14 @@ private:
     InventoryManager(const InventoryManager&) = delete;
     InventoryManager& operator=(const InventoryManager&) = delete;
 private:
-    std::array<InventoryItem, 2> m_AvailableItems
+    std::array<InventoryItem, 6> m_AvailableItems
     {
         InventoryItem{0, "Invalid item", ""},
-        InventoryItem{1, "Test key", "Key description"}
+        InventoryItem{1, "TEST KEY", "Key description"},
+        InventoryItem{2, "CHAMBER EXIT CARD"},
+        InventoryItem{3, "SECRET ROOM 1"},
+        InventoryItem{4, "SECRET ROOM 2"},
+        InventoryItem{5, "SECRET ROOM 3"}
     };
 
     std::vector<size_t> m_PlayerItems;

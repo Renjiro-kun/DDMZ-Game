@@ -1,4 +1,4 @@
-#include <PuruPuruManager.h>
+#include <VMU/PuruPuruManager.h>
 #include <dc/maple/controller.h>
 #include <dc/maple/purupuru.h>
 #include <VMU/SaveManager.h>

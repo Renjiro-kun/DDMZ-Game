@@ -1,6 +1,6 @@
 #include <Defines.h>
 #include <Gameplay/Objects/ObjectRepository.h>
-#include <PVRTextureLoader.h>
+#include <Helpers/PVRTextureLoader.h>
 
 void ObjectRepository::Init()
 {
