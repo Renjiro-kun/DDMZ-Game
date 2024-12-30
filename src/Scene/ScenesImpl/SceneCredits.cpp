@@ -2,6 +2,8 @@
 #include <Scene/ScenesImpl/SceneCredits.h>
 #include <Scene/SceneManager.h>
 
+#include <dc/syscalls.h>
+
 void SceneCredits::OnActivated()
 {
     m_Camera.position = Vector3{0.f, 0.f, 0.f};
@@ -83,6 +85,5 @@ void SceneCredits::OnUpdate()
 
 void SceneCredits::ExitScene()
 {
-    exit(42);
-    //std::exit(42);
+    syscall_system_bios_menu();
 }
