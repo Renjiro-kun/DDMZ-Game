@@ -78,7 +78,8 @@ public:
     void ResetSaveGame();
     void ResetOptions();
     void ResetInteractableStates();
-
+private:
+    void CopyDataFromVMUPkg(const SaveDataPkg* pkg);
     
 private:
     SaveGameManager() = default;

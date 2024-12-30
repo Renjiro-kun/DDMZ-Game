@@ -33,9 +33,20 @@ void SaveGameManager::SaveData()
     pkg.data_len = sizeof(SaveDataPkg);
     pkg.data = reinterpret_cast<uint8_t*>(&m_CurrentSaveData);
 
-    vmu_pkg_build(&pkg, &pkg_out, &pkg_size);
+    int res = vmu_pkg_build(&pkg, &pkg_out, &pkg_size);
+    if(res < 0)
+    {
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveFailed, SystemMessageType::Timed, 2.f);
+        return;
+    }
 
-    fs_unlink(TextFormat("/vmu/a1/%s", SAVE_NAME));
+    res = fs_unlink(TextFormat("/vmu/a1/%s", SAVE_NAME));
+    if(res < 0)
+    {
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveFailed, SystemMessageType::Timed, 2.f);
+        return;
+    }
+
     f = fs_open(TextFormat("/vmu/a1/%s", SAVE_NAME), O_WRONLY);
 
     if(!f)
@@ -44,10 +55,15 @@ void SaveGameManager::SaveData()
         return;
     }
 
-    MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveData, SystemMessageType::Timed, 2.f);
-
-    fs_write(f, pkg_out, pkg_size);
+    res = fs_write(f, pkg_out, pkg_size);
     fs_close(f);
+    if(res < 0)
+    {
+        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveFailed, SystemMessageType::Timed, 2.f);
+        return;
+    }
+
+    MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveData, SystemMessageType::Timed, 2.f);
 }
 
 void SaveGameManager::LoadData()
@@ -76,10 +92,26 @@ void SaveGameManager::LoadData()
     vmu_pkg_parse(pkg_data, &pkg);
 
     const SaveDataPkg* ingamePkg = reinterpret_cast<const SaveDataPkg*>(pkg.data);
-
-    m_CurrentSaveData.LevelIdx = ingamePkg->LevelIdx;
+    CopyDataFromVMUPkg(ingamePkg);
 
     free(pkg_data);
+}
+
+void SaveGameManager::CopyDataFromVMUPkg(const SaveDataPkg* pkg)
+{
+    m_CurrentSaveData.LevelIdx = pkg->LevelIdx;
+    m_CurrentSaveData.PositionX = pkg->PositionX;
+    m_CurrentSaveData.PositionY = pkg->PositionY;
+    m_CurrentSaveData.UseVibration = pkg->UseVibration;
+    m_CurrentSaveData.SFXVolume = pkg->SFXVolume;
+    m_CurrentSaveData.BGMVolume = pkg->BGMVolume;
+    for (size_t i = 0; i < INTERACTABLE_STATES_SIZE; i++)
+    {
+        m_CurrentSaveData.InteractableStates[i].CellX = pkg->InteractableStates[i].CellX;
+        m_CurrentSaveData.InteractableStates[i].CellY = pkg->InteractableStates[i].CellY;
+        m_CurrentSaveData.InteractableStates[i].State = pkg->InteractableStates[i].State;
+    }
+    
 }
 
 void SaveGameManager::ResetOptions()
