@@ -241,6 +241,7 @@ void  SceneMaze::LoadObjects()
         {
             m_InteractableStates[currentStateIdx].CellX = obj.position.x;
             m_InteractableStates[currentStateIdx].CellY = obj.position.y;
+            m_InteractableStates[currentStateIdx].State = false;
             currentStateIdx++;
         }
     }

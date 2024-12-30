@@ -15,7 +15,7 @@ public:
 
     void Unload() override;
 
-    void SetState(bool state) override { m_IsOpened = state; OpenDoor(); }
+    void SetState(bool state) override { m_IsOpened = state; if(state) OpenDoor(); }
 
 private:
     void OpenDoor();

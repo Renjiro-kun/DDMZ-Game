@@ -30,7 +30,6 @@ int main()
     SFXManager::GetInstance().Init();
     UIRepository::GetInstance().Init();
 
-
     PuruPuruManager::GetInstance().Init();
 
     SceneManager::GetInstance().Init();
