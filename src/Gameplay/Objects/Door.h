@@ -1,5 +1,7 @@
 #pragma once
 #include <Gameplay/Objects/Interactable.h>
+#include <VMU/PuruPuruManager.h>
+
 #include <raylib/raylib.h>
 #include <vector>
 
@@ -21,6 +23,7 @@ private:
     void OpenDoor();
 
 private:
+    rumble_fields_t m_DoorOpenRumble;
     Model* m_DoorModel = nullptr;
     size_t m_RequiredItemId;
     std::vector<char>* m_CollisionMaskRef;

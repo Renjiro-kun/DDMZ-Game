@@ -37,8 +37,8 @@ void PuruPuruManager::SetEnable(bool value)
     }
 }
 
-void PuruPuruManager::Rumble(uint32_t effect)
+void PuruPuruManager::Rumble(rumble_fields_t effect)
 {
-    if((m_PuruPuruDevice != NULL) && (maple_dev_valid(m_PuruPuruDevice->port, m_PuruPuruDevice->unit) != 0))  
-        purupuru_rumble_raw(m_PuruPuruDevice, effect);
+    if((m_PuruPuruDevice != NULL) && (maple_dev_valid(m_PuruPuruDevice->port, m_PuruPuruDevice->unit) != 0) && m_IsEnabled)  
+        purupuru_rumble_raw(m_PuruPuruDevice, effect.raw);
 }

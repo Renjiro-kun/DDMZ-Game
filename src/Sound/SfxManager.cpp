@@ -1,6 +1,8 @@
+#include <Defines.h>
 #include <Sound/SfxManager.h>
 #include <dc/sound/sound.h>
 #include <dc/sound/sfxmgr.h>
+
 
 void SFXManager::Init()
 {
@@ -37,7 +39,7 @@ void SFXManager::Unload(SFXHandle sfx)
 
 int SFXManager::GetCurrentVolume()
 {
-    return (m_CurrentVolume / 255) * 100;
+    return roundf(((float)m_CurrentVolume / 255) * 100);
 }
 
 void SFXManager::SetCurrentVolume(int volume)

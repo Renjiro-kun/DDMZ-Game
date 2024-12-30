@@ -7,6 +7,8 @@
 
 Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
+    m_DoorOpenRumble.raw = 0x011A7010;
+
     m_DoorModel = &ObjectRepository::GetInstance().GetDoorModel();
     m_Position = position;
     m_RequiredItemId = itemId;
@@ -58,6 +60,7 @@ void Door::Interact()
                 m_IsOpened = true;
                 OpenDoor();
                 SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetDoorOpenSFX());
+                PuruPuruManager::GetInstance().Rumble(m_DoorOpenRumble);
                 m_Context->currentInteractableState->State = true;
             }
             else
@@ -66,5 +69,5 @@ void Door::Interact()
                 MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::ItemRequired, SystemMessageType::Default, 0.f, item.name.c_str());
             }
         }
-    }
+    }   
 }

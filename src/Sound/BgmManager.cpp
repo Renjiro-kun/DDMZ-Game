@@ -1,3 +1,4 @@
+#include <Defines.h>
 #include <Sound/BgmManager.h>
 
 #include <dc/sound/stream.h>
@@ -55,7 +56,7 @@ void BGMManager::UnloadBGM(BGM_Handle bgm)
 
 int BGMManager::GetVolume()
 {
-    return (m_CurrentVolume / 255) * 100;
+    return roundf(((float)m_CurrentVolume / 255) * 100);
 }
 
 void BGMManager::SetVolume(int volume)
