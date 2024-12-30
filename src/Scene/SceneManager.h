@@ -10,7 +10,8 @@ enum class SceneId : int
     SCENE_MAZE = 1,
     SCENE_OPTIONS = 2, 
     SCENE_INTRO = 3,
-    SCENE_TITLE_SCREEN = 4
+    SCENE_TITLE_SCREEN = 4,
+    SCENE_CREDITS = 5
 };
 
 class SceneManager

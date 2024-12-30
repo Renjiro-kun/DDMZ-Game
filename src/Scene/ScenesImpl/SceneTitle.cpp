@@ -48,10 +48,6 @@ void SceneTitle::OnDraw3D()
 
 void SceneTitle::OnDraw2D()
 {
-    
-#ifdef DEBUG
-    DrawText(TextFormat("%i", SaveGameManager::GetInstance().GetPlayerPositionY()), 20, 20, 20, GREEN);
-#endif
     for (size_t y = 0; y < heightCount; y++)
     {
         for (size_t x = 0; x < widthCount; x++)

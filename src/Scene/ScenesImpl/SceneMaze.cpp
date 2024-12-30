@@ -263,7 +263,7 @@ void SceneMaze::OnExitReached()
     if(lvlIdx > m_LevelNames.size() - 1)
     {
         lvlIdx = 0;
-        nextScene = SceneId::SCENE_TITLE_SCREEN;
+        nextScene = SceneId::SCENE_CREDITS;
         SaveGameManager::GetInstance().ResetSaveGame();
     }
 

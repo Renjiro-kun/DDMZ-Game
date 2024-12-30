@@ -70,6 +70,11 @@ void SceneIntro::OnDraw2D()
     }
 }
 
+void SceneIntro::ExitScene()
+{
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
+}
+
 void SceneIntro::OnUpdate()
 {
     if(m_State == 0)
@@ -137,18 +142,14 @@ void SceneIntro::OnUpdate()
     }
     else if(m_State == 6)
     {
-        SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
+        ExitScene();
     }
     
-    
-    
-    
-
-    // if(IsGamepadAvailable(0))
-    // {
-    //     if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
-    //     {   
-    //         SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
-    //     }
-    // }
+    if(IsGamepadAvailable(0))
+    {
+        if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))
+        {   
+            ExitScene();
+        }
+    }
 }

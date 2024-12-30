@@ -1,7 +1,10 @@
 #pragma once
 #include <Scene/Scene.h>
 
-class SceneIntro : public Scene
+#include <string>
+#include <array>
+
+class SceneCredits : public Scene
 {
 public:
     void OnActivated() override;
@@ -10,22 +13,18 @@ public:
     void OnDraw3D() override;
     void OnDraw2D() override;
     Camera& GetCamera() override { return m_Camera; }
+    Color GetSceneBackgroundColor() override { return BLACK; }
 private:
     void ExitScene();
 private:
+    const std::array<std::string, 2> m_CreditsString
+    {
+        "Directed by: \n Test Test",
+        "Game by: \n Test Test"
+    };
     Camera m_Camera;
-    Texture m_KOSLogo;
-    int m_FramesCounter;
-    int m_LogoPositionX;
-    int m_LogoPositionY;
     float m_Alpha;
 
-    short m_TopSideRecWidth;
-    short m_LeftSideRecHeight;
-    short m_BottomSideRecWidth;
-    short m_RightSideRecHeight;
-
-    short m_LettersCount;
-    char m_State = 0;
-    
+    char m_CurrentText = 0;
+    char m_State = 0;    
 };
