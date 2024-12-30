@@ -67,22 +67,17 @@ Vector3 FirstPersonCamera::GetRightVector()
     return Vector3CrossProduct(forward, up);
 }
 
-constexpr float CULLING_DISTANCE = 5.f;
-constexpr float CULLING_DISTANCE_SQ = CULLING_DISTANCE * CULLING_DISTANCE;
-
 bool FirstPersonCamera::IsInDrawingRange(const Vector3& objectPosition)
 {
-
     float dx = abs(objectPosition.x - m_Camera.position.x);
-    if(dx > CULLING_DISTANCE) return false;
+    if(dx > m_CullingDistance) return false;
     float dy = abs(objectPosition.z - m_Camera.position.z);
-    if(dy > CULLING_DISTANCE) return false;
-    if(dx+dy <= CULLING_DISTANCE) return true;
-    return(dx*dx + dy*dy <= CULLING_DISTANCE_SQ);
+    if(dy > m_CullingDistance) return false;
+    if(dx+dy <= m_CullingDistance) return true;
+    return(dx*dx + dy*dy <= m_CullingDistance * m_CullingDistance);
 }
 
 void FirstPersonCamera::OnDraw2D()
 {
-#ifdef DEBUG
-#endif
+
 }

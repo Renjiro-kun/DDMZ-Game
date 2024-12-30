@@ -20,6 +20,8 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 	file.read((char*)mazeInfo.FogColor, sizeof(uint8_t)*4);
 	file.read((char*)mazeInfo.LightColor, sizeof(uint8_t)*4);
 	
+	file.read((char*)&mazeInfo.FogDepth, sizeof(int));
+
 	char length;
 	file.read(&length, sizeof(char));
 	char* atlasName = new char[length];
@@ -672,6 +674,7 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.BackColor.g = info.FogColor[1];
 	runtimeInfo.BackColor.b = info.FogColor[2];
 	runtimeInfo.BackColor.a = 255;
+	runtimeInfo.FogDepth = info.FogDepth;
 
 	for (size_t i = 0; i < 4; i++)
 	{

@@ -54,6 +54,8 @@ void SceneMaze::OnActivated()
     m_EnvironmentController.OnActivate();
     m_EnvironmentController.SetLightColor(m_MapInfo.LightColor);
     m_EnvironmentController.SetFogColor(m_MapInfo.FogColor);
+    m_EnvironmentController.SetFogDepth(m_MapInfo.FogDepth);
+    m_FpsCamera.SetCullingDistance(m_MapInfo.FogDepth);
 }
 
 void SceneMaze::OnDectivated()

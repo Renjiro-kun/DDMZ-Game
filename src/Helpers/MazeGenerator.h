@@ -41,6 +41,7 @@ struct MazeRuntimeInfo
 	Color BackColor;
 	float FogColor[4];
 	float LightColor[4];
+	float FogDepth;
 };
 
 enum class TileLayerType : char
@@ -114,6 +115,7 @@ private:
 		int imageSize;
 		uint8_t FogColor[4];
 		uint8_t LightColor[4];
+		int32_t FogDepth;
 		RectangleF DefalutTileUVs;
 		std::string atlasName;
 		std::vector<TileInfo> tiles;

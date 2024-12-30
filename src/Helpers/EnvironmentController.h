@@ -11,4 +11,5 @@ public:
 
     void SetFogColor(float* clr);
     void SetLightColor(float* clr);
+    void SetFogDepth(float depth);
 };
