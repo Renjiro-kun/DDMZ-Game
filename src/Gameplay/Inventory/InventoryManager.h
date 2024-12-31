@@ -31,6 +31,8 @@ public:
 
     const std::vector<size_t>& GetPlayerItems() { return m_PlayerItems; }
 
+    void WriteItemsToSaveData();
+    void ReadInventorySaveData();
 private:
     InventoryManager() = default;
     ~InventoryManager() = default;

@@ -1,5 +1,7 @@
 #include <Defines.h>
 #include <VMU/SaveManager.h>
+
+#include <Gameplay/Inventory/InventoryManager.h>
 #include <Messages/MessageManager.h>
 
 #include <kos.h>
@@ -19,6 +21,7 @@ void SaveGameManager::Shutdown()
 
 void SaveGameManager::SaveData()
 {
+    InventoryManager::GetInstance().WriteItemsToSaveData();
     vmu_pkg_t pkg;
     int pkg_size;
     uint8_t* pkg_out;
@@ -93,6 +96,7 @@ void SaveGameManager::LoadData()
 
     const SaveDataPkg* ingamePkg = reinterpret_cast<const SaveDataPkg*>(pkg.data);
     CopyDataFromVMUPkg(ingamePkg);
+    InventoryManager::GetInstance().ReadInventorySaveData();
 
     free(pkg_data);
 }
@@ -110,6 +114,10 @@ void SaveGameManager::CopyDataFromVMUPkg(const SaveDataPkg* pkg)
         m_CurrentSaveData.InteractableStates[i].CellX = pkg->InteractableStates[i].CellX;
         m_CurrentSaveData.InteractableStates[i].CellY = pkg->InteractableStates[i].CellY;
         m_CurrentSaveData.InteractableStates[i].State = pkg->InteractableStates[i].State;
+    }
+    for (size_t i = 0; i < INVENTORY_ITEMS_SIZE; i++)
+    {
+        m_CurrentSaveData.InventoryItems[i] = pkg->InventoryItems[i];
     }
     
 }
@@ -136,5 +144,4 @@ void SaveGameManager::ResetInteractableStates()
         m_CurrentSaveData.InteractableStates[i].CellY = -1;
         m_CurrentSaveData.InteractableStates[i].State = false;
     }
-    
 }

@@ -22,6 +22,8 @@ int GetSFXVolume();
 void SetBGMVolume(int value);
 int GetBGMVolume();
 
+void SaveOptions();
+
 void SceneOptions::OnActivated()
 {
     m_Camera.position = Vector3{0.f, 0.f, 0.f};
@@ -31,10 +33,11 @@ void SceneOptions::OnActivated()
 
     m_MenuCanvas = new Canvas(InputContext::Default);
     m_MenuCanvas->SetActive(true);
-    m_MenuCanvas->AddWidget(new Slider(Vector2{200, 150}, "BGM VOLUME ", 5, 0, 100, SetBGMVolume, GetBGMVolume));
-    m_MenuCanvas->AddWidget(new Slider(Vector2{200, 200}, "SFX VOLUME ", 5, 0, 100, SetSFXVolume, GetSFXVolume));
-    m_MenuCanvas->AddWidget(new Toggle(Vector2{200, 250}, "VIBRATION ", OnVibrationPressed, OnVibrationFocussed, SetVibrationValue, GetVibrationValue));
-    m_MenuCanvas->AddWidget(new Button(Vector2{200, 300}, "BACK", OnBackPressed));
+    m_MenuCanvas->AddWidget(new Slider(Vector2{150, 150}, "BGM VOLUME ", 5, 0, 100, SetBGMVolume, GetBGMVolume));
+    m_MenuCanvas->AddWidget(new Slider(Vector2{150, 200}, "SFX VOLUME ", 5, 0, 100, SetSFXVolume, GetSFXVolume));
+    m_MenuCanvas->AddWidget(new Toggle(Vector2{150, 250}, "VIBRATION ", OnVibrationPressed, OnVibrationFocussed, SetVibrationValue, GetVibrationValue));
+    m_MenuCanvas->AddWidget(new Button(Vector2{150, 300}, "SAVE OPTIONS", SaveOptions));
+    m_MenuCanvas->AddWidget(new Button(Vector2{150, 350}, "BACK", OnBackPressed));
 
     m_BackTexture = new Texture2D[widthCount * heightCount];
     for (size_t y = 0; y < heightCount; y++)
@@ -124,4 +127,9 @@ void SetBGMVolume(int value)
 int GetBGMVolume()
 {
     return BGMManager::GetInstance().GetVolume();
+}
+
+void SaveOptions()
+{
+    SaveGameManager::GetInstance().SaveData();
 }

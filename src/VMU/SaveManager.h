@@ -6,6 +6,7 @@
 #define SHORT_DESC "DDGAME"
 
 const size_t INTERACTABLE_STATES_SIZE = 100;
+const size_t INVENTORY_ITEMS_SIZE = 10;
 
 struct InteractableInfo
 {
@@ -37,6 +38,7 @@ struct SaveDataPkg
     }
 
     InteractableInfo InteractableStates[INTERACTABLE_STATES_SIZE];
+    int32_t InventoryItems[INVENTORY_ITEMS_SIZE];
     uint16_t LevelIdx = 0;
     int32_t PositionX = 0;
     int32_t PositionY = 0;
@@ -74,6 +76,8 @@ public:
     int GetPlayerPositionY() { return m_CurrentSaveData.PositionY; }
 
     InteractableInfo* GetInteractableStates() { return m_CurrentSaveData.InteractableStates; }
+
+    int32_t* GetInventoryItems() { return m_CurrentSaveData.InventoryItems; }
 
     void ResetSaveGame();
     void ResetOptions();
