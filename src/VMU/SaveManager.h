@@ -42,6 +42,7 @@ struct SaveDataPkg
     uint16_t LevelIdx = 0;
     int32_t PositionX = 0;
     int32_t PositionY = 0;
+    float TimeLimit = -1.f;
     int32_t BGMVolume = 255;
     int32_t SFXVolume = 255;
     bool UseVibration = false;
@@ -74,6 +75,9 @@ public:
 
     int GetPlayerPositionX() { return m_CurrentSaveData.PositionX; }
     int GetPlayerPositionY() { return m_CurrentSaveData.PositionY; }
+
+    float GetTimeLimit() { return m_CurrentSaveData.TimeLimit; }
+    void SetTimeLimit(float value) { m_CurrentSaveData.TimeLimit = value; }
 
     InteractableInfo* GetInteractableStates() { return m_CurrentSaveData.InteractableStates; }
 

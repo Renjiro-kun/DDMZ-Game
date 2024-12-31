@@ -20,7 +20,8 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 	file.read((char*)mazeInfo.FogColor, sizeof(uint8_t)*4);
 	file.read((char*)mazeInfo.LightColor, sizeof(uint8_t)*4);
 	
-	file.read((char*)&mazeInfo.FogDepth, sizeof(int));
+	file.read((char*)&mazeInfo.FogDepth, sizeof(int32_t));
+	file.read((char*)&mazeInfo.TimeLimit, sizeof(int32_t));
 
 	char length;
 	file.read(&length, sizeof(char));
@@ -675,6 +676,8 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 	runtimeInfo.BackColor.b = info.FogColor[2];
 	runtimeInfo.BackColor.a = 255;
 	runtimeInfo.FogDepth = info.FogDepth;
+
+	runtimeInfo.TimeLimit = info.TimeLimit;
 
 	for (size_t i = 0; i < 4; i++)
 	{

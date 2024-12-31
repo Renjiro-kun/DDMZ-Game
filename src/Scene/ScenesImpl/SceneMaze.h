@@ -36,6 +36,8 @@ private:
     void OnExitReached();
 
     void TriggerInteractable();
+
+    void OnTimerElapsed();
 private:
     const std::array<std::string, 3> m_LevelNames
     {

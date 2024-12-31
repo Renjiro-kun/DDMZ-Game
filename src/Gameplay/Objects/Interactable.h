@@ -8,6 +8,7 @@ struct InteractableContext
     int playerPosX;
     int playerPosY;
     int levelIdx;
+    float currentTimeLimit;
     InteractableInfo* currentInteractableState;
 };
 

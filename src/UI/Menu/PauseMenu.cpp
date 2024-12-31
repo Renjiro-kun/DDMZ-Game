@@ -1,6 +1,7 @@
 #include <Defines.h>
 #include <UI/Menu/PauseMenu.h>
 
+#include <Gameplay/TimerController.h>
 #include <Scene/SceneManager.h>
 #include <UI/UIRepository.h>
 #include <UI/Canvas.h>
@@ -29,10 +30,12 @@ void PauseMenu::OnUpdate()
             if(m_IsActive)
             {
                 LoadInventoryItems();
+                TimerController::GetInstance().PauseTimer();
             }
             else
             {
                 m_InventoryItems.clear();
+                TimerController::GetInstance().UnpauseTimer();
             }
             m_Canvas->SetActive(m_IsActive);
         }

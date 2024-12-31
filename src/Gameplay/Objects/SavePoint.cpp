@@ -28,6 +28,7 @@ void SavePoint::Interact()
         SaveGameManager::GetInstance().SetCurrentLevel(m_Context->levelIdx);
         SaveGameManager::GetInstance().SetPlayerPositionX(m_Context->playerPosX);
         SaveGameManager::GetInstance().SetPlayerPositionY(m_Context->playerPosY);
+        SaveGameManager::GetInstance().SetTimeLimit(m_Context->currentTimeLimit);
         SaveGameManager::GetInstance().SaveData();
         SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetSavePointSFX());
     }

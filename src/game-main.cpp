@@ -4,6 +4,7 @@
 
 #include <Gameplay/Inventory/InventoryManager.h>
 #include <Gameplay/Objects/ObjectRepository.h>
+#include <Gameplay/TimerController.h>
 #include <Input/InputContextManager.h>
 #include <Messages/MessageManager.h>
 #include <Scene/SceneManager.h>
@@ -13,7 +14,6 @@
 #include <VMU/PuruPuruManager.h>
 #include <VMU/vmu_profiler.h>
 #include <UI/UIRepository.h>
-
 
 int main()
 {
@@ -36,6 +36,7 @@ int main()
     SceneManager::GetInstance().LoadScene(SceneId::SCENE_INTRO);
     ObjectRepository::GetInstance().Init();
     InventoryManager::GetInstance().Init();
+    TimerController::GetInstance().Init();
 #if DEBUG
     VmuProfiler prof;
 #endif
@@ -43,6 +44,7 @@ int main()
     {
         SceneManager::GetInstance().Update();
         MessageManager::GetInstance().Update();
+        TimerController::GetInstance().Update();
 
         BeginDrawing();
             SceneManager::GetInstance().ClearScreen();
@@ -50,6 +52,7 @@ int main()
             SceneManager::GetInstance().Draw3D();
             SceneManager::GetInstance().Draw();
             MessageManager::GetInstance().OnDraw2D();
+            TimerController::GetInstance().OnDraw2D();
 #ifdef DEBUG
             DrawFPS(10, 10);
             prof.setVertexCount(0);
@@ -57,6 +60,7 @@ int main()
         EndDrawing();
     }
 
+    TimerController::GetInstance().Shutdown();
     InventoryManager::GetInstance().Shutdown();
     ObjectRepository::GetInstance().Shutdown();
     InputContextManager::GetInstance().Shutdown();
@@ -67,5 +71,6 @@ int main()
     BGMManager::GetInstance().Shutdown();
     SaveGameManager::GetInstance().Shutdown();
     CloseWindow();
+
     return 0;
 }

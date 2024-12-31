@@ -106,6 +106,7 @@ void SaveGameManager::CopyDataFromVMUPkg(const SaveDataPkg* pkg)
     m_CurrentSaveData.LevelIdx = pkg->LevelIdx;
     m_CurrentSaveData.PositionX = pkg->PositionX;
     m_CurrentSaveData.PositionY = pkg->PositionY;
+    m_CurrentSaveData.TimeLimit = pkg->TimeLimit;
     m_CurrentSaveData.UseVibration = pkg->UseVibration;
     m_CurrentSaveData.SFXVolume = pkg->SFXVolume;
     m_CurrentSaveData.BGMVolume = pkg->BGMVolume;
@@ -134,6 +135,7 @@ void SaveGameManager::ResetSaveGame()
     m_CurrentSaveData.LevelIdx = 0;
     m_CurrentSaveData.PositionX = 0;
     m_CurrentSaveData.PositionY = 0;
+    m_CurrentSaveData.TimeLimit = -1.f;
 }
 
 void SaveGameManager::ResetInteractableStates()

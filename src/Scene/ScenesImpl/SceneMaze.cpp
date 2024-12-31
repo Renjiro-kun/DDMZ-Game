@@ -5,6 +5,7 @@
 #include <Gameplay/Objects/ItemChest.h>
 #include <Gameplay/Objects/Door.h>
 #include <Gameplay/Objects/ObjectRepository.h>
+#include <Gameplay/TimerController.h>
 #include <Input/InputContextManager.h>
 
 #include <VMU/SaveManager.h>
@@ -56,16 +57,25 @@ void SceneMaze::OnActivated()
     m_EnvironmentController.SetFogColor(m_MapInfo.FogColor);
     m_EnvironmentController.SetFogDepth(m_MapInfo.FogDepth);
     m_FpsCamera.SetCullingDistance(m_MapInfo.FogDepth);
+
+    float timeLimit = SaveGameManager::GetInstance().GetTimeLimit();
+    if(timeLimit <= 0.f)
+    {
+        timeLimit = m_MapInfo.TimeLimit;
+    }
+
+    TimerController::GetInstance().StartTimer(timeLimit);
 }
 
 void SceneMaze::OnDectivated()
 {
+    TimerController::GetInstance().StopTimer();
     m_HUD.OnDeactivate();
     m_EnvironmentController.OnDeactivate();
     ObjectRepository::GetInstance().OnDeactivate();
     BGMManager::GetInstance().Stop(m_BGM);
     BGMManager::GetInstance().UnloadBGM(m_BGM);
-
+    
     for (size_t i = 0; i < m_MapObjects.size(); i++)
     {
         m_MapObjects[i]->Unload();
@@ -135,6 +145,10 @@ void SceneMaze::CheckCollisions()
 
 void SceneMaze::OnUpdate()
 {
+    if(TimerController::GetInstance().IsElapsed())
+    {
+        OnTimerElapsed();
+    }
     m_OldCamPosition = m_FpsCamera.GetPosition();
     m_FpsCamera.UpdateCamera(GetFrameTime());
     if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
@@ -170,6 +184,7 @@ void SceneMaze::TriggerInteractable()
         m_InteractionContext.levelIdx = SaveGameManager::GetInstance().GetCurrentLevel();
         m_InteractionContext.playerPosX = playerCellX;
         m_InteractionContext.playerPosY = playerCellY;
+        m_InteractionContext.currentTimeLimit = TimerController::GetInstance().GetCurrentTime();
         InteractableInfo* currentInteractableState = nullptr;
         for (size_t i = 0; i < INTERACTABLE_STATES_SIZE; i++)
         {
@@ -198,6 +213,11 @@ void SceneMaze::OnDraw3D()
         }
     }
     m_EnvironmentController.Disable();
+}
+
+void SceneMaze::OnTimerElapsed()
+{
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
 }
 
 void  SceneMaze::LoadObjects()
@@ -271,6 +291,7 @@ void SceneMaze::OnExitReached()
 
     SaveGameManager::GetInstance().SetPlayerPositionX(0);
     SaveGameManager::GetInstance().SetPlayerPositionY(0);
+    SaveGameManager::GetInstance().SetTimeLimit(-1.f);
     m_PauseMenu->DisableCanvasHack();
 
     SaveGameManager::GetInstance().SetCurrentLevel(lvlIdx);
