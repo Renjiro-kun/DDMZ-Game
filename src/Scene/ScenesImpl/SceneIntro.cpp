@@ -66,7 +66,8 @@ void SceneIntro::OnDraw2D()
     }
     else if (m_State == 4 || m_State == 5)
     {
-        DrawTexture(m_KOSLogo, 50, 0, Fade(WHITE, m_Alpha));
+        //DrawTexture(m_KOSLogo, 50, 0, Fade(WHITE, m_Alpha));
+        DrawTexturePro(m_KOSLogo, Rectangle{0, 0, 512, 512}, Rectangle{ 200, 120, 256, 256 }, Vector2{0, 0}, 0.f, Fade(WHITE, m_Alpha));
     }
 }
 

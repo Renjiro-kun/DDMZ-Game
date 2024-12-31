@@ -5,7 +5,7 @@
 #include <Scene/ScenesImpl/SceneMainMenu.h>
 #include <Input/InputContextManager.h>
 
-#include <UI/Button.h>
+#include <UI/UIRepository.h>
 #include <VMU/SaveManager.h>
 
 void SceneTitle::OnActivated()
@@ -26,6 +26,9 @@ void SceneTitle::OnActivated()
             m_AdvTextures[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/BG_TS_%01i%01i.png"), y+1, x+1));
         }
     }
+
+    m_EarthSourceRect = {0, 0, 256, 256};
+    m_EarthDestRect = { WIDTH / 2, HEIGHT + 200, WIDTH, WIDTH };
 
     SaveGameManager::GetInstance().LoadData();
 }
@@ -55,12 +58,14 @@ void SceneTitle::OnDraw2D()
            DrawTexture(m_AdvTextures[y*widthCount+x], x * 256, y * 256, WHITE);
         }
     }
-    DrawTextureEx(m_EarthTexture, Vector2{128, HEIGHT-128}, 0, 2.f, WHITE);
+    DrawTextEx(UIRepository::GetInstance().GetButtonFont(), "THE LAST ESCAPE", Vector2{50, 60}, 38, 1, WHITE);
+    DrawTexturePro(m_EarthTexture, m_EarthSourceRect, m_EarthDestRect, Vector2{ m_EarthDestRect.width / 2, m_EarthDestRect.height / 2 }, m_Rotation, WHITE);
     DrawTextEx(m_AdvFont, "PRESS START", Vector2{ 200, HEIGHT-150 }, 32, 1, Fade(WHITE, fabs(sin(GetTime()*1.5f))));
 }
 
 void SceneTitle::OnUpdate()
 {
+    m_Rotation -= GetFrameTime() * m_RotationSpeed;
     if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT))

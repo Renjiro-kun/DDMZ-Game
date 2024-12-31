@@ -18,9 +18,13 @@ private:
     Font m_AdvFont;
     Texture2D* m_AdvTextures;
     Texture2D m_EarthTexture;
+    Rectangle m_EarthSourceRect;
+    Rectangle m_EarthDestRect;
 
     const int8_t widthCount = 3;
     const int8_t heightCount = 2;
+    const float m_RotationSpeed{2.f};
+    float m_Rotation{0.f};
 
     Camera m_Camera;
 };
