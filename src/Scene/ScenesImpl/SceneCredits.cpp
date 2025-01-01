@@ -23,12 +23,16 @@ void SceneCredits::OnDraw3D()
 
 void SceneCredits::OnDraw2D()
 {
-    DrawText(m_CreditsString[m_CurrentText].c_str(), WIDTH/2, HEIGHT/2, 30, Fade(WHITE, m_Alpha));
+    DrawText(m_CreditsString[m_CurrentText].c_str(), 40, HEIGHT/2, 30, Fade(WHITE, m_Alpha));
 }
 
 void SceneCredits::OnUpdate()
 {
-    if (m_State == 0)
+    if(m_State == m_CreditsString.size() * 2 + 1)
+    {
+        ExitScene();
+    }
+    if (m_State % 2 == 0)
     {
         m_Alpha += 0.009f;
 
@@ -38,7 +42,7 @@ void SceneCredits::OnUpdate()
             m_State++;
         }
     }
-    else if(m_State == 1)
+    else if(m_State % 2 == 1)
     {
         m_Alpha -= 0.009f;
 
@@ -48,30 +52,6 @@ void SceneCredits::OnUpdate()
             m_State++;
             m_CurrentText++;
         }
-    }
-    if (m_State == 2)
-    {
-        m_Alpha += 0.009f;
-
-        if(m_Alpha >= 1.f)
-        {
-            m_Alpha = 1.f;
-            m_State++;
-        }
-    }
-    else if(m_State == 3)
-    {
-        m_Alpha -= 0.009f;
-
-        if(m_Alpha <= 0.f)
-        {
-            m_Alpha = 0.f;
-            m_State++;
-        }
-    }
-    else if(m_State == 4)
-    {
-        ExitScene();
     }
 
     if(IsGamepadAvailable(0))

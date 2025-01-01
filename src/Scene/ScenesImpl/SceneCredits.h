@@ -17,10 +17,19 @@ public:
 private:
     void ExitScene();
 private:
-    const std::array<std::string, 2> m_CreditsString
+    const std::array<std::string, 11> m_CreditsString
     {
-        "Directed by: \n Test Test",
-        "Game by: \n Test Test"
+        "GAME MADE WITH ",
+        "raylib\n&\nKalistiOS",
+        "FONTS USED",
+        "Pica Hole by Apostrophic Labs\nShmup In The Zone by Goma Shin\nMona Sans by Degarism",
+        "SFX USED",
+        "freesoundlibrary.org\nGuyEngine VST by SoundFontGuy",
+        "TEXTURES USED",
+        "\"The Blue Marble\" \nfrom NASA Johnson Space Center",
+        "GAME CREATED BY",
+        "Renji-kun",
+        "THANKS FOR PLAYING THE GAME"
     };
     Camera m_Camera;
     float m_Alpha;
