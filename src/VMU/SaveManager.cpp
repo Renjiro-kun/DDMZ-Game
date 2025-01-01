@@ -30,7 +30,9 @@ void SaveGameManager::SaveData()
     strcpy(pkg.desc_short, SHORT_DESC);
     strcpy(pkg.desc_long, LONG_DESC);
     strcpy(pkg.app_id, APP_ID);
-    pkg.icon_cnt = 0;
+    pkg.icon_cnt = 1;
+    pkg.icon_data = VMU_SAVE_ICON;
+    memcpy(&pkg.icon_pal[0], VMU_SAVE_ICON_PALLETE,32);
     pkg.icon_anim_speed = 0;
     pkg.eyecatch_type = VMUPKG_EC_NONE;
     pkg.data_len = sizeof(SaveDataPkg);
@@ -118,8 +120,8 @@ void SaveGameManager::CopyDataFromVMUPkg(const SaveDataPkg* pkg)
 
 void SaveGameManager::ResetOptions()
 {
-    m_CurrentSaveData.BGMVolume = 255;
-    m_CurrentSaveData.SFXVolume = 255;
+    m_CurrentSaveData.BGMVolume = 100;
+    m_CurrentSaveData.SFXVolume = 100;
     m_CurrentSaveData.UseVibration = false;
 }
 

@@ -1,11 +1,13 @@
 #include <Defines.h>
 #include <Sound/BgmManager.h>
+#include <VMU/SaveManager.h>
 
 #include <dc/sound/stream.h>
 #include <wav/sndwav.h>
 
 void BGMManager::Init()
 {
+    SetVolume(SaveGameManager::GetInstance().GetBGMVolume());
     snd_stream_init();
     wav_init();
 }

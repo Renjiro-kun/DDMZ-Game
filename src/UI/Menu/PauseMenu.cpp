@@ -12,7 +12,7 @@ void OnExitPressed();
 PauseMenu::PauseMenu()
 {
     m_Canvas = new Canvas(InputContext::PauseMenu);
-    m_Canvas->AddWidget(new Button(Vector2{WIDTH - 150, HEIGHT - 100}, "EXIT", OnExitPressed));
+    m_Canvas->AddWidget(new Button(Vector2{WIDTH / 2 - 200, HEIGHT - 100}, "EXIT TO TITLE", OnExitPressed));
 }
 
 PauseMenu::~PauseMenu()

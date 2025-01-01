@@ -1,11 +1,13 @@
 #include <Defines.h>
 #include <Sound/SfxManager.h>
+#include <VMU/SaveManager.h>
+
 #include <dc/sound/sound.h>
 #include <dc/sound/sfxmgr.h>
 
-
 void SFXManager::Init()
 {
+    SetCurrentVolume(SaveGameManager::GetInstance().GetSFXVolume());
     snd_init();
 }
 

@@ -13,11 +13,11 @@ void SceneGameOver::OnActivated()
 
     m_FramesCounter = 0;
     m_Alpha = 0.f;
+    m_State = 0;
 }
 
 void SceneGameOver::OnDectivated()
 {
-
 }
 
 void SceneGameOver::OnDraw3D()

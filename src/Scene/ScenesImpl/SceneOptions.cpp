@@ -117,6 +117,7 @@ void SetVibrationValue(bool value)
 
 void SetSFXVolume(int value)
 {
+    SaveGameManager::GetInstance().SetSFXVolume(value);
     SFXManager::GetInstance().SetCurrentVolume(value);
 }
 
@@ -127,6 +128,7 @@ int GetSFXVolume()
 
 void SetBGMVolume(int value)
 {
+    SaveGameManager::GetInstance().SetBGMVolume(value);
     BGMManager::GetInstance().SetVolume(value);
 }
 
