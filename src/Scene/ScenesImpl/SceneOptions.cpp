@@ -2,6 +2,7 @@
 
 #include <Scene/ScenesImpl/SceneOptions.h>
 #include <Scene/SceneManager.h>
+#include <Input/InputContextManager.h>
 #include <Sound/SfxManager.h>
 #include <Sound/BgmManager.h>
 #include <VMU/PuruPuruManager.h>
@@ -54,6 +55,7 @@ void SceneOptions::OnActivated()
 
 void SceneOptions::OnDectivated()
 {
+    InputContextManager::GetInstance().SetInputContext(InputContext::Default);
     BGMManager::GetInstance().Stop(m_SceneBGM);
     BGMManager::GetInstance().UnloadBGM(m_SceneBGM);
     

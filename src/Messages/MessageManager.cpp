@@ -60,22 +60,9 @@ void MessageManager::OnDraw2D()
         {
             DrawTexture(m_DialogBoxTextures[i], i * 256, HEIGHT-256, WHITE);
         }
-        //DrawText(m_RequestedString.c_str(), 0, 256, 32, BLACK);
         DrawTextEx(m_MsgFont, m_RequestedString.c_str(), Vector2{31, HEIGHT-161}, 32, 1, BLACK);
     }
 }
-
-// template<typename... Args>
-// void MessageManager::RequestSystemMessage(SystemMessageID messageID, SystemMessageType type, float time, Args... args)
-// {
-    
-// }
-
-// template<typename... Args>
-// void MessageManager::SetRequestedMessage(uint16_t messageID, Args... args)
-// {
-    
-// }
 
 void MessageManager::Update()
 {
