@@ -47,7 +47,7 @@ private:
         InventoryItem{1, "TEST KEY", "Key description"},
         InventoryItem{2, "SECTOR EXIT CARD"},
         InventoryItem{3, "DUCT KEY CARD"},
-        InventoryItem{4, "MAINTANCE ROOM KEY CARD"},
+        InventoryItem{4, "LOUNGE KEY CARD"},
         InventoryItem{5, "CAFETERIUM KEY CARD"},
         InventoryItem{6, "DORMITORY KEY CARD"}
     };
