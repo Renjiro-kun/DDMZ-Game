@@ -43,11 +43,11 @@ private:
     {
         InventoryItem{0, "Invalid item", ""},
         InventoryItem{1, "TEST KEY", "Key description"},
-        InventoryItem{2, "CHAMBER EXIT CARD"},
-        InventoryItem{3, "SECRET ROOM 1"},
-        InventoryItem{4, "SECRET ROOM 2"},
-        InventoryItem{5, "SECRET ROOM 3"},
-        InventoryItem{6, "SECRET ROOM 4"}
+        InventoryItem{2, "SECTOR EXIT CARD"},
+        InventoryItem{3, "DUCT KEY CARD"},
+        InventoryItem{4, "MAINTANCE ROOM KEY CARD"},
+        InventoryItem{5, "CAFETERIUM KEY CARD"},
+        InventoryItem{6, "DORMITORY KEY CARD"}
     };
 
     std::vector<size_t> m_PlayerItems;

@@ -3,6 +3,7 @@
 #include <raylib/raylib.h>
 #include <vector>
 #include <UI/Canvas.h>
+#include <Sound/BgmManager.h>
 
 class SceneTitle : public Scene
 {
@@ -25,6 +26,7 @@ private:
     const int8_t heightCount = 2;
     const float m_RotationSpeed{2.f};
     float m_Rotation{0.f};
+    BGM_Handle m_SceneBGM;
 
     Camera m_Camera;
 };

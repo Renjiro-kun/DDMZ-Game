@@ -1,8 +1,10 @@
 #pragma once
 #include <Scene/Scene.h>
+#include <Sound/BgmManager.h>
+#include <UI/Canvas.h>
+
 #include <raylib/raylib.h>
 #include <vector>
-#include <UI/Canvas.h>
 
 class SceneOptions : public Scene
 {
@@ -15,13 +17,13 @@ public:
     Camera& GetCamera() override { return m_Camera; }
     Color GetSceneBackgroundColor() override { return BLACK; }
 private:
-    //Font m_AdvFont;
     Texture2D* m_BackTexture;
 
     Canvas* m_MenuCanvas = nullptr;
 
     const int8_t widthCount = 3;
     const int8_t heightCount = 2;
+    BGM_Handle m_SceneBGM;
 
     Camera m_Camera;
 };

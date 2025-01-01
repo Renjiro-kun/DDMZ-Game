@@ -29,12 +29,17 @@ void SceneTitle::OnActivated()
 
     m_EarthSourceRect = {0, 0, 256, 256};
     m_EarthDestRect = { WIDTH / 2, HEIGHT + 200, WIDTH, WIDTH };
+    m_SceneBGM = BGMManager::GetInstance().LoadSound(GET_ASSET_FROM_CD("music/bgm_menu.adpcm"));
+    BGMManager::GetInstance().Play(m_SceneBGM);
 
     SaveGameManager::GetInstance().LoadData();
 }
 
 void SceneTitle::OnDectivated()
 {
+    BGMManager::GetInstance().Stop(m_SceneBGM);
+    BGMManager::GetInstance().UnloadBGM(m_SceneBGM);
+
     for (size_t i = 0; i < heightCount * widthCount; i++)
     {
         UnloadTexture(m_AdvTextures[i]);

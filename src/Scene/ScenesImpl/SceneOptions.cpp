@@ -47,10 +47,16 @@ void SceneOptions::OnActivated()
             m_BackTexture[y*widthCount+x] = LoadTexture(TextFormat(GET_ASSET_FROM_CD("titlescreen/BG_TS_%01i%01i.png"), y+1, x+1));
         }
     }
+
+    m_SceneBGM = BGMManager::GetInstance().LoadSound(GET_ASSET_FROM_CD("music/bgm_menu.adpcm"));
+    BGMManager::GetInstance().Play(m_SceneBGM);
 }
 
 void SceneOptions::OnDectivated()
 {
+    BGMManager::GetInstance().Stop(m_SceneBGM);
+    BGMManager::GetInstance().UnloadBGM(m_SceneBGM);
+    
     for (size_t i = 0; i < heightCount * widthCount; i++)
     {
         UnloadTexture(m_BackTexture[i]);
