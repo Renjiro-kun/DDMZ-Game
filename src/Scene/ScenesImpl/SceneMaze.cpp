@@ -217,7 +217,7 @@ void SceneMaze::OnDraw3D()
 
 void SceneMaze::OnTimerElapsed()
 {
-    SceneManager::GetInstance().LoadScene(SceneId::SCENE_TITLE_SCREEN);
+    SceneManager::GetInstance().LoadScene(SceneId::SCENE_GAMEOVER);
 }
 
 void  SceneMaze::LoadObjects()

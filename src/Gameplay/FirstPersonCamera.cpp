@@ -12,12 +12,12 @@ FirstPersonCamera::FirstPersonCamera()
     m_Camera.up = Vector3{0.f, 1.f, 0.f};
     m_Camera.fovy = 45.0f;
     m_Camera.projection = CAMERA_PERSPECTIVE;
-
 }
 
 void FirstPersonCamera::OnActivate()
 {
     m_StepSFX = SFXManager::GetInstance().LoadSFX(GET_ASSET_FROM_RD("sfx_footstep01.wav"));
+    m_Camera.target = (Vector3){0185.f, 0.4f, 0.f};
 }
 
 void FirstPersonCamera::OnDeactivate()

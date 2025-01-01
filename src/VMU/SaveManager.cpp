@@ -44,12 +44,6 @@ void SaveGameManager::SaveData()
     }
 
     res = fs_unlink(TextFormat("/vmu/a1/%s", SAVE_NAME));
-    if(res < 0)
-    {
-        MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::SaveFailed, SystemMessageType::Timed, 2.f);
-        return;
-    }
-
     f = fs_open(TextFormat("/vmu/a1/%s", SAVE_NAME), O_WRONLY);
 
     if(!f)
@@ -120,7 +114,6 @@ void SaveGameManager::CopyDataFromVMUPkg(const SaveDataPkg* pkg)
     {
         m_CurrentSaveData.InventoryItems[i] = pkg->InventoryItems[i];
     }
-    
 }
 
 void SaveGameManager::ResetOptions()

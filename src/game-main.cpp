@@ -15,6 +15,8 @@
 #include <VMU/vmu_profiler.h>
 #include <UI/UIRepository.h>
 
+#include <dc/syscalls.h>
+
 int main()
 {
     const int SCREEN_WIDTH = WIDTH;
@@ -71,6 +73,7 @@ int main()
     BGMManager::GetInstance().Shutdown();
     SaveGameManager::GetInstance().Shutdown();
     CloseWindow();
+    syscall_system_bios_menu();
 
     return 0;
 }

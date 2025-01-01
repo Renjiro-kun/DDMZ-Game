@@ -5,6 +5,7 @@
 #include <Scene/ScenesImpl/SceneIntro.h>
 #include <Scene/ScenesImpl/SceneOptions.h>
 #include <Scene/ScenesImpl/SceneCredits.h>
+#include <Scene/ScenesImpl/SceneGameOver.h>
 
 void SceneManager::Init()
 {
@@ -15,6 +16,7 @@ void SceneManager::Init()
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_INTRO, new SceneIntro()));
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_OPTIONS, new SceneOptions()));
     m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_CREDITS, new SceneCredits()));
+    m_ScenesArray.emplace(std::pair<SceneId, Scene*>(SceneId::SCENE_GAMEOVER, new SceneGameOver()));
 }
 
 void SceneManager::Shutdown()
