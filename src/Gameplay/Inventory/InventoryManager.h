@@ -33,6 +33,8 @@ public:
 
     void WriteItemsToSaveData();
     void ReadInventorySaveData();
+
+    void ResetInventory() { m_PlayerItems.clear(); }
 private:
     InventoryManager() = default;
     ~InventoryManager() = default;

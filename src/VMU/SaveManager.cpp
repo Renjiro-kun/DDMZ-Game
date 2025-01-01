@@ -131,6 +131,12 @@ void SaveGameManager::ResetSaveGame()
     m_CurrentSaveData.PositionX = 0;
     m_CurrentSaveData.PositionY = 0;
     m_CurrentSaveData.TimeLimit = -1.f;
+    InventoryManager::GetInstance().ResetInventory();
+    for (size_t i = 0; i < INVENTORY_ITEMS_SIZE; i++)
+    {
+        m_CurrentSaveData.InventoryItems[i] = -1;
+    }
+    ResetInteractableStates();
 }
 
 void SaveGameManager::ResetInteractableStates()
