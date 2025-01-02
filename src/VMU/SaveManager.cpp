@@ -137,6 +137,9 @@ void SaveGameManager::ResetSaveGame()
         m_CurrentSaveData.InventoryItems[i] = -1;
     }
     ResetInteractableStates();
+    SaveGameManager::GetInstance().SaveData();
+    // HACK
+    InputContextManager::GetInstance().SetInputContext(InputContext::Message);
 }
 
 void SaveGameManager::ResetInteractableStates()

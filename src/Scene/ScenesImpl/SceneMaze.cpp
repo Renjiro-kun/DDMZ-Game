@@ -151,7 +151,8 @@ void SceneMaze::OnUpdate()
     }
     m_OldCamPosition = m_FpsCamera.GetPosition();
     m_FpsCamera.UpdateCamera(GetFrameTime());
-    if(IsGamepadAvailable(0) && InputContextManager::GetInstance().CurrentInputComtext() == InputContext::Default)
+    InputContext currentContext = InputContextManager::GetInstance().CurrentInputComtext();
+    if(IsGamepadAvailable(0) && currentContext == InputContext::Default)
     {
         if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) && m_CanInteract)
         {
