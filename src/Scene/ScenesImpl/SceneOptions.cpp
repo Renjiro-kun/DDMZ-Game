@@ -23,6 +23,11 @@ int GetSFXVolume();
 void SetBGMVolume(int value);
 int GetBGMVolume();
 
+void OnBGMPressed(Toggle* sender);
+void OnBGMFocused(Toggle* sender);
+void SetBGMValue(bool value);
+bool GetBGMValue();
+
 void SaveOptions();
 
 void SceneOptions::OnActivated()
@@ -34,10 +39,11 @@ void SceneOptions::OnActivated()
 
     m_MenuCanvas = new Canvas(InputContext::Default);
     m_MenuCanvas->SetActive(true);
-    m_MenuCanvas->AddWidget(new Slider(Vector2{150, 150}, "BGM VOLUME ", 5, 0, 100, SetBGMVolume, GetBGMVolume));
+    //m_MenuCanvas->AddWidget(new Slider(Vector2{150, 150}, "BGM VOLUME ", 5, 0, 100, SetBGMVolume, GetBGMVolume));
+    m_MenuCanvas->AddWidget(new Toggle(Vector2{150, 150}, "BGM ", OnBGMPressed, OnBGMFocused, SetBGMValue, GetBGMValue));
     m_MenuCanvas->AddWidget(new Slider(Vector2{150, 200}, "SFX VOLUME ", 5, 0, 100, SetSFXVolume, GetSFXVolume));
     m_MenuCanvas->AddWidget(new Toggle(Vector2{150, 250}, "VIBRATION ", OnVibrationPressed, OnVibrationFocussed, SetVibrationValue, GetVibrationValue));
-    m_MenuCanvas->AddWidget(new Button(Vector2{150, 300}, "SAVE OPTIONS", SaveOptions));
+    //m_MenuCanvas->AddWidget(new Button(Vector2{150, 300}, "SAVE OPTIONS", SaveOptions));
     m_MenuCanvas->AddWidget(new Button(Vector2{150, 350}, "BACK", OnBackPressed));
 
     m_BackTexture = new Texture2D[widthCount * heightCount];
@@ -142,4 +148,24 @@ int GetBGMVolume()
 void SaveOptions()
 {
     SaveGameManager::GetInstance().SaveData();
+}
+
+void OnBGMPressed(Toggle* sender)
+{
+    
+}
+
+void OnBGMFocused(Toggle* sender)
+{
+
+}
+
+void SetBGMValue(bool value)
+{
+    BGMManager::GetInstance().SetEnabled(value);
+}
+
+bool GetBGMValue()
+{
+    return BGMManager::GetInstance().GetEnabled();
 }

@@ -24,11 +24,16 @@ public:
 
     void SetVolume(int volume);
     int GetVolume();
+
+    void SetEnabled(bool value);
+    bool GetEnabled() { return m_IsEnabled; }
 private:
     BGMManager() = default;
     ~BGMManager() = default;
     BGMManager(const BGMManager&) = delete;
     BGMManager& operator=(const BGMManager&) = delete;
 private:
+    bool m_IsEnabled{true};
+    BGM_Handle m_CurrentBGM;
     int m_CurrentVolume{255};
 };

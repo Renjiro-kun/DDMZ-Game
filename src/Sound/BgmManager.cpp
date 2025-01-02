@@ -27,7 +27,11 @@ void BGMManager::Play(BGM_Handle bgm)
 {
     if(bgm != INVALID_BGM_HANDLE)
     {
-        wav_play(bgm);
+        m_CurrentBGM = bgm;
+        if(m_IsEnabled)
+        {
+            wav_play(bgm);
+        }
         wav_volume(bgm, m_CurrentVolume);
     }
 }
@@ -45,6 +49,7 @@ void BGMManager::Stop(BGM_Handle bgm)
     if(bgm != INVALID_BGM_HANDLE)
     {
         wav_stop(bgm);
+        m_CurrentBGM = INVALID_BGM_HANDLE;
     }
 }
 
@@ -52,6 +57,7 @@ void BGMManager::UnloadBGM(BGM_Handle bgm)
 {
     if(bgm != INVALID_BGM_HANDLE)
     {
+        m_CurrentBGM = INVALID_BGM_HANDLE;
         wav_destroy(bgm);
     }
 }
@@ -64,4 +70,20 @@ int BGMManager::GetVolume()
 void BGMManager::SetVolume(int volume)
 {
     m_CurrentVolume = ((float)volume / 100) * 255;
+}
+
+void BGMManager::SetEnabled(bool value)
+{
+    m_IsEnabled = value;
+    if(m_CurrentBGM != INVALID_BGM_HANDLE)
+    {
+        if(m_IsEnabled)
+        {
+            wav_play(m_CurrentBGM);
+        }
+        else
+        {
+            wav_pause(m_CurrentBGM);
+        }
+    }
 }
