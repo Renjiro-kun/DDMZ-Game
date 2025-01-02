@@ -7,7 +7,7 @@
 
 Door::Door(Vector3 position, size_t itemId, float rotation, int mapHeight, std::vector<char>* collisionMask)
 {
-    m_DoorOpenRumble.raw = 0x011A7010;
+    m_DoorOpenRumble.raw = 0x03258710;
 
     m_DoorModel = &ObjectRepository::GetInstance().GetDoorModel();
     m_Position = position;

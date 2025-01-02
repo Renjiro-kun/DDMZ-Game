@@ -1,7 +1,7 @@
 #pragma once
 
 #define APP_ID "DDMZ"
-#define SAVE_NAME "LAST_ESCAPE_SAVE"
+#define SAVE_NAME "TLE_SAVE"
 #define LONG_DESC "The Last Escape save data"
 #define SHORT_DESC "MAIN_SAVE"
 

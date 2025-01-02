@@ -5,6 +5,7 @@
 
 SavePoint::SavePoint(Vector3 position, float rotation)
 {
+    m_SaveRumble.raw = 0x06103010;
     m_SavePointModel = &ObjectRepository::GetInstance().GetSavePointModel();
     m_Position = position;
 
@@ -29,8 +30,9 @@ void SavePoint::Interact()
         SaveGameManager::GetInstance().SetPlayerPositionX(m_Context->playerPosX);
         SaveGameManager::GetInstance().SetPlayerPositionY(m_Context->playerPosY);
         SaveGameManager::GetInstance().SetTimeLimit(m_Context->currentTimeLimit);
-        SaveGameManager::GetInstance().SaveData();
         SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetSavePointSFX());
+        SaveGameManager::GetInstance().SaveData();
+        PuruPuruManager::GetInstance().Rumble(m_SaveRumble);
     }
 }
 

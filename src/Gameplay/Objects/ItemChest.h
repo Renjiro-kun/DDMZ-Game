@@ -1,5 +1,7 @@
 #pragma once
 #include <Gameplay/Objects/Interactable.h>
+#include <VMU/PuruPuruManager.h>
+
 #include <raylib/raylib.h>
 
 class ItemChest : public Interactable
@@ -17,6 +19,7 @@ public:
     void SetState(bool state) { m_IsOpened = state; }
 
 private:
+    rumble_fields_t m_ChestOpenRumble;
     Model* m_ChestModel;
     size_t m_ItemId;
     float m_Rotation;

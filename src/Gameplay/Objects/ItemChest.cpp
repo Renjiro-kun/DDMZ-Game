@@ -7,6 +7,7 @@
 
 ItemChest::ItemChest(Vector3 position, float rotation, size_t itemId)
 {
+    m_ChestOpenRumble.raw = 0x01083810;
     m_ChestModel = &ObjectRepository::GetInstance().GetChestModel();
     m_Position = position;
     m_ItemId = itemId;
@@ -35,6 +36,7 @@ void ItemChest::Interact()
         MessageManager::GetInstance().RequestSystemMessage(SystemMessageID::FoundItem, SystemMessageType::Default, 0.f, item.name.c_str());
         m_IsOpened = true;
         SFXManager::GetInstance().Play(ObjectRepository::GetInstance().GetItemPickupSFX());
+        PuruPuruManager::GetInstance().Rumble(m_ChestOpenRumble);
         m_Context->currentInteractableState->State = true;
     }
     else
