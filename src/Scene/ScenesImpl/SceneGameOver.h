@@ -1,4 +1,4 @@
-#pragma ince
+#pragma once
 #include <Scene/Scene.h>
 
 class SceneGameOver : public Scene

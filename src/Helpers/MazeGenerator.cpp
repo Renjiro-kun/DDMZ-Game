@@ -68,20 +68,21 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 		if(layer.type == LayerType::Tile)
 		{
 			file.read((char*)&layer.tileType, sizeof(char));
-			layer.dataSize = mazeInfo.width * mazeInfo.height;
-			layer.data = (void*)new char[layer.dataSize];
-			ReadTileData((char*)layer.data, (size_t)mazeInfo.width * mazeInfo.height, file);
+
+			//layer.dataSize = mazeInfo.width * mazeInfo.height;
+			//layer.data = (void*)new char[layer.dataSize];
+			ReadTileData(layer.tilesData, (size_t)mazeInfo.width * mazeInfo.height, file);
 		} 
 		else if (layer.type == LayerType::Object)
 		{
 			char count = 0;
 			file.read(&count, sizeof(char));
-			layer.objects.reserve(count);
+			layer.objectsData.reserve(count);
 			for (size_t j = 0; j < count; j++)
 			{
 				ObjectInfo obj;
 				ReadObjectData(obj, file);
-				layer.objects.push_back(obj);
+				layer.objectsData.push_back(obj);
 			}
 		}
 		
@@ -90,9 +91,16 @@ void MazeGenerator::ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze
 	file.close();
 }
 
-void MazeGenerator::ReadTileData(char* dataLocation, size_t size, std::ifstream& stream)
+void MazeGenerator::ReadTileData(std::vector<char>& tileData, size_t size, std::ifstream& stream)
 {
-	stream.read(dataLocation, sizeof(char) * size);
+	//stream.read(dataLocation, sizeof(char) * size);
+	for (size_t i = 0; i < size; i++)
+	{
+		char tempChar;
+		stream.read(&tempChar, sizeof(char));
+		tileData.push_back(tempChar);
+	}
+	
 }
 
 void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
@@ -114,14 +122,16 @@ void MazeGenerator::ReadObjectData(ObjectInfo& object, std::ifstream& stream)
 	delete[] tempName;
 }
 
-bool MazeGenerator::CheckLayerData(void* data, size_t idx, char value)
+bool MazeGenerator::CheckLayerData(const std::vector<char>& tileData, size_t idx, char value)
 {
-	return ((char*)data)[idx] == value;
+	//return ((char*)data)[idx] == value;
+	return tileData[idx] == value;
 }
 
-bool MazeGenerator::CellIsWall(void* data, size_t idx)
+bool MazeGenerator::CellIsWall(const std::vector<char>& tileData, size_t idx)
 {
-	return ((char*)data)[idx] > 0;
+	return tileData[idx] > 0;
+	//return ((char*)data)[idx] > 0;
 }
 
 void MazeGenerator::SetTileUVs(RectangleF& uvRects, Vector2* texCoordsArray, int& texCounter, UVType type)
@@ -270,7 +280,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 			Vector3 v7 = { w * (x - 0.5f), 0, h * (z + 0.5f) };
 			Vector3 v8 = { w * (x + 0.5f), 0, h * (z + 0.5f) };
 
-			if(CellIsWall(WallLayer->data, z * info.width + x))
+			if(CellIsWall(WallLayer->tilesData, z * info.width + x))
 			{
 				// Define triangles and checking collateral cubes
 				//----------------------------------------------
@@ -343,7 +353,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				cCounter += 6;
 
 				// Checking cube on the botton of current cube
-				if (((z < info.height - 1) && !CellIsWall(WallLayer->data, (z+1)*info.width+x)) || (z == info.height - 1))
+				if (((z < info.height - 1) && !CellIsWall(WallLayer->tilesData, (z+1)*info.width+x)) || (z == info.height - 1))
 				{
 					// Define front triangles (2 tris, 6 verts --> v2-v7-v3, v3-v7-v8)
 					// NOTE: Collateral occluded faces are not generated
@@ -363,7 +373,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n6;
 					nCounter += 6;
 
-					char id = ((char*)WallLayer->data)[z * info.width + x];
+					char id = (WallLayer->tilesData)[z * info.width + x];
 					RectangleF& uvRect = GetTileUV(info, id);
 					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::FRONT);
 
@@ -378,7 +388,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on top of the current cube
-				if (((z > 0) && !CellIsWall(WallLayer->data, (z-1) * info.width + x)) || (z==0))
+				if (((z > 0) && !CellIsWall(WallLayer->tilesData, (z-1) * info.width + x)) || (z==0))
 				{
 					// Define back triangles (2 tris, 6 verts --> v1-v5-v6, v1-v4-v5)
 					mapVerticies[vCounter]		= v1;
@@ -397,7 +407,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n5;
 					nCounter += 6;
 
-					char id = ((char*)WallLayer->data)[z * info.width + x];
+					char id = (WallLayer->tilesData)[z * info.width + x];
 					RectangleF& uvRect = GetTileUV(info, id);
 					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::BACK);
 
@@ -412,7 +422,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on right of the current cube
-				if (((x < info.width - 1) && !CellIsWall(WallLayer->data, z*info.width+(x+1))) || (x == info.width - 1))
+				if (((x < info.width - 1) && !CellIsWall(WallLayer->tilesData, z*info.width+(x+1))) || (x == info.width - 1))
 				{
 					// Define right triangles (2 tris, 6 verts --> v3-v8-v4, v4-v8-v5)
 					mapVerticies[vCounter]		= v3;
@@ -431,7 +441,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n1;
 					nCounter += 6;
 
-					char id = ((char*)WallLayer->data)[z * info.width + x];
+					char id = (WallLayer->tilesData)[z * info.width + x];
 					RectangleF& uvRect = GetTileUV(info, id);
 					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::RIGHT);
 
@@ -446,7 +456,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 				}
 
 				// Checking cube on the left of the current cube
-				if (((x > 0) && !CellIsWall(WallLayer->data, z * info.width + (x - 1))) || (x == 0))
+				if (((x > 0) && !CellIsWall(WallLayer->tilesData, z * info.width + (x - 1))) || (x == 0))
 				{
 					// Define left triangles (2 tris, 6 verts --> v1-v7-v2, v1-v6-v7)
 					mapVerticies[vCounter]		= v1;
@@ -465,7 +475,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5] = n2;
 					nCounter += 6;
 
-					char id = ((char*)WallLayer->data)[z * info.width + x];
+					char id = (WallLayer->tilesData)[z * info.width + x];
 					RectangleF& uvRect = GetTileUV(info, id);
 					SetTileUVs(uvRect, mapTexcoord, tcCounter, UVType::LEFT);
 
@@ -479,9 +489,9 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					cCounter += 6;
 				}
 			}
-			else if(!CellIsWall(WallLayer->data, z * info.width + x))
+			else if(!CellIsWall(WallLayer->tilesData, z * info.width + x))
 			{
-				if(CellIsWall(cellingLayer->data, z * info.width + x))
+				if(CellIsWall(cellingLayer->tilesData, z * info.width + x))
 				{
 					// Define top triangles (2 tris, 6 verts --> v1-v2-v3, v1-v3-v4)
 					mapVerticies[vCounter]		= v1;
@@ -500,7 +510,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n4;
 					nCounter += 6;
 
-					char id = ((char*)cellingLayer->data)[z * info.width + x];
+					char id = (cellingLayer->tilesData)[z * info.width + x];
 					RectangleF& topUVs = GetTileUV(info, id);
 					SetTileUVs(topUVs, mapTexcoord, tcCounter, UVType::TOP);
 
@@ -514,7 +524,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					cCounter += 6;
 				}
 				
-				if(CellIsWall(floorLayer->data, z * info.width + x))
+				if(CellIsWall(floorLayer->tilesData, z * info.width + x))
 				{
 					// Define botton triangles (2 tris, 6 verts --> v6-v8-v7, v6-v5-v8)
 					mapVerticies[vCounter]		= v6;
@@ -533,7 +543,7 @@ void MazeGenerator::GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh)
 					mapNormals[nCounter + 5]	= n3;
 					nCounter += 6;
 
-					char floorId = ((char*)floorLayer->data)[z * info.width + x];
+					char floorId = (floorLayer->tilesData)[z * info.width + x];
 					RectangleF& bottomUVs = GetTileUV(info, floorId);
 					SetTileUVs(bottomUVs, mapTexcoord, tcCounter, UVType::BOTTOM);
 
@@ -635,23 +645,23 @@ void MazeGenerator::GenerateCollisionMask(MazeInfo& info, std::vector<char>& col
 	}
 
 	collisionMask.clear();
-	collisionMask.reserve(layerInfo->dataSize);
+	collisionMask.reserve(layerInfo->tilesData.size());
 
 	const char wallID = 1;
 
-	for (size_t i = 0; i < layerInfo->dataSize; i++)
+	for (size_t i = 0; i < layerInfo->tilesData.size(); i++)
 	{
 		char pushValue = static_cast<char>(CollisionType::None);
-		if(CellIsWall(layerInfo->data, i))
+		if(CellIsWall(layerInfo->tilesData, i))
 		{
 			pushValue = static_cast<char>(CollisionType::Wall);
 		}
 		collisionMask.push_back(pushValue);
 	}
 
-	for (size_t i = 0; i < objectLayer->objects.size(); i++)
+	for (size_t i = 0; i < objectLayer->objectsData.size(); i++)
 	{
-		ObjectInfo& objectInfo = objectLayer->objects[i];
+		ObjectInfo& objectInfo = objectLayer->objectsData[i];
 		if(IsObject(objectInfo.type))
 		{
 			char pushValue = static_cast<char>(CollisionType::Object);
@@ -704,12 +714,12 @@ void MazeGenerator::FillRuntimeInfo(MazeInfo& info, MazeRuntimeInfo& runtimeInfo
 		return;
 	}
 	
-	runtimeInfo.objects.reserve(info.layers[objectLayerIdx].objects.size());
+	runtimeInfo.objects.reserve(info.layers[objectLayerIdx].objectsData.size());
 
-	for (size_t i = 0; i < info.layers[objectLayerIdx].objects.size(); i++)
+	for (size_t i = 0; i < info.layers[objectLayerIdx].objectsData.size(); i++)
 	{
 		RuntimeObjectInfo runtimeObj;
-		ObjectInfo& object = info.layers[objectLayerIdx].objects[i];
+		ObjectInfo& object = info.layers[objectLayerIdx].objectsData[i];
 
 		// Hack for proper rounding object cell location
 		int x = roundf((float)object.x / info.tileSize);
@@ -753,7 +763,7 @@ void MazeGenerator::GenerateMazeMap(const std::string& name, Mesh& maze, MazeRun
 	std::ifstream file(name, std::ios::binary);
 	if (!file)
 	{
-		// error handling
+		return;
 	}
 	MazeGenerator::MazeInfo info;
 

@@ -103,9 +103,8 @@ private:
 		std::string name;
 		LayerType type;
 		TileLayerType tileType;
-		void* data;
-		size_t dataSize;
-		std::vector<ObjectInfo> objects;
+		std::vector<char> tilesData;
+		std::vector<ObjectInfo> objectsData;
 	};
 
 	struct MazeInfo
@@ -127,14 +126,14 @@ private:
 private:
 	static void ParseFile(std::ifstream& file, MazeGenerator::MazeInfo& maze);
 
-	static void ReadTileData(char* dataLocation, size_t size, std::ifstream& stream);
+	static void ReadTileData(std::vector<char>& dataLocation, size_t size, std::ifstream& stream);
 	static void ReadObjectData(ObjectInfo& objectToRead, std::ifstream& stream);
 	static bool IsObject(ObjectType type);
 	static void GenerateMesh(MazeGenerator::MazeInfo& info, Mesh& outMesh);
 	static void GenerateCollisionMask(MazeGenerator::MazeInfo& info, std::vector<char>& collisionMask);
 	static void FillRuntimeInfo(MazeGenerator::MazeInfo& info, MazeRuntimeInfo& runtimeInfo);
-	static bool CheckLayerData(void* data, size_t idx, char value);
-	static bool CellIsWall(void* data, size_t idx);
+	static bool CheckLayerData(const std::vector<char>& tileData, size_t idx, char value);
+	static bool CellIsWall(const std::vector<char>& tileData, size_t idx);
 	static RectangleF& GetTileUV(MazeGenerator::MazeInfo& info, char id);
 	static void SetTileUVs(RectangleF& uvRects, Vector2* texCoordsArray, int& texCounter, UVType type);
 };
